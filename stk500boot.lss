@@ -1,0 +1,4287 @@
+
+stk500boot.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         0000000c  00800200  0001f4e4  00001578  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         000014e4  0001e000  0001e000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .bss          0000012f  0080020c  0080020c  00001584  2**0
+                  ALLOC
+  3 .stab         00000cd8  00000000  00000000  00001584  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  4 .stabstr      0000015e  00000000  00000000  0000225c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .comment      00000011  00000000  00000000  000023ba  2**0
+                  CONTENTS, READONLY
+  6 .debug_aranges 00000070  00000000  00000000  000023cb  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_info   00001bea  00000000  00000000  0000243b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_abbrev 000006dc  00000000  00000000  00004025  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_line   00000600  00000000  00000000  00004701  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_frame  00000300  00000000  00000000  00004d04  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_str    00000567  00000000  00000000  00005004  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_loc    00001bd9  00000000  00000000  0000556b  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 13 .debug_ranges 00000150  00000000  00000000  00007144  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+0001e000 <__vectors>:
+   1e000:	71 c0       	rjmp	.+226    	; 0x1e0e4 <__ctors_end>
+   1e002:	00 00       	nop
+   1e004:	94 c0       	rjmp	.+296    	; 0x1e12e <__bad_interrupt>
+   1e006:	00 00       	nop
+   1e008:	92 c0       	rjmp	.+292    	; 0x1e12e <__bad_interrupt>
+   1e00a:	00 00       	nop
+   1e00c:	90 c0       	rjmp	.+288    	; 0x1e12e <__bad_interrupt>
+   1e00e:	00 00       	nop
+   1e010:	8e c0       	rjmp	.+284    	; 0x1e12e <__bad_interrupt>
+   1e012:	00 00       	nop
+   1e014:	8c c0       	rjmp	.+280    	; 0x1e12e <__bad_interrupt>
+   1e016:	00 00       	nop
+   1e018:	8a c0       	rjmp	.+276    	; 0x1e12e <__bad_interrupt>
+   1e01a:	00 00       	nop
+   1e01c:	88 c0       	rjmp	.+272    	; 0x1e12e <__bad_interrupt>
+   1e01e:	00 00       	nop
+   1e020:	86 c0       	rjmp	.+268    	; 0x1e12e <__bad_interrupt>
+   1e022:	00 00       	nop
+   1e024:	84 c0       	rjmp	.+264    	; 0x1e12e <__bad_interrupt>
+   1e026:	00 00       	nop
+   1e028:	82 c0       	rjmp	.+260    	; 0x1e12e <__bad_interrupt>
+   1e02a:	00 00       	nop
+   1e02c:	80 c0       	rjmp	.+256    	; 0x1e12e <__bad_interrupt>
+   1e02e:	00 00       	nop
+   1e030:	7e c0       	rjmp	.+252    	; 0x1e12e <__bad_interrupt>
+   1e032:	00 00       	nop
+   1e034:	7c c0       	rjmp	.+248    	; 0x1e12e <__bad_interrupt>
+   1e036:	00 00       	nop
+   1e038:	7a c0       	rjmp	.+244    	; 0x1e12e <__bad_interrupt>
+   1e03a:	00 00       	nop
+   1e03c:	78 c0       	rjmp	.+240    	; 0x1e12e <__bad_interrupt>
+   1e03e:	00 00       	nop
+   1e040:	76 c0       	rjmp	.+236    	; 0x1e12e <__bad_interrupt>
+   1e042:	00 00       	nop
+   1e044:	74 c0       	rjmp	.+232    	; 0x1e12e <__bad_interrupt>
+   1e046:	00 00       	nop
+   1e048:	72 c0       	rjmp	.+228    	; 0x1e12e <__bad_interrupt>
+   1e04a:	00 00       	nop
+   1e04c:	70 c0       	rjmp	.+224    	; 0x1e12e <__bad_interrupt>
+   1e04e:	00 00       	nop
+   1e050:	6e c0       	rjmp	.+220    	; 0x1e12e <__bad_interrupt>
+   1e052:	00 00       	nop
+   1e054:	6c c0       	rjmp	.+216    	; 0x1e12e <__bad_interrupt>
+   1e056:	00 00       	nop
+   1e058:	6a c0       	rjmp	.+212    	; 0x1e12e <__bad_interrupt>
+   1e05a:	00 00       	nop
+   1e05c:	68 c0       	rjmp	.+208    	; 0x1e12e <__bad_interrupt>
+   1e05e:	00 00       	nop
+   1e060:	66 c0       	rjmp	.+204    	; 0x1e12e <__bad_interrupt>
+   1e062:	00 00       	nop
+   1e064:	64 c0       	rjmp	.+200    	; 0x1e12e <__bad_interrupt>
+   1e066:	00 00       	nop
+   1e068:	62 c0       	rjmp	.+196    	; 0x1e12e <__bad_interrupt>
+   1e06a:	00 00       	nop
+   1e06c:	60 c0       	rjmp	.+192    	; 0x1e12e <__bad_interrupt>
+   1e06e:	00 00       	nop
+   1e070:	5e c0       	rjmp	.+188    	; 0x1e12e <__bad_interrupt>
+   1e072:	00 00       	nop
+   1e074:	5c c0       	rjmp	.+184    	; 0x1e12e <__bad_interrupt>
+   1e076:	00 00       	nop
+   1e078:	5a c0       	rjmp	.+180    	; 0x1e12e <__bad_interrupt>
+   1e07a:	00 00       	nop
+   1e07c:	58 c0       	rjmp	.+176    	; 0x1e12e <__bad_interrupt>
+   1e07e:	00 00       	nop
+   1e080:	56 c0       	rjmp	.+172    	; 0x1e12e <__bad_interrupt>
+   1e082:	00 00       	nop
+   1e084:	54 c0       	rjmp	.+168    	; 0x1e12e <__bad_interrupt>
+   1e086:	00 00       	nop
+   1e088:	52 c0       	rjmp	.+164    	; 0x1e12e <__bad_interrupt>
+   1e08a:	00 00       	nop
+   1e08c:	50 c0       	rjmp	.+160    	; 0x1e12e <__bad_interrupt>
+   1e08e:	00 00       	nop
+   1e090:	4e c0       	rjmp	.+156    	; 0x1e12e <__bad_interrupt>
+   1e092:	00 00       	nop
+   1e094:	4c c0       	rjmp	.+152    	; 0x1e12e <__bad_interrupt>
+   1e096:	00 00       	nop
+   1e098:	4a c0       	rjmp	.+148    	; 0x1e12e <__bad_interrupt>
+   1e09a:	00 00       	nop
+   1e09c:	48 c0       	rjmp	.+144    	; 0x1e12e <__bad_interrupt>
+   1e09e:	00 00       	nop
+   1e0a0:	46 c0       	rjmp	.+140    	; 0x1e12e <__bad_interrupt>
+   1e0a2:	00 00       	nop
+   1e0a4:	44 c0       	rjmp	.+136    	; 0x1e12e <__bad_interrupt>
+   1e0a6:	00 00       	nop
+   1e0a8:	42 c0       	rjmp	.+132    	; 0x1e12e <__bad_interrupt>
+   1e0aa:	00 00       	nop
+   1e0ac:	40 c0       	rjmp	.+128    	; 0x1e12e <__bad_interrupt>
+   1e0ae:	00 00       	nop
+   1e0b0:	3e c0       	rjmp	.+124    	; 0x1e12e <__bad_interrupt>
+   1e0b2:	00 00       	nop
+   1e0b4:	3c c0       	rjmp	.+120    	; 0x1e12e <__bad_interrupt>
+   1e0b6:	00 00       	nop
+   1e0b8:	3a c0       	rjmp	.+116    	; 0x1e12e <__bad_interrupt>
+   1e0ba:	00 00       	nop
+   1e0bc:	38 c0       	rjmp	.+112    	; 0x1e12e <__bad_interrupt>
+   1e0be:	00 00       	nop
+   1e0c0:	36 c0       	rjmp	.+108    	; 0x1e12e <__bad_interrupt>
+   1e0c2:	00 00       	nop
+   1e0c4:	34 c0       	rjmp	.+104    	; 0x1e12e <__bad_interrupt>
+   1e0c6:	00 00       	nop
+   1e0c8:	32 c0       	rjmp	.+100    	; 0x1e12e <__bad_interrupt>
+   1e0ca:	00 00       	nop
+   1e0cc:	30 c0       	rjmp	.+96     	; 0x1e12e <__bad_interrupt>
+   1e0ce:	00 00       	nop
+   1e0d0:	2e c0       	rjmp	.+92     	; 0x1e12e <__bad_interrupt>
+   1e0d2:	00 00       	nop
+   1e0d4:	2c c0       	rjmp	.+88     	; 0x1e12e <__bad_interrupt>
+   1e0d6:	00 00       	nop
+   1e0d8:	2a c0       	rjmp	.+84     	; 0x1e12e <__bad_interrupt>
+   1e0da:	00 00       	nop
+   1e0dc:	28 c0       	rjmp	.+80     	; 0x1e12e <__bad_interrupt>
+   1e0de:	00 00       	nop
+   1e0e0:	26 c0       	rjmp	.+76     	; 0x1e12e <__bad_interrupt>
+	...
+
+0001e0e4 <__ctors_end>:
+   1e0e4:	11 24       	eor	r1, r1
+   1e0e6:	1f be       	out	0x3f, r1	; 63
+   1e0e8:	cf ef       	ldi	r28, 0xFF	; 255
+   1e0ea:	d1 e2       	ldi	r29, 0x21	; 33
+   1e0ec:	de bf       	out	0x3e, r29	; 62
+   1e0ee:	cd bf       	out	0x3d, r28	; 61
+
+0001e0f0 <__do_copy_data>:
+   1e0f0:	12 e0       	ldi	r17, 0x02	; 2
+   1e0f2:	a0 e0       	ldi	r26, 0x00	; 0
+   1e0f4:	b2 e0       	ldi	r27, 0x02	; 2
+   1e0f6:	e4 ee       	ldi	r30, 0xE4	; 228
+   1e0f8:	f4 ef       	ldi	r31, 0xF4	; 244
+   1e0fa:	01 e0       	ldi	r16, 0x01	; 1
+   1e0fc:	0b bf       	out	0x3b, r16	; 59
+   1e0fe:	02 c0       	rjmp	.+4      	; 0x1e104 <__do_copy_data+0x14>
+   1e100:	07 90       	elpm	r0, Z+
+   1e102:	0d 92       	st	X+, r0
+   1e104:	ac 30       	cpi	r26, 0x0C	; 12
+   1e106:	b1 07       	cpc	r27, r17
+   1e108:	d9 f7       	brne	.-10     	; 0x1e100 <__do_copy_data+0x10>
+
+0001e10a <__do_clear_bss>:
+   1e10a:	13 e0       	ldi	r17, 0x03	; 3
+   1e10c:	ac e0       	ldi	r26, 0x0C	; 12
+   1e10e:	b2 e0       	ldi	r27, 0x02	; 2
+   1e110:	01 c0       	rjmp	.+2      	; 0x1e114 <.do_clear_bss_start>
+
+0001e112 <.do_clear_bss_loop>:
+   1e112:	1d 92       	st	X+, r1
+
+0001e114 <.do_clear_bss_start>:
+   1e114:	ab 33       	cpi	r26, 0x3B	; 59
+   1e116:	b1 07       	cpc	r27, r17
+   1e118:	e1 f7       	brne	.-8      	; 0x1e112 <.do_clear_bss_loop>
+   1e11a:	42 d6       	rcall	.+3204   	; 0x1eda0 <main>
+   1e11c:	0c 94 70 fa 	jmp	0x1f4e0	; 0x1f4e0 <_exit>
+
+0001e120 <__jumpMain>:
+
+	asm volatile ( ".set __stack, %0" :: "i" (RAMEND) );
+
+//*	set stack pointer to top of RAM
+
+	asm volatile ( "ldi	16, %0" :: "i" (RAMEND >> 8) );
+   1e120:	01 e2       	ldi	r16, 0x21	; 33
+	asm volatile ( "out %0,16" :: "i" (AVR_STACK_POINTER_HI_ADDR) );
+   1e122:	0e bf       	out	0x3e, r16	; 62
+
+	asm volatile ( "ldi	16, %0" :: "i" (RAMEND & 0x0ff) );
+   1e124:	0f ef       	ldi	r16, 0xFF	; 255
+	asm volatile ( "out %0,16" :: "i" (AVR_STACK_POINTER_LO_ADDR) );
+   1e126:	0d bf       	out	0x3d, r16	; 61
+
+	asm volatile ( "clr __zero_reg__" );									// GCC depends on register r1 set to 0
+   1e128:	11 24       	eor	r1, r1
+	asm volatile ( "out %0, __zero_reg__" :: "I" (_SFR_IO_ADDR(SREG)) );	// set SREG to 0
+   1e12a:	1f be       	out	0x3f, r1	; 63
+	asm volatile ( "jmp main");												// jump to main()
+   1e12c:	39 c6       	rjmp	.+3186   	; 0x1eda0 <main>
+
+0001e12e <__bad_interrupt>:
+   1e12e:	68 cf       	rjmp	.-304    	; 0x1e000 <__vectors>
+
+0001e130 <sendchar>:
+/*
+ * send single byte to USART, wait until transmission is completed
+ */
+static void sendchar(char c)
+{
+	UART_DATA_REG	=	c;										// prepare transmission
+   1e130:	80 93 c6 00 	sts	0x00C6, r24
+	while (!(UART_STATUS_REG & (1 << UART_TRANSMIT_COMPLETE)));	// wait until byte sent
+   1e134:	80 91 c0 00 	lds	r24, 0x00C0
+   1e138:	86 ff       	sbrs	r24, 6
+   1e13a:	fc cf       	rjmp	.-8      	; 0x1e134 <sendchar+0x4>
+	UART_STATUS_REG |= (1 << UART_TRANSMIT_COMPLETE);			// delete TXCflag
+   1e13c:	80 91 c0 00 	lds	r24, 0x00C0
+   1e140:	80 64       	ori	r24, 0x40	; 64
+   1e142:	80 93 c0 00 	sts	0x00C0, r24
+   1e146:	08 95       	ret
+
+0001e148 <delay_ms>:
+
+//*****************************************************************************
+void delay_ms(unsigned int timedelay)
+{
+	unsigned int i;
+	for (i=0;i<timedelay;i++)
+   1e148:	20 e0       	ldi	r18, 0x00	; 0
+   1e14a:	30 e0       	ldi	r19, 0x00	; 0
+   1e14c:	28 17       	cp	r18, r24
+   1e14e:	39 07       	cpc	r19, r25
+   1e150:	49 f0       	breq	.+18     	; 0x1e164 <delay_ms+0x1c>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+   1e152:	ef ec       	ldi	r30, 0xCF	; 207
+   1e154:	f7 e0       	ldi	r31, 0x07	; 7
+   1e156:	31 97       	sbiw	r30, 0x01	; 1
+   1e158:	f1 f7       	brne	.-4      	; 0x1e156 <delay_ms+0xe>
+   1e15a:	00 c0       	rjmp	.+0      	; 0x1e15c <delay_ms+0x14>
+   1e15c:	00 00       	nop
+   1e15e:	2f 5f       	subi	r18, 0xFF	; 255
+   1e160:	3f 4f       	sbci	r19, 0xFF	; 255
+   1e162:	f4 cf       	rjmp	.-24     	; 0x1e14c <delay_ms+0x4>
+	{
+		_delay_ms(0.5);
+	}
+}
+   1e164:	08 95       	ret
+
+0001e166 <load_firmware>:
+	}
+	return UART_DATA_REG;
+}
+
+#ifdef PFF
+void load_firmware(void) {
+   1e166:	a2 e0       	ldi	r26, 0x02	; 2
+   1e168:	b0 e0       	ldi	r27, 0x00	; 0
+   1e16a:	e9 eb       	ldi	r30, 0xB9	; 185
+   1e16c:	f0 ef       	ldi	r31, 0xF0	; 240
+   1e16e:	0c 94 1d fa 	jmp	0x1f43a	; 0x1f43a <__prologue_saves__+0x20>
+	
+	if (eeprom_read_byte(0) == 1) {	//if eeprom byte 0 has been set to 1, then try and open a file
+   1e172:	80 e0       	ldi	r24, 0x00	; 0
+   1e174:	90 e0       	ldi	r25, 0x00	; 0
+   1e176:	0e 94 5a fa 	call	0x1f4b4	; 0x1f4b4 <__eerd_byte_m1280>
+   1e17a:	81 30       	cpi	r24, 0x01	; 1
+   1e17c:	69 f5       	brne	.+90     	; 0x1e1d8 <load_firmware+0x72>
+		
+		DWORD fa;	/* Flash address */
+		WORD br;	/* Bytes read */
+
+		pf_mount(&Fatfs);	/* Initialize file system */
+   1e17e:	81 e1       	ldi	r24, 0x11	; 17
+   1e180:	92 e0       	ldi	r25, 0x02	; 2
+   1e182:	af d1       	rcall	.+862    	; 0x1e4e2 <pf_mount>
+   1e184:	83 e0       	ldi	r24, 0x03	; 3
+	
+		if (pf_open("app.bin") == FR_OK) {	/* Open application file */
+   1e186:	92 e0       	ldi	r25, 0x02	; 2
+   1e188:	9b d2       	rcall	.+1334   	; 0x1e6c0 <pf_open>
+   1e18a:	81 11       	cpse	r24, r1
+   1e18c:	20 c0       	rjmp	.+64     	; 0x1e1ce <load_firmware+0x68>
+   1e18e:	60 e0       	ldi	r22, 0x00	; 0
+   1e190:	70 e0       	ldi	r23, 0x00	; 0
+			for (fa = 0; fa < BOOT_ADR; fa += SPM_PAGESIZE) {	/* Update all application pages */
+				flash_erase(fa);					/* Erase a page */
+   1e192:	cb 01       	movw	r24, r22
+   1e194:	d7 d5       	rcall	.+2990   	; 0x1ed44 <flash_erase>
+   1e196:	40 e0       	ldi	r20, 0x00	; 0
+   1e198:	51 e0       	ldi	r21, 0x01	; 1
+   1e19a:	6f ef       	ldi	r22, 0xFF	; 255
+				memset(Buff, 0xFF, SPM_PAGESIZE);	/* Clear buffer */
+   1e19c:	70 e0       	ldi	r23, 0x00	; 0
+   1e19e:	8b e3       	ldi	r24, 0x3B	; 59
+   1e1a0:	92 e0       	ldi	r25, 0x02	; 2
+   1e1a2:	0e 94 53 fa 	call	0x1f4a6	; 0x1f4a6 <memset>
+   1e1a6:	ae 01       	movw	r20, r28
+   1e1a8:	4f 5f       	subi	r20, 0xFF	; 255
+   1e1aa:	5f 4f       	sbci	r21, 0xFF	; 255
+				pf_read(Buff, SPM_PAGESIZE, &br);	/* Load a page data */
+   1e1ac:	60 e0       	ldi	r22, 0x00	; 0
+   1e1ae:	71 e0       	ldi	r23, 0x01	; 1
+   1e1b0:	8b e3       	ldi	r24, 0x3B	; 59
+   1e1b2:	92 e0       	ldi	r25, 0x02	; 2
+   1e1b4:	da d3       	rcall	.+1972   	; 0x1e96a <pf_read>
+   1e1b6:	89 81       	ldd	r24, Y+1	; 0x01
+   1e1b8:	9a 81       	ldd	r25, Y+2	; 0x02
+   1e1ba:	89 2b       	or	r24, r25
+   1e1bc:	31 f0       	breq	.+12     	; 0x1e1ca <load_firmware+0x64>
+				if (br) flash_write(fa, Buff);		/* Write it if the data is available */
+   1e1be:	4b e3       	ldi	r20, 0x3B	; 59
+   1e1c0:	52 e0       	ldi	r21, 0x02	; 2
+   1e1c2:	60 e0       	ldi	r22, 0x00	; 0
+   1e1c4:	70 e0       	ldi	r23, 0x00	; 0
+   1e1c6:	cb 01       	movw	r24, r22
+   1e1c8:	cc d5       	rcall	.+2968   	; 0x1ed62 <flash_write>
+   1e1ca:	62 e0       	ldi	r22, 0x02	; 2
+   1e1cc:	01 c0       	rjmp	.+2      	; 0x1e1d0 <load_firmware+0x6a>
+   1e1ce:	63 e0       	ldi	r22, 0x03	; 3
+   1e1d0:	80 e0       	ldi	r24, 0x00	; 0
+   1e1d2:	90 e0       	ldi	r25, 0x00	; 0
+			}
+			eeprom_write_byte(0, 2);	//set eeprom byte 0 to 2 to indicate that a file was written to flash
+   1e1d4:	0e 94 62 fa 	call	0x1f4c4	; 0x1f4c4 <__eewr_byte_m1280>
+		} else {
+			eeprom_write_byte(0, 3);			//set eeprom byte 0 to 3 to indicate a file was not written to flash
+   1e1d8:	22 96       	adiw	r28, 0x02	; 2
+   1e1da:	e2 e0       	ldi	r30, 0x02	; 2
+   1e1dc:	0c 94 39 fa 	jmp	0x1f472	; 0x1f472 <__epilogue_restores__+0x20>
+
+0001e1e0 <clust2sect>:
+
+static
+DWORD clust2sect (	/* !=0: Sector number, 0: Failed - invalid cluster# */
+	CLUST clst		/* Cluster# to be converted */
+)
+{
+   1e1e0:	0f 93       	push	r16
+   1e1e2:	1f 93       	push	r17
+   1e1e4:	9b 01       	movw	r18, r22
+   1e1e6:	ac 01       	movw	r20, r24
+	FATFS *fs = FatFs;
+   1e1e8:	e0 91 0e 02 	lds	r30, 0x020E
+   1e1ec:	f0 91 0f 02 	lds	r31, 0x020F
+
+
+	clst -= 2;
+   1e1f0:	22 50       	subi	r18, 0x02	; 2
+   1e1f2:	31 09       	sbc	r19, r1
+   1e1f4:	41 09       	sbc	r20, r1
+   1e1f6:	51 09       	sbc	r21, r1
+	if (clst >= (fs->n_fatent - 2)) return 0;		/* Invalid cluster# */
+   1e1f8:	86 81       	ldd	r24, Z+6	; 0x06
+   1e1fa:	97 81       	ldd	r25, Z+7	; 0x07
+   1e1fc:	a0 85       	ldd	r26, Z+8	; 0x08
+   1e1fe:	b1 85       	ldd	r27, Z+9	; 0x09
+   1e200:	02 97       	sbiw	r24, 0x02	; 2
+   1e202:	a1 09       	sbc	r26, r1
+   1e204:	b1 09       	sbc	r27, r1
+   1e206:	28 17       	cp	r18, r24
+   1e208:	39 07       	cpc	r19, r25
+   1e20a:	4a 07       	cpc	r20, r26
+   1e20c:	5b 07       	cpc	r21, r27
+   1e20e:	68 f4       	brcc	.+26     	; 0x1e22a <clust2sect+0x4a>
+	return (DWORD)clst * fs->csize + fs->database;
+   1e210:	a2 81       	ldd	r26, Z+2	; 0x02
+   1e212:	b0 e0       	ldi	r27, 0x00	; 0
+   1e214:	0e 94 e1 f9 	call	0x1f3c2	; 0x1f3c2 <__muluhisi3>
+   1e218:	02 89       	ldd	r16, Z+18	; 0x12
+   1e21a:	13 89       	ldd	r17, Z+19	; 0x13
+   1e21c:	24 89       	ldd	r18, Z+20	; 0x14
+   1e21e:	35 89       	ldd	r19, Z+21	; 0x15
+   1e220:	60 0f       	add	r22, r16
+   1e222:	71 1f       	adc	r23, r17
+   1e224:	82 1f       	adc	r24, r18
+   1e226:	93 1f       	adc	r25, r19
+   1e228:	03 c0       	rjmp	.+6      	; 0x1e230 <clust2sect+0x50>
+{
+	FATFS *fs = FatFs;
+
+
+	clst -= 2;
+	if (clst >= (fs->n_fatent - 2)) return 0;		/* Invalid cluster# */
+   1e22a:	60 e0       	ldi	r22, 0x00	; 0
+   1e22c:	70 e0       	ldi	r23, 0x00	; 0
+   1e22e:	cb 01       	movw	r24, r22
+	return (DWORD)clst * fs->csize + fs->database;
+}
+   1e230:	1f 91       	pop	r17
+   1e232:	0f 91       	pop	r16
+   1e234:	08 95       	ret
+
+0001e236 <dir_rewind>:
+
+static
+FRESULT dir_rewind (
+	DIR *dj			/* Pointer to directory object */
+)
+{
+   1e236:	0f 93       	push	r16
+   1e238:	1f 93       	push	r17
+   1e23a:	cf 93       	push	r28
+   1e23c:	df 93       	push	r29
+   1e23e:	ec 01       	movw	r28, r24
+	CLUST clst;
+	FATFS *fs = FatFs;
+   1e240:	e0 91 0e 02 	lds	r30, 0x020E
+   1e244:	f0 91 0f 02 	lds	r31, 0x020F
+
+
+	dj->index = 0;
+   1e248:	19 82       	std	Y+1, r1	; 0x01
+   1e24a:	18 82       	st	Y, r1
+	clst = dj->sclust;
+   1e24c:	6c 81       	ldd	r22, Y+4	; 0x04
+   1e24e:	7d 81       	ldd	r23, Y+5	; 0x05
+   1e250:	8e 81       	ldd	r24, Y+6	; 0x06
+   1e252:	9f 81       	ldd	r25, Y+7	; 0x07
+	if (clst == 1 || clst >= fs->n_fatent)	/* Check start cluster range */
+   1e254:	61 30       	cpi	r22, 0x01	; 1
+   1e256:	71 05       	cpc	r23, r1
+   1e258:	81 05       	cpc	r24, r1
+   1e25a:	91 05       	cpc	r25, r1
+   1e25c:	51 f1       	breq	.+84     	; 0x1e2b2 <dir_rewind+0x7c>
+   1e25e:	06 81       	ldd	r16, Z+6	; 0x06
+   1e260:	17 81       	ldd	r17, Z+7	; 0x07
+   1e262:	20 85       	ldd	r18, Z+8	; 0x08
+   1e264:	31 85       	ldd	r19, Z+9	; 0x09
+   1e266:	60 17       	cp	r22, r16
+   1e268:	71 07       	cpc	r23, r17
+   1e26a:	82 07       	cpc	r24, r18
+   1e26c:	93 07       	cpc	r25, r19
+   1e26e:	08 f5       	brcc	.+66     	; 0x1e2b2 <dir_rewind+0x7c>
+		return FR_DISK_ERR;
+	if (_FS_FAT32 && !clst && fs->fs_type == FS_FAT32)	/* Replace cluster# 0 with root cluster# if in FAT32 */
+   1e270:	61 15       	cp	r22, r1
+   1e272:	71 05       	cpc	r23, r1
+   1e274:	81 05       	cpc	r24, r1
+   1e276:	91 05       	cpc	r25, r1
+   1e278:	39 f4       	brne	.+14     	; 0x1e288 <dir_rewind+0x52>
+   1e27a:	20 81       	ld	r18, Z
+   1e27c:	23 30       	cpi	r18, 0x03	; 3
+   1e27e:	21 f4       	brne	.+8      	; 0x1e288 <dir_rewind+0x52>
+		clst = (CLUST)fs->dirbase;
+   1e280:	66 85       	ldd	r22, Z+14	; 0x0e
+   1e282:	77 85       	ldd	r23, Z+15	; 0x0f
+   1e284:	80 89       	ldd	r24, Z+16	; 0x10
+   1e286:	91 89       	ldd	r25, Z+17	; 0x11
+	dj->clust = clst;						/* Current cluster */
+   1e288:	68 87       	std	Y+8, r22	; 0x08
+   1e28a:	79 87       	std	Y+9, r23	; 0x09
+   1e28c:	8a 87       	std	Y+10, r24	; 0x0a
+   1e28e:	9b 87       	std	Y+11, r25	; 0x0b
+	dj->sect = clst ? clust2sect(clst) : fs->dirbase;	/* Current sector */
+   1e290:	61 15       	cp	r22, r1
+   1e292:	71 05       	cpc	r23, r1
+   1e294:	81 05       	cpc	r24, r1
+   1e296:	91 05       	cpc	r25, r1
+   1e298:	11 f0       	breq	.+4      	; 0x1e29e <dir_rewind+0x68>
+   1e29a:	a2 df       	rcall	.-188    	; 0x1e1e0 <clust2sect>
+   1e29c:	04 c0       	rjmp	.+8      	; 0x1e2a6 <dir_rewind+0x70>
+   1e29e:	66 85       	ldd	r22, Z+14	; 0x0e
+   1e2a0:	77 85       	ldd	r23, Z+15	; 0x0f
+   1e2a2:	80 89       	ldd	r24, Z+16	; 0x10
+   1e2a4:	91 89       	ldd	r25, Z+17	; 0x11
+   1e2a6:	6c 87       	std	Y+12, r22	; 0x0c
+   1e2a8:	7d 87       	std	Y+13, r23	; 0x0d
+   1e2aa:	8e 87       	std	Y+14, r24	; 0x0e
+   1e2ac:	9f 87       	std	Y+15, r25	; 0x0f
+   1e2ae:	80 e0       	ldi	r24, 0x00	; 0
+
+	return FR_OK;	/* Seek succeeded */
+   1e2b0:	01 c0       	rjmp	.+2      	; 0x1e2b4 <dir_rewind+0x7e>
+   1e2b2:	81 e0       	ldi	r24, 0x01	; 1
+
+
+	dj->index = 0;
+	clst = dj->sclust;
+	if (clst == 1 || clst >= fs->n_fatent)	/* Check start cluster range */
+		return FR_DISK_ERR;
+   1e2b4:	df 91       	pop	r29
+		clst = (CLUST)fs->dirbase;
+	dj->clust = clst;						/* Current cluster */
+	dj->sect = clst ? clust2sect(clst) : fs->dirbase;	/* Current sector */
+
+	return FR_OK;	/* Seek succeeded */
+}
+   1e2b6:	cf 91       	pop	r28
+   1e2b8:	1f 91       	pop	r17
+   1e2ba:	0f 91       	pop	r16
+   1e2bc:	08 95       	ret
+
+0001e2be <get_fat>:
+   1e2be:	4f 92       	push	r4
+
+static
+CLUST get_fat (	/* 1:IO error, Else:Cluster status */
+	CLUST clst	/* Cluster# to get the link information */
+)
+{
+   1e2c0:	5f 92       	push	r5
+   1e2c2:	6f 92       	push	r6
+   1e2c4:	7f 92       	push	r7
+   1e2c6:	af 92       	push	r10
+   1e2c8:	bf 92       	push	r11
+   1e2ca:	cf 92       	push	r12
+   1e2cc:	df 92       	push	r13
+   1e2ce:	ef 92       	push	r14
+   1e2d0:	ff 92       	push	r15
+   1e2d2:	0f 93       	push	r16
+   1e2d4:	1f 93       	push	r17
+   1e2d6:	cf 93       	push	r28
+   1e2d8:	df 93       	push	r29
+   1e2da:	00 d0       	rcall	.+0      	; 0x1e2dc <get_fat+0x1e>
+   1e2dc:	00 d0       	rcall	.+0      	; 0x1e2de <get_fat+0x20>
+   1e2de:	cd b7       	in	r28, 0x3d	; 61
+   1e2e0:	de b7       	in	r29, 0x3e	; 62
+   1e2e2:	6b 01       	movw	r12, r22
+   1e2e4:	7c 01       	movw	r14, r24
+   1e2e6:	a0 90 0e 02 	lds	r10, 0x020E
+	WORD wc, bc, ofs;
+	BYTE buf[4];
+	FATFS *fs = FatFs;
+   1e2ea:	b0 90 0f 02 	lds	r11, 0x020F
+   1e2ee:	62 30       	cpi	r22, 0x02	; 2
+
+
+	if (clst < 2 || clst >= fs->n_fatent)	/* Range check */
+   1e2f0:	71 05       	cpc	r23, r1
+   1e2f2:	81 05       	cpc	r24, r1
+   1e2f4:	91 05       	cpc	r25, r1
+   1e2f6:	08 f4       	brcc	.+2      	; 0x1e2fa <get_fat+0x3c>
+   1e2f8:	a0 c0       	rjmp	.+320    	; 0x1e43a <get_fat+0x17c>
+   1e2fa:	f5 01       	movw	r30, r10
+   1e2fc:	86 81       	ldd	r24, Z+6	; 0x06
+   1e2fe:	97 81       	ldd	r25, Z+7	; 0x07
+   1e300:	a0 85       	ldd	r26, Z+8	; 0x08
+   1e302:	b1 85       	ldd	r27, Z+9	; 0x09
+   1e304:	c8 16       	cp	r12, r24
+   1e306:	d9 06       	cpc	r13, r25
+   1e308:	ea 06       	cpc	r14, r26
+   1e30a:	fb 06       	cpc	r15, r27
+   1e30c:	08 f0       	brcs	.+2      	; 0x1e310 <get_fat+0x52>
+   1e30e:	95 c0       	rjmp	.+298    	; 0x1e43a <get_fat+0x17c>
+   1e310:	80 81       	ld	r24, Z
+		return 1;
+
+	switch (fs->fs_type) {
+   1e312:	82 30       	cpi	r24, 0x02	; 2
+   1e314:	09 f4       	brne	.+2      	; 0x1e318 <get_fat+0x5a>
+   1e316:	50 c0       	rjmp	.+160    	; 0x1e3b8 <get_fat+0xfa>
+   1e318:	83 30       	cpi	r24, 0x03	; 3
+   1e31a:	09 f4       	brne	.+2      	; 0x1e31e <get_fat+0x60>
+   1e31c:	68 c0       	rjmp	.+208    	; 0x1e3ee <get_fat+0x130>
+   1e31e:	81 30       	cpi	r24, 0x01	; 1
+   1e320:	09 f0       	breq	.+2      	; 0x1e324 <get_fat+0x66>
+   1e322:	8b c0       	rjmp	.+278    	; 0x1e43a <get_fat+0x17c>
+   1e324:	26 01       	movw	r4, r12
+#if _FS_FAT12
+	case FS_FAT12 :
+		bc = (WORD)clst; bc += bc / 2;
+   1e326:	56 94       	lsr	r5
+   1e328:	47 94       	ror	r4
+   1e32a:	4c 0c       	add	r4, r12
+   1e32c:	5d 1c       	adc	r5, r13
+   1e32e:	92 01       	movw	r18, r4
+		ofs = bc % 512; bc /= 512;
+   1e330:	31 70       	andi	r19, 0x01	; 1
+   1e332:	45 2c       	mov	r4, r5
+   1e334:	55 24       	eor	r5, r5
+   1e336:	46 94       	lsr	r4
+   1e338:	61 2c       	mov	r6, r1
+   1e33a:	71 2c       	mov	r7, r1
+   1e33c:	82 85       	ldd	r24, Z+10	; 0x0a
+   1e33e:	93 85       	ldd	r25, Z+11	; 0x0b
+   1e340:	a4 85       	ldd	r26, Z+12	; 0x0c
+   1e342:	b5 85       	ldd	r27, Z+13	; 0x0d
+   1e344:	b3 01       	movw	r22, r6
+		if (ofs != 511) {
+			if (disk_readp(buf, fs->fatbase + bc, ofs, 2)) break;
+   1e346:	a2 01       	movw	r20, r4
+   1e348:	48 0f       	add	r20, r24
+   1e34a:	59 1f       	adc	r21, r25
+   1e34c:	6a 1f       	adc	r22, r26
+   1e34e:	7b 1f       	adc	r23, r27
+   1e350:	2f 3f       	cpi	r18, 0xFF	; 255
+	switch (fs->fs_type) {
+#if _FS_FAT12
+	case FS_FAT12 :
+		bc = (WORD)clst; bc += bc / 2;
+		ofs = bc % 512; bc /= 512;
+		if (ofs != 511) {
+   1e352:	f1 e0       	ldi	r31, 0x01	; 1
+   1e354:	3f 07       	cpc	r19, r31
+   1e356:	29 f0       	breq	.+10     	; 0x1e362 <get_fat+0xa4>
+   1e358:	02 e0       	ldi	r16, 0x02	; 2
+			if (disk_readp(buf, fs->fatbase + bc, ofs, 2)) break;
+   1e35a:	10 e0       	ldi	r17, 0x00	; 0
+   1e35c:	ce 01       	movw	r24, r28
+   1e35e:	01 96       	adiw	r24, 0x01	; 1
+   1e360:	1a c0       	rjmp	.+52     	; 0x1e396 <get_fat+0xd8>
+   1e362:	01 e0       	ldi	r16, 0x01	; 1
+		} else {
+			if (disk_readp(buf, fs->fatbase + bc, 511, 1)) break;
+   1e364:	10 e0       	ldi	r17, 0x00	; 0
+   1e366:	2f ef       	ldi	r18, 0xFF	; 255
+   1e368:	31 e0       	ldi	r19, 0x01	; 1
+   1e36a:	ce 01       	movw	r24, r28
+   1e36c:	01 96       	adiw	r24, 0x01	; 1
+   1e36e:	79 d4       	rcall	.+2290   	; 0x1ec62 <disk_readp>
+   1e370:	81 11       	cpse	r24, r1
+   1e372:	63 c0       	rjmp	.+198    	; 0x1e43a <get_fat+0x17c>
+   1e374:	f5 01       	movw	r30, r10
+   1e376:	42 85       	ldd	r20, Z+10	; 0x0a
+			if (disk_readp(buf+1, fs->fatbase + bc + 1, 0, 1)) break;
+   1e378:	53 85       	ldd	r21, Z+11	; 0x0b
+   1e37a:	64 85       	ldd	r22, Z+12	; 0x0c
+   1e37c:	75 85       	ldd	r23, Z+13	; 0x0d
+   1e37e:	4f 5f       	subi	r20, 0xFF	; 255
+   1e380:	5f 4f       	sbci	r21, 0xFF	; 255
+   1e382:	6f 4f       	sbci	r22, 0xFF	; 255
+   1e384:	7f 4f       	sbci	r23, 0xFF	; 255
+   1e386:	44 0d       	add	r20, r4
+   1e388:	55 1d       	adc	r21, r5
+   1e38a:	66 1d       	adc	r22, r6
+   1e38c:	77 1d       	adc	r23, r7
+   1e38e:	20 e0       	ldi	r18, 0x00	; 0
+   1e390:	30 e0       	ldi	r19, 0x00	; 0
+   1e392:	ce 01       	movw	r24, r28
+   1e394:	02 96       	adiw	r24, 0x02	; 2
+   1e396:	65 d4       	rcall	.+2250   	; 0x1ec62 <disk_readp>
+   1e398:	81 11       	cpse	r24, r1
+   1e39a:	4f c0       	rjmp	.+158    	; 0x1e43a <get_fat+0x17c>
+   1e39c:	69 81       	ldd	r22, Y+1	; 0x01
+   1e39e:	7a 81       	ldd	r23, Y+2	; 0x02
+   1e3a0:	c0 fe       	sbrs	r12, 0
+		}
+		wc = LD_WORD(buf);
+   1e3a2:	06 c0       	rjmp	.+12     	; 0x1e3b0 <get_fat+0xf2>
+   1e3a4:	e4 e0       	ldi	r30, 0x04	; 4
+		return (clst & 1) ? (wc >> 4) : (wc & 0xFFF);
+   1e3a6:	76 95       	lsr	r23
+   1e3a8:	67 95       	ror	r22
+   1e3aa:	ea 95       	dec	r30
+   1e3ac:	e1 f7       	brne	.-8      	; 0x1e3a6 <get_fat+0xe8>
+   1e3ae:	01 c0       	rjmp	.+2      	; 0x1e3b2 <get_fat+0xf4>
+   1e3b0:	7f 70       	andi	r23, 0x0F	; 15
+   1e3b2:	80 e0       	ldi	r24, 0x00	; 0
+   1e3b4:	90 e0       	ldi	r25, 0x00	; 0
+   1e3b6:	45 c0       	rjmp	.+138    	; 0x1e442 <get_fat+0x184>
+   1e3b8:	96 01       	movw	r18, r12
+   1e3ba:	33 27       	eor	r19, r19
+   1e3bc:	22 0f       	add	r18, r18
+#endif
+	case FS_FAT16 :
+		if (disk_readp(buf, fs->fatbase + clst / 256, (WORD)(((WORD)clst % 256) * 2), 2)) break;
+   1e3be:	33 1f       	adc	r19, r19
+   1e3c0:	77 27       	eor	r23, r23
+   1e3c2:	6f 2d       	mov	r22, r15
+   1e3c4:	5e 2d       	mov	r21, r14
+   1e3c6:	4d 2d       	mov	r20, r13
+   1e3c8:	f5 01       	movw	r30, r10
+   1e3ca:	82 85       	ldd	r24, Z+10	; 0x0a
+   1e3cc:	93 85       	ldd	r25, Z+11	; 0x0b
+   1e3ce:	a4 85       	ldd	r26, Z+12	; 0x0c
+   1e3d0:	b5 85       	ldd	r27, Z+13	; 0x0d
+   1e3d2:	48 0f       	add	r20, r24
+   1e3d4:	59 1f       	adc	r21, r25
+   1e3d6:	6a 1f       	adc	r22, r26
+   1e3d8:	7b 1f       	adc	r23, r27
+   1e3da:	02 e0       	ldi	r16, 0x02	; 2
+   1e3dc:	10 e0       	ldi	r17, 0x00	; 0
+   1e3de:	ce 01       	movw	r24, r28
+   1e3e0:	01 96       	adiw	r24, 0x01	; 1
+   1e3e2:	3f d4       	rcall	.+2174   	; 0x1ec62 <disk_readp>
+   1e3e4:	81 11       	cpse	r24, r1
+   1e3e6:	29 c0       	rjmp	.+82     	; 0x1e43a <get_fat+0x17c>
+   1e3e8:	69 81       	ldd	r22, Y+1	; 0x01
+   1e3ea:	7a 81       	ldd	r23, Y+2	; 0x02
+   1e3ec:	e2 cf       	rjmp	.-60     	; 0x1e3b2 <get_fat+0xf4>
+   1e3ee:	96 01       	movw	r18, r12
+		return LD_WORD(buf);
+   1e3f0:	2f 77       	andi	r18, 0x7F	; 127
+   1e3f2:	33 27       	eor	r19, r19
+   1e3f4:	22 0f       	add	r18, r18
+#if _FS_FAT32
+	case FS_FAT32 :
+		if (disk_readp(buf, fs->fatbase + clst / 128, (WORD)(((WORD)clst % 128) * 4), 4)) break;
+   1e3f6:	33 1f       	adc	r19, r19
+   1e3f8:	22 0f       	add	r18, r18
+   1e3fa:	33 1f       	adc	r19, r19
+   1e3fc:	b7 01       	movw	r22, r14
+   1e3fe:	a6 01       	movw	r20, r12
+   1e400:	97 e0       	ldi	r25, 0x07	; 7
+   1e402:	76 95       	lsr	r23
+   1e404:	67 95       	ror	r22
+   1e406:	57 95       	ror	r21
+   1e408:	47 95       	ror	r20
+   1e40a:	9a 95       	dec	r25
+   1e40c:	d1 f7       	brne	.-12     	; 0x1e402 <get_fat+0x144>
+   1e40e:	f5 01       	movw	r30, r10
+   1e410:	82 85       	ldd	r24, Z+10	; 0x0a
+   1e412:	93 85       	ldd	r25, Z+11	; 0x0b
+   1e414:	a4 85       	ldd	r26, Z+12	; 0x0c
+   1e416:	b5 85       	ldd	r27, Z+13	; 0x0d
+   1e418:	48 0f       	add	r20, r24
+   1e41a:	59 1f       	adc	r21, r25
+   1e41c:	6a 1f       	adc	r22, r26
+   1e41e:	7b 1f       	adc	r23, r27
+   1e420:	04 e0       	ldi	r16, 0x04	; 4
+   1e422:	10 e0       	ldi	r17, 0x00	; 0
+   1e424:	ce 01       	movw	r24, r28
+   1e426:	01 96       	adiw	r24, 0x01	; 1
+   1e428:	1c d4       	rcall	.+2104   	; 0x1ec62 <disk_readp>
+   1e42a:	81 11       	cpse	r24, r1
+   1e42c:	06 c0       	rjmp	.+12     	; 0x1e43a <get_fat+0x17c>
+   1e42e:	69 81       	ldd	r22, Y+1	; 0x01
+   1e430:	7a 81       	ldd	r23, Y+2	; 0x02
+   1e432:	8b 81       	ldd	r24, Y+3	; 0x03
+   1e434:	9c 81       	ldd	r25, Y+4	; 0x04
+   1e436:	9f 70       	andi	r25, 0x0F	; 15
+		return LD_DWORD(buf) & 0x0FFFFFFF;
+   1e438:	04 c0       	rjmp	.+8      	; 0x1e442 <get_fat+0x184>
+   1e43a:	61 e0       	ldi	r22, 0x01	; 1
+   1e43c:	70 e0       	ldi	r23, 0x00	; 0
+   1e43e:	80 e0       	ldi	r24, 0x00	; 0
+   1e440:	90 e0       	ldi	r25, 0x00	; 0
+   1e442:	0f 90       	pop	r0
+#endif
+	}
+
+	return 1;	/* An error occured at the disk I/O layer */
+   1e444:	0f 90       	pop	r0
+   1e446:	0f 90       	pop	r0
+   1e448:	0f 90       	pop	r0
+   1e44a:	df 91       	pop	r29
+}
+   1e44c:	cf 91       	pop	r28
+   1e44e:	1f 91       	pop	r17
+   1e450:	0f 91       	pop	r16
+   1e452:	ff 90       	pop	r15
+   1e454:	ef 90       	pop	r14
+   1e456:	df 90       	pop	r13
+   1e458:	cf 90       	pop	r12
+   1e45a:	bf 90       	pop	r11
+   1e45c:	af 90       	pop	r10
+   1e45e:	7f 90       	pop	r7
+   1e460:	6f 90       	pop	r6
+   1e462:	5f 90       	pop	r5
+   1e464:	4f 90       	pop	r4
+   1e466:	08 95       	ret
+
+0001e468 <check_fs>:
+   1e468:	a0 e0       	ldi	r26, 0x00	; 0
+   1e46a:	b0 e0       	ldi	r27, 0x00	; 0
+   1e46c:	e9 e3       	ldi	r30, 0x39	; 57
+   1e46e:	f2 ef       	ldi	r31, 0xF2	; 242
+   1e470:	de c7       	rjmp	.+4028   	; 0x1f42e <__prologue_saves__+0x14>
+static
+BYTE check_fs (	/* 0:The FAT boot record, 1:Valid boot record but not an FAT, 2:Not a boot record, 3:Error */
+	BYTE *buf,	/* Working buffer */
+	DWORD sect	/* Sector# (lba) to check if it is an FAT boot record or not */
+)
+{
+   1e472:	ec 01       	movw	r28, r24
+   1e474:	6a 01       	movw	r12, r20
+   1e476:	7b 01       	movw	r14, r22
+   1e478:	02 e0       	ldi	r16, 0x02	; 2
+   1e47a:	10 e0       	ldi	r17, 0x00	; 0
+   1e47c:	2e ef       	ldi	r18, 0xFE	; 254
+   1e47e:	31 e0       	ldi	r19, 0x01	; 1
+   1e480:	f0 d3       	rcall	.+2016   	; 0x1ec62 <disk_readp>
+   1e482:	81 11       	cpse	r24, r1
+	if (disk_readp(buf, sect, 510, 2))		/* Read the boot sector */
+   1e484:	25 c0       	rjmp	.+74     	; 0x1e4d0 <check_fs+0x68>
+   1e486:	88 81       	ld	r24, Y
+   1e488:	99 81       	ldd	r25, Y+1	; 0x01
+   1e48a:	85 35       	cpi	r24, 0x55	; 85
+   1e48c:	9a 4a       	sbci	r25, 0xAA	; 170
+   1e48e:	11 f5       	brne	.+68     	; 0x1e4d4 <check_fs+0x6c>
+   1e490:	26 e3       	ldi	r18, 0x36	; 54
+   1e492:	30 e0       	ldi	r19, 0x00	; 0
+		return 3;
+	if (LD_WORD(buf) != 0xAA55)				/* Check record signature */
+   1e494:	b7 01       	movw	r22, r14
+   1e496:	a6 01       	movw	r20, r12
+   1e498:	ce 01       	movw	r24, r28
+   1e49a:	e3 d3       	rcall	.+1990   	; 0x1ec62 <disk_readp>
+   1e49c:	81 11       	cpse	r24, r1
+		return 2;
+
+	if (!disk_readp(buf, sect, BS_FilSysType, 2) && LD_WORD(buf) == 0x4146)	/* Check FAT12/16 */
+   1e49e:	05 c0       	rjmp	.+10     	; 0x1e4aa <check_fs+0x42>
+   1e4a0:	88 81       	ld	r24, Y
+   1e4a2:	99 81       	ldd	r25, Y+1	; 0x01
+   1e4a4:	86 34       	cpi	r24, 0x46	; 70
+   1e4a6:	91 44       	sbci	r25, 0x41	; 65
+   1e4a8:	b9 f0       	breq	.+46     	; 0x1e4d8 <check_fs+0x70>
+   1e4aa:	02 e0       	ldi	r16, 0x02	; 2
+   1e4ac:	10 e0       	ldi	r17, 0x00	; 0
+   1e4ae:	22 e5       	ldi	r18, 0x52	; 82
+   1e4b0:	30 e0       	ldi	r19, 0x00	; 0
+   1e4b2:	b7 01       	movw	r22, r14
+   1e4b4:	a6 01       	movw	r20, r12
+   1e4b6:	ce 01       	movw	r24, r28
+   1e4b8:	d4 d3       	rcall	.+1960   	; 0x1ec62 <disk_readp>
+		return 0;
+	if (_FS_FAT32 && !disk_readp(buf, sect, BS_FilSysType32, 2) && LD_WORD(buf) == 0x4146)	/* Check FAT32 */
+   1e4ba:	81 11       	cpse	r24, r1
+   1e4bc:	07 c0       	rjmp	.+14     	; 0x1e4cc <check_fs+0x64>
+   1e4be:	81 e0       	ldi	r24, 0x01	; 1
+   1e4c0:	28 81       	ld	r18, Y
+   1e4c2:	39 81       	ldd	r19, Y+1	; 0x01
+   1e4c4:	26 34       	cpi	r18, 0x46	; 70
+   1e4c6:	31 44       	sbci	r19, 0x41	; 65
+   1e4c8:	41 f4       	brne	.+16     	; 0x1e4da <check_fs+0x72>
+   1e4ca:	06 c0       	rjmp	.+12     	; 0x1e4d8 <check_fs+0x70>
+   1e4cc:	81 e0       	ldi	r24, 0x01	; 1
+   1e4ce:	05 c0       	rjmp	.+10     	; 0x1e4da <check_fs+0x72>
+   1e4d0:	83 e0       	ldi	r24, 0x03	; 3
+   1e4d2:	03 c0       	rjmp	.+6      	; 0x1e4da <check_fs+0x72>
+   1e4d4:	82 e0       	ldi	r24, 0x02	; 2
+   1e4d6:	01 c0       	rjmp	.+2      	; 0x1e4da <check_fs+0x72>
+   1e4d8:	80 e0       	ldi	r24, 0x00	; 0
+   1e4da:	cd b7       	in	r28, 0x3d	; 61
+   1e4dc:	de b7       	in	r29, 0x3e	; 62
+		return 0;
+	return 1;
+   1e4de:	e8 e0       	ldi	r30, 0x08	; 8
+   1e4e0:	c2 c7       	rjmp	.+3972   	; 0x1f466 <__epilogue_restores__+0x14>
+
+0001e4e2 <pf_mount>:
+	BYTE *buf,	/* Working buffer */
+	DWORD sect	/* Sector# (lba) to check if it is an FAT boot record or not */
+)
+{
+	if (disk_readp(buf, sect, 510, 2))		/* Read the boot sector */
+		return 3;
+   1e4e2:	a8 e2       	ldi	r26, 0x28	; 40
+   1e4e4:	b0 e0       	ldi	r27, 0x00	; 0
+	if (LD_WORD(buf) != 0xAA55)				/* Check record signature */
+		return 2;
+   1e4e6:	e6 e7       	ldi	r30, 0x76	; 118
+   1e4e8:	f2 ef       	ldi	r31, 0xF2	; 242
+
+	if (!disk_readp(buf, sect, BS_FilSysType, 2) && LD_WORD(buf) == 0x4146)	/* Check FAT12/16 */
+		return 0;
+   1e4ea:	99 c7       	rjmp	.+3890   	; 0x1f41e <__prologue_saves__+0x4>
+	if (_FS_FAT32 && !disk_readp(buf, sect, BS_FilSysType32, 2) && LD_WORD(buf) == 0x4146)	/* Check FAT32 */
+		return 0;
+	return 1;
+}
+   1e4ec:	5c 01       	movw	r10, r24
+   1e4ee:	10 92 0f 02 	sts	0x020F, r1
+   1e4f2:	10 92 0e 02 	sts	0x020E, r1
+/*-----------------------------------------------------------------------*/
+
+FRESULT pf_mount (
+	FATFS *fs		/* Pointer to new file system object (NULL: Unmount) */
+)
+{
+   1e4f6:	00 97       	sbiw	r24, 0x00	; 0
+   1e4f8:	09 f4       	brne	.+2      	; 0x1e4fc <pf_mount+0x1a>
+   1e4fa:	dc c0       	rjmp	.+440    	; 0x1e6b4 <pf_mount+0x1d2>
+   1e4fc:	20 d3       	rcall	.+1600   	; 0x1eb3e <disk_initialize>
+   1e4fe:	80 fd       	sbrc	r24, 0
+   1e500:	db c0       	rjmp	.+438    	; 0x1e6b8 <pf_mount+0x1d6>
+   1e502:	40 e0       	ldi	r20, 0x00	; 0
+	BYTE fmt, buf[36];
+	DWORD bsect, fsize, tsect, mclst;
+
+
+	FatFs = 0;
+   1e504:	50 e0       	ldi	r21, 0x00	; 0
+   1e506:	ba 01       	movw	r22, r20
+   1e508:	ce 01       	movw	r24, r28
+   1e50a:	01 96       	adiw	r24, 0x01	; 1
+	if (!fs) return FR_OK;				/* Unregister fs object */
+   1e50c:	ad df       	rcall	.-166    	; 0x1e468 <check_fs>
+   1e50e:	81 30       	cpi	r24, 0x01	; 1
+   1e510:	e9 f4       	brne	.+58     	; 0x1e54c <pf_mount+0x6a>
+
+	if (disk_initialize() & STA_NOINIT)	/* Check if the drive is ready or not */
+   1e512:	00 e1       	ldi	r16, 0x10	; 16
+   1e514:	10 e0       	ldi	r17, 0x00	; 0
+   1e516:	2e eb       	ldi	r18, 0xBE	; 190
+   1e518:	31 e0       	ldi	r19, 0x01	; 1
+		return FR_NOT_READY;
+
+	/* Search FAT partition on the drive */
+	bsect = 0;
+	fmt = check_fs(buf, bsect);			/* Check sector 0 as an SFD format */
+   1e51a:	40 e0       	ldi	r20, 0x00	; 0
+   1e51c:	50 e0       	ldi	r21, 0x00	; 0
+   1e51e:	ba 01       	movw	r22, r20
+   1e520:	ce 01       	movw	r24, r28
+   1e522:	01 96       	adiw	r24, 0x01	; 1
+   1e524:	9e d3       	rcall	.+1852   	; 0x1ec62 <disk_readp>
+   1e526:	88 23       	and	r24, r24
+	if (fmt == 1) {						/* Not an FAT boot record, it may be FDISK format */
+   1e528:	11 f0       	breq	.+4      	; 0x1e52e <pf_mount+0x4c>
+   1e52a:	81 e0       	ldi	r24, 0x01	; 1
+		/* Check a partition listed in top of the partition table */
+		if (disk_readp(buf, bsect, MBR_Table, 16)) {	/* 1st partition entry */
+   1e52c:	c6 c0       	rjmp	.+396    	; 0x1e6ba <pf_mount+0x1d8>
+   1e52e:	8d 81       	ldd	r24, Y+5	; 0x05
+   1e530:	81 11       	cpse	r24, r1
+   1e532:	02 c0       	rjmp	.+4      	; 0x1e538 <pf_mount+0x56>
+   1e534:	87 e0       	ldi	r24, 0x07	; 7
+   1e536:	c1 c0       	rjmp	.+386    	; 0x1e6ba <pf_mount+0x1d8>
+   1e538:	49 84       	ldd	r4, Y+9	; 0x09
+   1e53a:	5a 84       	ldd	r5, Y+10	; 0x0a
+   1e53c:	6b 84       	ldd	r6, Y+11	; 0x0b
+   1e53e:	7c 84       	ldd	r7, Y+12	; 0x0c
+   1e540:	b3 01       	movw	r22, r6
+   1e542:	a2 01       	movw	r20, r4
+   1e544:	ce 01       	movw	r24, r28
+				bsect = LD_DWORD(&buf[8]);	/* Partition offset in LBA */
+				fmt = check_fs(buf, bsect);	/* Check the partition */
+			}
+		}
+	}
+	if (fmt == 3) return FR_DISK_ERR;
+   1e546:	01 96       	adiw	r24, 0x01	; 1
+   1e548:	8f df       	rcall	.-226    	; 0x1e468 <check_fs>
+	if (fmt == 1) {						/* Not an FAT boot record, it may be FDISK format */
+		/* Check a partition listed in top of the partition table */
+		if (disk_readp(buf, bsect, MBR_Table, 16)) {	/* 1st partition entry */
+			fmt = 3;
+		} else {
+			if (buf[4]) {					/* Is the partition existing? */
+   1e54a:	03 c0       	rjmp	.+6      	; 0x1e552 <pf_mount+0x70>
+   1e54c:	41 2c       	mov	r4, r1
+   1e54e:	51 2c       	mov	r5, r1
+				fmt = check_fs(buf, bsect);	/* Check the partition */
+			}
+		}
+	}
+	if (fmt == 3) return FR_DISK_ERR;
+	if (fmt) return FR_NO_FILESYSTEM;	/* No valid FAT patition is found */
+   1e550:	32 01       	movw	r6, r4
+   1e552:	83 30       	cpi	r24, 0x03	; 3
+		/* Check a partition listed in top of the partition table */
+		if (disk_readp(buf, bsect, MBR_Table, 16)) {	/* 1st partition entry */
+			fmt = 3;
+		} else {
+			if (buf[4]) {					/* Is the partition existing? */
+				bsect = LD_DWORD(&buf[8]);	/* Partition offset in LBA */
+   1e554:	51 f3       	breq	.-44     	; 0x1e52a <pf_mount+0x48>
+   1e556:	81 11       	cpse	r24, r1
+   1e558:	ed cf       	rjmp	.-38     	; 0x1e534 <pf_mount+0x52>
+   1e55a:	04 e2       	ldi	r16, 0x24	; 36
+				fmt = check_fs(buf, bsect);	/* Check the partition */
+   1e55c:	10 e0       	ldi	r17, 0x00	; 0
+   1e55e:	2d e0       	ldi	r18, 0x0D	; 13
+   1e560:	30 e0       	ldi	r19, 0x00	; 0
+   1e562:	b3 01       	movw	r22, r6
+   1e564:	a2 01       	movw	r20, r4
+   1e566:	ce 01       	movw	r24, r28
+   1e568:	01 96       	adiw	r24, 0x01	; 1
+
+	if (disk_initialize() & STA_NOINIT)	/* Check if the drive is ready or not */
+		return FR_NOT_READY;
+
+	/* Search FAT partition on the drive */
+	bsect = 0;
+   1e56a:	7b d3       	rcall	.+1782   	; 0x1ec62 <disk_readp>
+   1e56c:	81 11       	cpse	r24, r1
+   1e56e:	dd cf       	rjmp	.-70     	; 0x1e52a <pf_mount+0x48>
+				bsect = LD_DWORD(&buf[8]);	/* Partition offset in LBA */
+				fmt = check_fs(buf, bsect);	/* Check the partition */
+			}
+		}
+	}
+	if (fmt == 3) return FR_DISK_ERR;
+   1e570:	2a 85       	ldd	r18, Y+10	; 0x0a
+   1e572:	3b 85       	ldd	r19, Y+11	; 0x0b
+	if (fmt) return FR_NO_FILESYSTEM;	/* No valid FAT patition is found */
+   1e574:	40 e0       	ldi	r20, 0x00	; 0
+   1e576:	50 e0       	ldi	r21, 0x00	; 0
+
+	/* Initialize the file system object */
+	if (disk_readp(buf, bsect, 13, sizeof(buf))) return FR_DISK_ERR;
+   1e578:	21 15       	cp	r18, r1
+   1e57a:	31 05       	cpc	r19, r1
+   1e57c:	41 05       	cpc	r20, r1
+   1e57e:	51 05       	cpc	r21, r1
+   1e580:	21 f4       	brne	.+8      	; 0x1e58a <pf_mount+0xa8>
+   1e582:	28 8d       	ldd	r18, Y+24	; 0x18
+   1e584:	39 8d       	ldd	r19, Y+25	; 0x19
+   1e586:	4a 8d       	ldd	r20, Y+26	; 0x1a
+   1e588:	5b 8d       	ldd	r21, Y+27	; 0x1b
+   1e58a:	ac 81       	ldd	r26, Y+4	; 0x04
+   1e58c:	b0 e0       	ldi	r27, 0x00	; 0
+   1e58e:	19 d7       	rcall	.+3634   	; 0x1f3c2 <__muluhisi3>
+
+	fsize = LD_WORD(buf+BPB_FATSz16-13);				/* Number of sectors per FAT */
+   1e590:	6b 01       	movw	r12, r22
+   1e592:	7c 01       	movw	r14, r24
+   1e594:	8a 81       	ldd	r24, Y+2	; 0x02
+   1e596:	9b 81       	ldd	r25, Y+3	; 0x03
+	if (!fsize) fsize = LD_DWORD(buf+BPB_FATSz32-13);
+   1e598:	ac 01       	movw	r20, r24
+   1e59a:	60 e0       	ldi	r22, 0x00	; 0
+   1e59c:	70 e0       	ldi	r23, 0x00	; 0
+   1e59e:	44 0e       	add	r4, r20
+   1e5a0:	55 1e       	adc	r5, r21
+   1e5a2:	66 1e       	adc	r6, r22
+   1e5a4:	77 1e       	adc	r7, r23
+   1e5a6:	d5 01       	movw	r26, r10
+   1e5a8:	1a 96       	adiw	r26, 0x0a	; 10
+
+	fsize *= buf[BPB_NumFATs-13];						/* Number of sectors in FAT area */
+   1e5aa:	4d 92       	st	X+, r4
+   1e5ac:	5d 92       	st	X+, r5
+   1e5ae:	6d 92       	st	X+, r6
+   1e5b0:	7c 92       	st	X, r7
+   1e5b2:	1d 97       	sbiw	r26, 0x0d	; 13
+   1e5b4:	e9 81       	ldd	r30, Y+1	; 0x01
+	fs->fatbase = bsect + LD_WORD(buf+BPB_RsvdSecCnt-13); /* FAT start sector (lba) */
+   1e5b6:	12 96       	adiw	r26, 0x02	; 2
+   1e5b8:	ec 93       	st	X, r30
+   1e5ba:	12 97       	sbiw	r26, 0x02	; 2
+   1e5bc:	2d 81       	ldd	r18, Y+5	; 0x05
+   1e5be:	3e 81       	ldd	r19, Y+6	; 0x06
+   1e5c0:	15 96       	adiw	r26, 0x05	; 5
+   1e5c2:	3c 93       	st	X, r19
+   1e5c4:	2e 93       	st	-X, r18
+   1e5c6:	14 97       	sbiw	r26, 0x04	; 4
+   1e5c8:	8f 81       	ldd	r24, Y+7	; 0x07
+   1e5ca:	98 85       	ldd	r25, Y+8	; 0x08
+   1e5cc:	a0 e0       	ldi	r26, 0x00	; 0
+   1e5ce:	b0 e0       	ldi	r27, 0x00	; 0
+   1e5d0:	00 97       	sbiw	r24, 0x00	; 0
+   1e5d2:	a1 05       	cpc	r26, r1
+   1e5d4:	b1 05       	cpc	r27, r1
+	fs->csize = buf[BPB_SecPerClus-13];					/* Number of sectors per cluster */
+   1e5d6:	21 f4       	brne	.+8      	; 0x1e5e0 <pf_mount+0xfe>
+   1e5d8:	8c 89       	ldd	r24, Y+20	; 0x14
+   1e5da:	9d 89       	ldd	r25, Y+21	; 0x15
+   1e5dc:	ae 89       	ldd	r26, Y+22	; 0x16
+	fs->n_rootdir = LD_WORD(buf+BPB_RootEntCnt-13);		/* Nmuber of root directory entries */
+   1e5de:	bf 89       	ldd	r27, Y+23	; 0x17
+   1e5e0:	49 01       	movw	r8, r18
+   1e5e2:	14 e0       	ldi	r17, 0x04	; 4
+   1e5e4:	96 94       	lsr	r9
+   1e5e6:	87 94       	ror	r8
+   1e5e8:	1a 95       	dec	r17
+	tsect = LD_WORD(buf+BPB_TotSec16-13);				/* Number of sectors on the file system */
+   1e5ea:	e1 f7       	brne	.-8      	; 0x1e5e4 <pf_mount+0x102>
+   1e5ec:	84 01       	movw	r16, r8
+   1e5ee:	20 e0       	ldi	r18, 0x00	; 0
+   1e5f0:	30 e0       	ldi	r19, 0x00	; 0
+	if (!tsect) tsect = LD_DWORD(buf+BPB_TotSec32-13);
+   1e5f2:	0d a3       	std	Y+37, r16	; 0x25
+   1e5f4:	1e a3       	std	Y+38, r17	; 0x26
+   1e5f6:	2f a3       	std	Y+39, r18	; 0x27
+   1e5f8:	38 a7       	std	Y+40, r19	; 0x28
+   1e5fa:	8c 01       	movw	r16, r24
+   1e5fc:	9d 01       	movw	r18, r26
+   1e5fe:	04 1b       	sub	r16, r20
+   1e600:	15 0b       	sbc	r17, r21
+	mclst = (tsect						/* Last cluster# + 1 */
+		- LD_WORD(buf+BPB_RsvdSecCnt-13) - fsize - fs->n_rootdir / 16
+   1e602:	26 0b       	sbc	r18, r22
+   1e604:	37 0b       	sbc	r19, r23
+   1e606:	c9 01       	movw	r24, r18
+   1e608:	b8 01       	movw	r22, r16
+   1e60a:	6c 19       	sub	r22, r12
+   1e60c:	7d 09       	sbc	r23, r13
+   1e60e:	8e 09       	sbc	r24, r14
+   1e610:	9f 09       	sbc	r25, r15
+   1e612:	0d a1       	ldd	r16, Y+37	; 0x25
+   1e614:	1e a1       	ldd	r17, Y+38	; 0x26
+   1e616:	2f a1       	ldd	r18, Y+39	; 0x27
+   1e618:	38 a5       	ldd	r19, Y+40	; 0x28
+   1e61a:	60 1b       	sub	r22, r16
+   1e61c:	71 0b       	sbc	r23, r17
+   1e61e:	82 0b       	sbc	r24, r18
+   1e620:	93 0b       	sbc	r25, r19
+   1e622:	2e 2f       	mov	r18, r30
+   1e624:	30 e0       	ldi	r19, 0x00	; 0
+   1e626:	40 e0       	ldi	r20, 0x00	; 0
+   1e628:	50 e0       	ldi	r21, 0x00	; 0
+   1e62a:	d5 d6       	rcall	.+3498   	; 0x1f3d6 <__udivmodsi4>
+   1e62c:	2e 5f       	subi	r18, 0xFE	; 254
+   1e62e:	3f 4f       	sbci	r19, 0xFF	; 255
+   1e630:	4f 4f       	sbci	r20, 0xFF	; 255
+   1e632:	5f 4f       	sbci	r21, 0xFF	; 255
+   1e634:	d5 01       	movw	r26, r10
+   1e636:	16 96       	adiw	r26, 0x06	; 6
+   1e638:	2d 93       	st	X+, r18
+   1e63a:	3d 93       	st	X+, r19
+   1e63c:	4d 93       	st	X+, r20
+   1e63e:	5c 93       	st	X, r21
+   1e640:	19 97       	sbiw	r26, 0x09	; 9
+   1e642:	27 3f       	cpi	r18, 0xF7	; 247
+		) / fs->csize + 2;
+   1e644:	bf e0       	ldi	r27, 0x0F	; 15
+   1e646:	3b 07       	cpc	r19, r27
+   1e648:	41 05       	cpc	r20, r1
+   1e64a:	51 05       	cpc	r21, r1
+   1e64c:	38 f0       	brcs	.+14     	; 0x1e65c <pf_mount+0x17a>
+   1e64e:	27 3f       	cpi	r18, 0xF7	; 247
+	fs->fatbase = bsect + LD_WORD(buf+BPB_RsvdSecCnt-13); /* FAT start sector (lba) */
+	fs->csize = buf[BPB_SecPerClus-13];					/* Number of sectors per cluster */
+	fs->n_rootdir = LD_WORD(buf+BPB_RootEntCnt-13);		/* Nmuber of root directory entries */
+	tsect = LD_WORD(buf+BPB_TotSec16-13);				/* Number of sectors on the file system */
+	if (!tsect) tsect = LD_DWORD(buf+BPB_TotSec32-13);
+	mclst = (tsect						/* Last cluster# + 1 */
+   1e650:	3f 4f       	sbci	r19, 0xFF	; 255
+   1e652:	41 05       	cpc	r20, r1
+   1e654:	51 05       	cpc	r21, r1
+   1e656:	20 f4       	brcc	.+8      	; 0x1e660 <pf_mount+0x17e>
+		- LD_WORD(buf+BPB_RsvdSecCnt-13) - fsize - fs->n_rootdir / 16
+		) / fs->csize + 2;
+	fs->n_fatent = (CLUST)mclst;
+   1e658:	82 e0       	ldi	r24, 0x02	; 2
+   1e65a:	03 c0       	rjmp	.+6      	; 0x1e662 <pf_mount+0x180>
+   1e65c:	81 e0       	ldi	r24, 0x01	; 1
+   1e65e:	01 c0       	rjmp	.+2      	; 0x1e662 <pf_mount+0x180>
+   1e660:	83 e0       	ldi	r24, 0x03	; 3
+   1e662:	d5 01       	movw	r26, r10
+   1e664:	8c 93       	st	X, r24
+
+	fmt = FS_FAT16;							/* Determine the FAT sub type */
+	if (mclst < 0xFF7) 						/* Number of clusters < 0xFF5 */
+   1e666:	83 30       	cpi	r24, 0x03	; 3
+   1e668:	29 f4       	brne	.+10     	; 0x1e674 <pf_mount+0x192>
+   1e66a:	88 a1       	ldd	r24, Y+32	; 0x20
+   1e66c:	99 a1       	ldd	r25, Y+33	; 0x21
+   1e66e:	aa a1       	ldd	r26, Y+34	; 0x22
+   1e670:	bb a1       	ldd	r27, Y+35	; 0x23
+#if _FS_FAT12
+		fmt = FS_FAT12;
+#else
+		return FR_NO_FILESYSTEM;
+#endif
+	if (mclst >= 0xFFF7)					/* Number of clusters >= 0xFFF5 */
+   1e672:	06 c0       	rjmp	.+12     	; 0x1e680 <pf_mount+0x19e>
+   1e674:	d7 01       	movw	r26, r14
+   1e676:	c6 01       	movw	r24, r12
+   1e678:	84 0d       	add	r24, r4
+   1e67a:	95 1d       	adc	r25, r5
+	mclst = (tsect						/* Last cluster# + 1 */
+		- LD_WORD(buf+BPB_RsvdSecCnt-13) - fsize - fs->n_rootdir / 16
+		) / fs->csize + 2;
+	fs->n_fatent = (CLUST)mclst;
+
+	fmt = FS_FAT16;							/* Determine the FAT sub type */
+   1e67c:	a6 1d       	adc	r26, r6
+   1e67e:	b7 1d       	adc	r27, r7
+	if (mclst < 0xFF7) 						/* Number of clusters < 0xFF5 */
+#if _FS_FAT12
+		fmt = FS_FAT12;
+   1e680:	f5 01       	movw	r30, r10
+   1e682:	86 87       	std	Z+14, r24	; 0x0e
+#else
+		return FR_NO_FILESYSTEM;
+#endif
+	if (mclst >= 0xFFF7)					/* Number of clusters >= 0xFFF5 */
+#if _FS_FAT32
+		fmt = FS_FAT32;
+   1e684:	97 87       	std	Z+15, r25	; 0x0f
+#else
+		return FR_NO_FILESYSTEM;
+#endif
+
+	fs->fs_type = fmt;		/* FAT sub-type */
+   1e686:	a0 8b       	std	Z+16, r26	; 0x10
+   1e688:	b1 8b       	std	Z+17, r27	; 0x11
+	if (_FS_FAT32 && fmt == FS_FAT32)
+   1e68a:	0d a1       	ldd	r16, Y+37	; 0x25
+   1e68c:	1e a1       	ldd	r17, Y+38	; 0x26
+		fs->dirbase = LD_DWORD(buf+(BPB_RootClus-13));	/* Root directory start cluster */
+   1e68e:	2f a1       	ldd	r18, Y+39	; 0x27
+   1e690:	38 a5       	ldd	r19, Y+40	; 0x28
+   1e692:	40 0e       	add	r4, r16
+   1e694:	51 1e       	adc	r5, r17
+   1e696:	62 1e       	adc	r6, r18
+	else
+		fs->dirbase = fs->fatbase + fsize;				/* Root directory start sector (lba) */
+   1e698:	73 1e       	adc	r7, r19
+   1e69a:	4c 0c       	add	r4, r12
+   1e69c:	5d 1c       	adc	r5, r13
+   1e69e:	6e 1c       	adc	r6, r14
+   1e6a0:	7f 1c       	adc	r7, r15
+   1e6a2:	42 8a       	std	Z+18, r4	; 0x12
+   1e6a4:	53 8a       	std	Z+19, r5	; 0x13
+   1e6a6:	64 8a       	std	Z+20, r6	; 0x14
+   1e6a8:	75 8a       	std	Z+21, r7	; 0x15
+   1e6aa:	11 82       	std	Z+1, r1	; 0x01
+   1e6ac:	b0 92 0f 02 	sts	0x020F, r11
+	fs->database = fs->fatbase + fsize + fs->n_rootdir / 16;	/* Data start sector (lba) */
+   1e6b0:	a0 92 0e 02 	sts	0x020E, r10
+   1e6b4:	80 e0       	ldi	r24, 0x00	; 0
+   1e6b6:	01 c0       	rjmp	.+2      	; 0x1e6ba <pf_mount+0x1d8>
+   1e6b8:	82 e0       	ldi	r24, 0x02	; 2
+   1e6ba:	a8 96       	adiw	r28, 0x28	; 40
+   1e6bc:	e0 e1       	ldi	r30, 0x10	; 16
+   1e6be:	cb c6       	rjmp	.+3478   	; 0x1f456 <__epilogue_restores__+0x4>
+
+0001e6c0 <pf_open>:
+   1e6c0:	ac e3       	ldi	r26, 0x3C	; 60
+   1e6c2:	b0 e0       	ldi	r27, 0x00	; 0
+   1e6c4:	e5 e6       	ldi	r30, 0x65	; 101
+   1e6c6:	f3 ef       	ldi	r31, 0xF3	; 243
+   1e6c8:	ad c6       	rjmp	.+3418   	; 0x1f424 <__prologue_saves__+0xa>
+   1e6ca:	c0 90 0e 02 	lds	r12, 0x020E
+
+	fs->flag = 0;
+   1e6ce:	d0 90 0f 02 	lds	r13, 0x020F
+	FatFs = fs;
+   1e6d2:	c1 14       	cp	r12, r1
+   1e6d4:	d1 04       	cpc	r13, r1
+   1e6d6:	09 f4       	brne	.+2      	; 0x1e6da <pf_open+0x1a>
+	BYTE fmt, buf[36];
+	DWORD bsect, fsize, tsect, mclst;
+
+
+	FatFs = 0;
+	if (!fs) return FR_OK;				/* Unregister fs object */
+   1e6d8:	20 c1       	rjmp	.+576    	; 0x1e91a <pf_open+0x25a>
+   1e6da:	d6 01       	movw	r26, r12
+
+	if (disk_initialize() & STA_NOINIT)	/* Check if the drive is ready or not */
+		return FR_NOT_READY;
+   1e6dc:	11 96       	adiw	r26, 0x01	; 1
+
+	fs->flag = 0;
+	FatFs = fs;
+
+	return FR_OK;
+}
+   1e6de:	1c 92       	st	X, r1
+   1e6e0:	9e 01       	movw	r18, r28
+   1e6e2:	2f 5c       	subi	r18, 0xCF	; 207
+   1e6e4:	3f 4f       	sbci	r19, 0xFF	; 255
+/*-----------------------------------------------------------------------*/
+
+FRESULT pf_open (
+	const char *path	/* Pointer to the file name */
+)
+{
+   1e6e6:	3c a3       	std	Y+36, r19	; 0x24
+   1e6e8:	2b a3       	std	Y+35, r18	; 0x23
+   1e6ea:	9c 01       	movw	r18, r24
+   1e6ec:	79 01       	movw	r14, r18
+   1e6ee:	f9 01       	movw	r30, r18
+   1e6f0:	80 81       	ld	r24, Z
+	FRESULT res;
+	DIR dj;
+	BYTE sp[12], dir[32];
+	FATFS *fs = FatFs;
+   1e6f2:	2f 5f       	subi	r18, 0xFF	; 255
+   1e6f4:	3f 4f       	sbci	r19, 0xFF	; 255
+   1e6f6:	80 32       	cpi	r24, 0x20	; 32
+   1e6f8:	c9 f3       	breq	.-14     	; 0x1e6ec <pf_open+0x2c>
+
+
+	if (!fs)						/* Check file system */
+   1e6fa:	8f 32       	cpi	r24, 0x2F	; 47
+   1e6fc:	09 f4       	brne	.+2      	; 0x1e700 <pf_open+0x40>
+   1e6fe:	79 01       	movw	r14, r18
+   1e700:	1d a2       	std	Y+37, r1	; 0x25
+		return FR_NOT_ENABLED;
+
+	fs->flag = 0;
+   1e702:	1e a2       	std	Y+38, r1	; 0x26
+   1e704:	1f a2       	std	Y+39, r1	; 0x27
+   1e706:	18 a6       	std	Y+40, r1	; 0x28
+	dj.fn = sp;
+   1e708:	d7 01       	movw	r26, r14
+   1e70a:	8c 91       	ld	r24, X
+   1e70c:	81 32       	cpi	r24, 0x21	; 33
+   1e70e:	40 f4       	brcc	.+16     	; 0x1e720 <pf_open+0x60>
+   1e710:	ce 01       	movw	r24, r28
+   1e712:	81 96       	adiw	r24, 0x21	; 33
+   1e714:	90 dd       	rcall	.-1248   	; 0x1e236 <dir_rewind>
+)
+{
+	FRESULT res;
+
+
+	while (*path == ' ') path++;		/* Skip leading spaces */
+   1e716:	19 82       	std	Y+1, r1	; 0x01
+   1e718:	88 23       	and	r24, r24
+   1e71a:	09 f4       	brne	.+2      	; 0x1e71e <pf_open+0x5e>
+   1e71c:	d4 c0       	rjmp	.+424    	; 0x1e8c6 <pf_open+0x206>
+   1e71e:	22 c1       	rjmp	.+580    	; 0x1e964 <pf_open+0x2a4>
+   1e720:	a0 e2       	ldi	r26, 0x20	; 32
+	if (*path == '/') path++;			/* Strip heading separator */
+   1e722:	7a 2e       	mov	r7, r26
+   1e724:	4e 01       	movw	r8, r28
+   1e726:	bc e0       	ldi	r27, 0x0C	; 12
+	dj->sclust = 0;						/* Set start directory (always root dir) */
+   1e728:	8b 0e       	add	r8, r27
+   1e72a:	91 1c       	adc	r9, r1
+   1e72c:	eb a1       	ldd	r30, Y+35	; 0x23
+   1e72e:	fc a1       	ldd	r31, Y+36	; 0x24
+
+	if ((BYTE)*path <= ' ') {			/* Null path means the root directory */
+   1e730:	df 01       	movw	r26, r30
+   1e732:	cf 01       	movw	r24, r30
+   1e734:	0b 96       	adiw	r24, 0x0b	; 11
+   1e736:	a8 17       	cp	r26, r24
+		res = dir_rewind(dj);
+   1e738:	b9 07       	cpc	r27, r25
+   1e73a:	11 f0       	breq	.+4      	; 0x1e740 <pf_open+0x80>
+   1e73c:	7d 92       	st	X+, r7
+   1e73e:	fb cf       	rjmp	.-10     	; 0x1e736 <pf_open+0x76>
+		dir[0] = 0;
+   1e740:	90 e0       	ldi	r25, 0x00	; 0
+		return FR_NOT_ENABLED;
+
+	fs->flag = 0;
+	dj.fn = sp;
+	res = follow_path(&dj, dir, path);	/* Follow the file path */
+	if (res != FR_OK) return res;		/* Follow failed */
+   1e742:	80 e0       	ldi	r24, 0x00	; 0
+   1e744:	28 e0       	ldi	r18, 0x08	; 8
+   1e746:	31 e0       	ldi	r19, 0x01	; 1
+   1e748:	38 0f       	add	r19, r24
+
+/* Fill memory */
+static
+void mem_set (void* dst, int val, int cnt) {
+	char *d = (char*)dst;
+	while (cnt--) *d++ = (char)val;
+   1e74a:	d7 01       	movw	r26, r14
+   1e74c:	a8 0f       	add	r26, r24
+   1e74e:	b1 1d       	adc	r27, r1
+   1e750:	8c 91       	ld	r24, X
+   1e752:	81 32       	cpi	r24, 0x21	; 33
+   1e754:	98 f0       	brcs	.+38     	; 0x1e77c <pf_open+0xbc>
+/* Follow a file path                                                    */
+/*-----------------------------------------------------------------------*/
+
+static
+FRESULT follow_path (	/* FR_OK(0): successful, !=0: error code */
+	DIR *dj,			/* Directory object to return last directory and found object */
+   1e756:	8f 32       	cpi	r24, 0x2F	; 47
+   1e758:	89 f0       	breq	.+34     	; 0x1e77c <pf_open+0xbc>
+   1e75a:	8e 32       	cpi	r24, 0x2E	; 46
+   1e75c:	09 f4       	brne	.+2      	; 0x1e760 <pf_open+0xa0>
+   1e75e:	e1 c0       	rjmp	.+450    	; 0x1e922 <pf_open+0x262>
+
+/* Fill memory */
+static
+void mem_set (void* dst, int val, int cnt) {
+	char *d = (char*)dst;
+	while (cnt--) *d++ = (char)val;
+   1e760:	92 17       	cp	r25, r18
+   1e762:	60 f4       	brcc	.+24     	; 0x1e77c <pf_open+0xbc>
+   1e764:	4f e9       	ldi	r20, 0x9F	; 159
+   1e766:	48 0f       	add	r20, r24
+   1e768:	4a 31       	cpi	r20, 0x1A	; 26
+   1e76a:	08 f4       	brcc	.+2      	; 0x1e76e <pf_open+0xae>
+   1e76c:	80 52       	subi	r24, 0x20	; 32
+   1e76e:	df 01       	movw	r26, r30
+	sfn = dj->fn;
+	mem_set(sfn, ' ', 11);
+	si = i = 0; ni = 8;
+	p = *path;
+	for (;;) {
+		c = p[si++];
+   1e770:	a9 0f       	add	r26, r25
+   1e772:	b1 1d       	adc	r27, r1
+   1e774:	8c 93       	st	X, r24
+   1e776:	9f 5f       	subi	r25, 0xFF	; 255
+   1e778:	83 2f       	mov	r24, r19
+   1e77a:	e5 cf       	rjmp	.-54     	; 0x1e746 <pf_open+0x86>
+		if (c <= ' ' || c == '/') break;	/* Break on end of segment */
+   1e77c:	e3 0e       	add	r14, r19
+   1e77e:	f1 1c       	adc	r15, r1
+   1e780:	91 e0       	ldi	r25, 0x01	; 1
+   1e782:	81 32       	cpi	r24, 0x21	; 33
+		if (c == '.' || i >= ni) {
+   1e784:	08 f0       	brcs	.+2      	; 0x1e788 <pf_open+0xc8>
+   1e786:	90 e0       	ldi	r25, 0x00	; 0
+   1e788:	93 87       	std	Z+11, r25	; 0x0b
+   1e78a:	ce 01       	movw	r24, r28
+   1e78c:	81 96       	adiw	r24, 0x21	; 33
+		if (IsDBCS1(c) && i < ni - 1) {	/* DBC 1st byte? */
+			d = p[si++];				/* Get 2nd byte */
+			sfn[i++] = c;
+			sfn[i++] = d;
+		} else {						/* Single byte code */
+			if (IsLower(c)) c -= 0x20;	/* toupper */
+   1e78e:	53 dd       	rcall	.-1370   	; 0x1e236 <dir_rewind>
+   1e790:	81 11       	cpse	r24, r1
+   1e792:	8b c0       	rjmp	.+278    	; 0x1e8aa <pf_open+0x1ea>
+   1e794:	29 a1       	ldd	r18, Y+33	; 0x21
+   1e796:	3a a1       	ldd	r19, Y+34	; 0x22
+			sfn[i++] = c;
+   1e798:	2f 70       	andi	r18, 0x0F	; 15
+   1e79a:	33 27       	eor	r19, r19
+   1e79c:	f5 e0       	ldi	r31, 0x05	; 5
+   1e79e:	22 0f       	add	r18, r18
+   1e7a0:	33 1f       	adc	r19, r19
+	sfn = dj->fn;
+	mem_set(sfn, ' ', 11);
+	si = i = 0; ni = 8;
+	p = *path;
+	for (;;) {
+		c = p[si++];
+   1e7a2:	fa 95       	dec	r31
+   1e7a4:	e1 f7       	brne	.-8      	; 0x1e79e <pf_open+0xde>
+		} else {						/* Single byte code */
+			if (IsLower(c)) c -= 0x20;	/* toupper */
+			sfn[i++] = c;
+		}
+	}
+	*path = &p[si];						/* Rerurn pointer to the next segment */
+   1e7a6:	4d a5       	ldd	r20, Y+45	; 0x2d
+   1e7a8:	5e a5       	ldd	r21, Y+46	; 0x2e
+
+	sfn[11] = (c <= ' ') ? 1 : 0;		/* Set last segment flag if end of path */
+   1e7aa:	6f a5       	ldd	r22, Y+47	; 0x2f
+   1e7ac:	78 a9       	ldd	r23, Y+48	; 0x30
+   1e7ae:	00 e2       	ldi	r16, 0x20	; 32
+   1e7b0:	10 e0       	ldi	r17, 0x00	; 0
+   1e7b2:	ce 01       	movw	r24, r28
+{
+	FRESULT res;
+	BYTE c;
+
+
+	res = dir_rewind(dj);			/* Rewind directory object */
+   1e7b4:	01 96       	adiw	r24, 0x01	; 1
+   1e7b6:	55 d2       	rcall	.+1194   	; 0x1ec62 <disk_readp>
+   1e7b8:	81 11       	cpse	r24, r1
+   1e7ba:	d1 c0       	rjmp	.+418    	; 0x1e95e <pf_open+0x29e>
+	if (res != FR_OK) return res;
+   1e7bc:	89 81       	ldd	r24, Y+1	; 0x01
+   1e7be:	88 23       	and	r24, r24
+
+	do {
+		res = disk_readp(dir, dj->sect, (WORD)((dj->index % 16) * 32), 32)	/* Read an entry */
+   1e7c0:	09 f4       	brne	.+2      	; 0x1e7c4 <pf_open+0x104>
+   1e7c2:	76 c0       	rjmp	.+236    	; 0x1e8b0 <pf_open+0x1f0>
+   1e7c4:	2c 85       	ldd	r18, Y+12	; 0x0c
+   1e7c6:	23 fd       	sbrc	r18, 3
+   1e7c8:	0f c0       	rjmp	.+30     	; 0x1e7e8 <pf_open+0x128>
+   1e7ca:	6b a1       	ldd	r22, Y+35	; 0x23
+   1e7cc:	7c a1       	ldd	r23, Y+36	; 0x24
+   1e7ce:	fe 01       	movw	r30, r28
+   1e7d0:	31 96       	adiw	r30, 0x01	; 1
+   1e7d2:	cb 01       	movw	r24, r22
+   1e7d4:	e8 15       	cp	r30, r8
+   1e7d6:	f9 05       	cpc	r31, r9
+   1e7d8:	09 f4       	brne	.+2      	; 0x1e7dc <pf_open+0x11c>
+   1e7da:	71 c0       	rjmp	.+226    	; 0x1e8be <pf_open+0x1fe>
+   1e7dc:	41 91       	ld	r20, Z+
+   1e7de:	dc 01       	movw	r26, r24
+   1e7e0:	3d 91       	ld	r19, X+
+   1e7e2:	cd 01       	movw	r24, r26
+   1e7e4:	43 17       	cp	r20, r19
+			? FR_DISK_ERR : FR_OK;
+   1e7e6:	b1 f3       	breq	.-20     	; 0x1e7d4 <pf_open+0x114>
+   1e7e8:	a0 90 0e 02 	lds	r10, 0x020E
+		if (res != FR_OK) break;
+		c = dir[DIR_Name];	/* First character */
+		if (c == 0) { res = FR_NO_FILE; break; }	/* Reached to end of table */
+   1e7ec:	b0 90 0f 02 	lds	r11, 0x020F
+   1e7f0:	09 a1       	ldd	r16, Y+33	; 0x21
+		if (!(dir[DIR_Attr] & AM_VOL) && !mem_cmp(dir, dj->fn, 11)) /* Is it a valid entry? */
+   1e7f2:	1a a1       	ldd	r17, Y+34	; 0x22
+   1e7f4:	0f 5f       	subi	r16, 0xFF	; 255
+   1e7f6:	1f 4f       	sbci	r17, 0xFF	; 255
+   1e7f8:	01 15       	cp	r16, r1
+   1e7fa:	11 05       	cpc	r17, r1
+   1e7fc:	09 f4       	brne	.+2      	; 0x1e800 <pf_open+0x140>
+   1e7fe:	54 c0       	rjmp	.+168    	; 0x1e8a8 <pf_open+0x1e8>
+   1e800:	8d a5       	ldd	r24, Y+45	; 0x2d
+/* Compare memory to memory */
+static
+int mem_cmp (const void* dst, const void* src, int cnt) {
+	const char *d = (const char *)dst, *s = (const char *)src;
+	int r = 0;
+	while (cnt-- && (r = *d++ - *s++) == 0) ;
+   1e802:	9e a5       	ldd	r25, Y+46	; 0x2e
+   1e804:	af a5       	ldd	r26, Y+47	; 0x2f
+   1e806:	b8 a9       	ldd	r27, Y+48	; 0x30
+   1e808:	00 97       	sbiw	r24, 0x00	; 0
+   1e80a:	a1 05       	cpc	r26, r1
+   1e80c:	b1 05       	cpc	r27, r1
+   1e80e:	09 f4       	brne	.+2      	; 0x1e812 <pf_open+0x152>
+   1e810:	4b c0       	rjmp	.+150    	; 0x1e8a8 <pf_open+0x1e8>
+   1e812:	98 01       	movw	r18, r16
+   1e814:	2f 70       	andi	r18, 0x0F	; 15
+	DIR *dj			/* Pointer to directory object */
+)
+{
+	CLUST clst;
+	WORD i;
+	FATFS *fs = FatFs;
+   1e816:	33 27       	eor	r19, r19
+   1e818:	23 2b       	or	r18, r19
+   1e81a:	09 f0       	breq	.+2      	; 0x1e81e <pf_open+0x15e>
+   1e81c:	42 c0       	rjmp	.+132    	; 0x1e8a2 <pf_open+0x1e2>
+
+
+	i = dj->index + 1;
+   1e81e:	01 96       	adiw	r24, 0x01	; 1
+   1e820:	a1 1d       	adc	r26, r1
+   1e822:	b1 1d       	adc	r27, r1
+   1e824:	8d a7       	std	Y+45, r24	; 0x2d
+	if (!i || !dj->sect)	/* Report EOT when index has reached 65535 */
+   1e826:	9e a7       	std	Y+46, r25	; 0x2e
+   1e828:	af a7       	std	Y+47, r26	; 0x2f
+   1e82a:	b8 ab       	std	Y+48, r27	; 0x30
+   1e82c:	69 a5       	ldd	r22, Y+41	; 0x29
+   1e82e:	7a a5       	ldd	r23, Y+42	; 0x2a
+   1e830:	8b a5       	ldd	r24, Y+43	; 0x2b
+   1e832:	9c a5       	ldd	r25, Y+44	; 0x2c
+   1e834:	61 15       	cp	r22, r1
+   1e836:	71 05       	cpc	r23, r1
+   1e838:	81 05       	cpc	r24, r1
+   1e83a:	91 05       	cpc	r25, r1
+   1e83c:	39 f4       	brne	.+14     	; 0x1e84c <pf_open+0x18c>
+   1e83e:	f5 01       	movw	r30, r10
+		return FR_NO_FILE;
+
+	if (!(i % 16)) {		/* Sector changed? */
+   1e840:	84 81       	ldd	r24, Z+4	; 0x04
+   1e842:	95 81       	ldd	r25, Z+5	; 0x05
+   1e844:	08 17       	cp	r16, r24
+   1e846:	19 07       	cpc	r17, r25
+   1e848:	78 f5       	brcc	.+94     	; 0x1e8a8 <pf_open+0x1e8>
+   1e84a:	2b c0       	rjmp	.+86     	; 0x1e8a2 <pf_open+0x1e2>
+		dj->sect++;			/* Next sector */
+   1e84c:	d5 01       	movw	r26, r10
+   1e84e:	12 96       	adiw	r26, 0x02	; 2
+   1e850:	2c 91       	ld	r18, X
+   1e852:	42 2f       	mov	r20, r18
+   1e854:	50 e0       	ldi	r21, 0x00	; 0
+   1e856:	41 50       	subi	r20, 0x01	; 1
+   1e858:	51 09       	sbc	r21, r1
+
+		if (dj->clust == 0) {	/* Static table */
+   1e85a:	98 01       	movw	r18, r16
+   1e85c:	e4 e0       	ldi	r30, 0x04	; 4
+   1e85e:	36 95       	lsr	r19
+   1e860:	27 95       	ror	r18
+   1e862:	ea 95       	dec	r30
+   1e864:	e1 f7       	brne	.-8      	; 0x1e85e <pf_open+0x19e>
+   1e866:	42 23       	and	r20, r18
+   1e868:	53 23       	and	r21, r19
+   1e86a:	45 2b       	or	r20, r21
+			if (i >= fs->n_rootdir)	/* Report EOT when end of table */
+   1e86c:	d1 f4       	brne	.+52     	; 0x1e8a2 <pf_open+0x1e2>
+   1e86e:	27 dd       	rcall	.-1458   	; 0x1e2be <get_fat>
+   1e870:	62 30       	cpi	r22, 0x02	; 2
+   1e872:	71 05       	cpc	r23, r1
+   1e874:	81 05       	cpc	r24, r1
+   1e876:	91 05       	cpc	r25, r1
+   1e878:	08 f4       	brcc	.+2      	; 0x1e87c <pf_open+0x1bc>
+				return FR_NO_FILE;
+		}
+		else {					/* Dynamic table */
+			if (((i / 16) & (fs->csize-1)) == 0) {	/* Cluster changed? */
+   1e87a:	59 c0       	rjmp	.+178    	; 0x1e92e <pf_open+0x26e>
+   1e87c:	f5 01       	movw	r30, r10
+   1e87e:	26 81       	ldd	r18, Z+6	; 0x06
+   1e880:	37 81       	ldd	r19, Z+7	; 0x07
+   1e882:	40 85       	ldd	r20, Z+8	; 0x08
+   1e884:	51 85       	ldd	r21, Z+9	; 0x09
+   1e886:	62 17       	cp	r22, r18
+   1e888:	73 07       	cpc	r23, r19
+   1e88a:	84 07       	cpc	r24, r20
+   1e88c:	95 07       	cpc	r25, r21
+   1e88e:	60 f4       	brcc	.+24     	; 0x1e8a8 <pf_open+0x1e8>
+   1e890:	69 a7       	std	Y+41, r22	; 0x29
+   1e892:	7a a7       	std	Y+42, r23	; 0x2a
+   1e894:	8b a7       	std	Y+43, r24	; 0x2b
+   1e896:	9c a7       	std	Y+44, r25	; 0x2c
+   1e898:	a3 dc       	rcall	.-1722   	; 0x1e1e0 <clust2sect>
+   1e89a:	6d a7       	std	Y+45, r22	; 0x2d
+				clst = get_fat(dj->clust);		/* Get next cluster */
+   1e89c:	7e a7       	std	Y+46, r23	; 0x2e
+   1e89e:	8f a7       	std	Y+47, r24	; 0x2f
+				if (clst <= 1) return FR_DISK_ERR;
+   1e8a0:	98 ab       	std	Y+48, r25	; 0x30
+   1e8a2:	1a a3       	std	Y+34, r17	; 0x22
+   1e8a4:	09 a3       	std	Y+33, r16	; 0x21
+   1e8a6:	76 cf       	rjmp	.-276    	; 0x1e794 <pf_open+0xd4>
+   1e8a8:	83 e0       	ldi	r24, 0x03	; 3
+   1e8aa:	83 30       	cpi	r24, 0x03	; 3
+				if (clst >= fs->n_fatent)		/* When it reached end of dynamic table */
+   1e8ac:	09 f0       	breq	.+2      	; 0x1e8b0 <pf_open+0x1f0>
+   1e8ae:	5a c0       	rjmp	.+180    	; 0x1e964 <pf_open+0x2a4>
+   1e8b0:	eb a1       	ldd	r30, Y+35	; 0x23
+   1e8b2:	fc a1       	ldd	r31, Y+36	; 0x24
+   1e8b4:	83 85       	ldd	r24, Z+11	; 0x0b
+   1e8b6:	88 23       	and	r24, r24
+   1e8b8:	09 f4       	brne	.+2      	; 0x1e8bc <pf_open+0x1fc>
+   1e8ba:	53 c0       	rjmp	.+166    	; 0x1e962 <pf_open+0x2a2>
+   1e8bc:	30 c0       	rjmp	.+96     	; 0x1e91e <pf_open+0x25e>
+   1e8be:	fb 01       	movw	r30, r22
+					return FR_NO_FILE;			/* Report EOT */
+				dj->clust = clst;				/* Initialize data for new cluster */
+   1e8c0:	83 85       	ldd	r24, Z+11	; 0x0b
+   1e8c2:	88 23       	and	r24, r24
+   1e8c4:	b1 f1       	breq	.+108    	; 0x1e932 <pf_open+0x272>
+   1e8c6:	89 81       	ldd	r24, Y+1	; 0x01
+				dj->sect = clust2sect(clst);
+   1e8c8:	88 23       	and	r24, r24
+   1e8ca:	49 f1       	breq	.+82     	; 0x1e91e <pf_open+0x25e>
+   1e8cc:	8c 85       	ldd	r24, Y+12	; 0x0c
+   1e8ce:	84 fd       	sbrc	r24, 4
+   1e8d0:	26 c0       	rjmp	.+76     	; 0x1e91e <pf_open+0x25e>
+   1e8d2:	8d 89       	ldd	r24, Y+21	; 0x15
+			}
+		}
+	}
+
+	dj->index = i;
+   1e8d4:	9e 89       	ldd	r25, Y+22	; 0x16
+   1e8d6:	a0 e0       	ldi	r26, 0x00	; 0
+   1e8d8:	b0 e0       	ldi	r27, 0x00	; 0
+	FATFS *fs = FatFs;
+
+
+	i = dj->index + 1;
+	if (!i || !dj->sect)	/* Report EOT when index has reached 65535 */
+		return FR_NO_FILE;
+   1e8da:	dc 01       	movw	r26, r24
+		for (;;) {
+			res = create_name(dj, &path);	/* Get a segment */
+			if (res != FR_OK) break;
+			res = dir_find(dj, dir);		/* Find it */
+			if (res != FR_OK) {				/* Could not find the object */
+				if (res == FR_NO_FILE && !*(dj->fn+11))
+   1e8dc:	99 27       	eor	r25, r25
+   1e8de:	88 27       	eor	r24, r24
+   1e8e0:	4b 8d       	ldd	r20, Y+27	; 0x1b
+   1e8e2:	5c 8d       	ldd	r21, Y+28	; 0x1c
+   1e8e4:	60 e0       	ldi	r22, 0x00	; 0
+   1e8e6:	70 e0       	ldi	r23, 0x00	; 0
+   1e8e8:	84 2b       	or	r24, r20
+   1e8ea:	95 2b       	or	r25, r21
+   1e8ec:	a6 2b       	or	r26, r22
+   1e8ee:	b7 2b       	or	r27, r23
+					res = FR_NO_PATH;
+				break;
+			}
+			if (*(dj->fn+11)) break;		/* Last segment match. Function completed. */
+   1e8f0:	f6 01       	movw	r30, r12
+   1e8f2:	86 8f       	std	Z+30, r24	; 0x1e
+   1e8f4:	97 8f       	std	Z+31, r25	; 0x1f
+   1e8f6:	a0 a3       	std	Z+32, r26	; 0x20
+
+	fs->flag = 0;
+	dj.fn = sp;
+	res = follow_path(&dj, dir, path);	/* Follow the file path */
+	if (res != FR_OK) return res;		/* Follow failed */
+	if (!dir[0] || (dir[DIR_Attr] & AM_DIR))	/* It is a directory */
+   1e8f8:	b1 a3       	std	Z+33, r27	; 0x21
+   1e8fa:	8d 8d       	ldd	r24, Y+29	; 0x1d
+   1e8fc:	9e 8d       	ldd	r25, Y+30	; 0x1e
+   1e8fe:	af 8d       	ldd	r26, Y+31	; 0x1f
+   1e900:	b8 a1       	ldd	r27, Y+32	; 0x20
+   1e902:	82 8f       	std	Z+26, r24	; 0x1a
+		return FR_NO_FILE;
+
+	fs->org_clust = LD_CLUST(dir);			/* File start cluster */
+   1e904:	93 8f       	std	Z+27, r25	; 0x1b
+   1e906:	a4 8f       	std	Z+28, r26	; 0x1c
+   1e908:	b5 8f       	std	Z+29, r27	; 0x1d
+   1e90a:	16 8a       	std	Z+22, r1	; 0x16
+   1e90c:	17 8a       	std	Z+23, r1	; 0x17
+   1e90e:	10 8e       	std	Z+24, r1	; 0x18
+   1e910:	11 8e       	std	Z+25, r1	; 0x19
+   1e912:	81 e0       	ldi	r24, 0x01	; 1
+   1e914:	81 83       	std	Z+1, r24	; 0x01
+   1e916:	80 e0       	ldi	r24, 0x00	; 0
+   1e918:	25 c0       	rjmp	.+74     	; 0x1e964 <pf_open+0x2a4>
+   1e91a:	86 e0       	ldi	r24, 0x06	; 6
+   1e91c:	23 c0       	rjmp	.+70     	; 0x1e964 <pf_open+0x2a4>
+   1e91e:	83 e0       	ldi	r24, 0x03	; 3
+   1e920:	21 c0       	rjmp	.+66     	; 0x1e964 <pf_open+0x2a4>
+   1e922:	28 30       	cpi	r18, 0x08	; 8
+   1e924:	09 f0       	breq	.+2      	; 0x1e928 <pf_open+0x268>
+   1e926:	2a cf       	rjmp	.-428    	; 0x1e77c <pf_open+0xbc>
+   1e928:	98 e0       	ldi	r25, 0x08	; 8
+   1e92a:	2b e0       	ldi	r18, 0x0B	; 11
+	fs->fsize = LD_DWORD(dir+DIR_FileSize);	/* File size */
+   1e92c:	25 cf       	rjmp	.-438    	; 0x1e778 <pf_open+0xb8>
+   1e92e:	81 e0       	ldi	r24, 0x01	; 1
+   1e930:	bc cf       	rjmp	.-136    	; 0x1e8aa <pf_open+0x1ea>
+   1e932:	24 ff       	sbrs	r18, 4
+   1e934:	16 c0       	rjmp	.+44     	; 0x1e962 <pf_open+0x2a2>
+   1e936:	8d 89       	ldd	r24, Y+21	; 0x15
+   1e938:	9e 89       	ldd	r25, Y+22	; 0x16
+   1e93a:	a0 e0       	ldi	r26, 0x00	; 0
+	fs->fptr = 0;						/* File pointer */
+   1e93c:	b0 e0       	ldi	r27, 0x00	; 0
+   1e93e:	dc 01       	movw	r26, r24
+   1e940:	99 27       	eor	r25, r25
+   1e942:	88 27       	eor	r24, r24
+	fs->flag = FA_OPENED;
+   1e944:	4b 8d       	ldd	r20, Y+27	; 0x1b
+   1e946:	5c 8d       	ldd	r21, Y+28	; 0x1c
+
+	return FR_OK;
+   1e948:	60 e0       	ldi	r22, 0x00	; 0
+   1e94a:	70 e0       	ldi	r23, 0x00	; 0
+	BYTE sp[12], dir[32];
+	FATFS *fs = FatFs;
+
+
+	if (!fs)						/* Check file system */
+		return FR_NOT_ENABLED;
+   1e94c:	84 2b       	or	r24, r20
+   1e94e:	95 2b       	or	r25, r21
+	fs->flag = 0;
+	dj.fn = sp;
+	res = follow_path(&dj, dir, path);	/* Follow the file path */
+	if (res != FR_OK) return res;		/* Follow failed */
+	if (!dir[0] || (dir[DIR_Attr] & AM_DIR))	/* It is a directory */
+		return FR_NO_FILE;
+   1e950:	a6 2b       	or	r26, r22
+   1e952:	b7 2b       	or	r27, r23
+	p = *path;
+	for (;;) {
+		c = p[si++];
+		if (c <= ' ' || c == '/') break;	/* Break on end of segment */
+		if (c == '.' || i >= ni) {
+			if (ni != 8 || c != '.') break;
+   1e954:	8d a3       	std	Y+37, r24	; 0x25
+   1e956:	9e a3       	std	Y+38, r25	; 0x26
+   1e958:	af a3       	std	Y+39, r26	; 0x27
+			i = 8; ni = 11;
+   1e95a:	b8 a7       	std	Y+40, r27	; 0x28
+   1e95c:	e7 ce       	rjmp	.-562    	; 0x1e72c <pf_open+0x6c>
+   1e95e:	81 e0       	ldi	r24, 0x01	; 1
+				return FR_NO_FILE;
+		}
+		else {					/* Dynamic table */
+			if (((i / 16) & (fs->csize-1)) == 0) {	/* Cluster changed? */
+				clst = get_fat(dj->clust);		/* Get next cluster */
+				if (clst <= 1) return FR_DISK_ERR;
+   1e960:	01 c0       	rjmp	.+2      	; 0x1e964 <pf_open+0x2a4>
+   1e962:	84 e0       	ldi	r24, 0x04	; 4
+				if (res == FR_NO_FILE && !*(dj->fn+11))
+					res = FR_NO_PATH;
+				break;
+			}
+			if (*(dj->fn+11)) break;		/* Last segment match. Function completed. */
+			if (!(dir[DIR_Attr] & AM_DIR)) { /* Cannot follow because it is a file */
+   1e964:	ec 96       	adiw	r28, 0x3c	; 60
+   1e966:	ed e0       	ldi	r30, 0x0D	; 13
+				res = FR_NO_PATH; break;
+			}
+			dj->sclust = LD_CLUST(dir);
+   1e968:	79 c5       	rjmp	.+2802   	; 0x1f45c <__epilogue_restores__+0xa>
+
+0001e96a <pf_read>:
+   1e96a:	a0 e0       	ldi	r26, 0x00	; 0
+   1e96c:	b0 e0       	ldi	r27, 0x00	; 0
+   1e96e:	ea eb       	ldi	r30, 0xBA	; 186
+   1e970:	f4 ef       	ldi	r31, 0xF4	; 244
+   1e972:	55 c5       	rjmp	.+2730   	; 0x1f41e <__prologue_saves__+0x4>
+   1e974:	4c 01       	movw	r8, r24
+   1e976:	7b 01       	movw	r14, r22
+   1e978:	5a 01       	movw	r10, r20
+   1e97a:	c0 91 0e 02 	lds	r28, 0x020E
+   1e97e:	d0 91 0f 02 	lds	r29, 0x020F
+   1e982:	fa 01       	movw	r30, r20
+   1e984:	11 82       	std	Z+1, r1	; 0x01
+   1e986:	10 82       	st	Z, r1
+   1e988:	20 97       	sbiw	r28, 0x00	; 0
+   1e98a:	09 f4       	brne	.+2      	; 0x1e98e <pf_read+0x24>
+   1e98c:	9e c0       	rjmp	.+316    	; 0x1eaca <pf_read+0x160>
+   1e98e:	89 81       	ldd	r24, Y+1	; 0x01
+	if (res != FR_OK) return res;
+
+	do {
+		res = disk_readp(dir, dj->sect, (WORD)((dj->index % 16) * 32), 32)	/* Read an entry */
+			? FR_DISK_ERR : FR_OK;
+		if (res != FR_OK) break;
+   1e990:	80 ff       	sbrs	r24, 0
+   1e992:	9d c0       	rjmp	.+314    	; 0x1eace <pf_read+0x164>
+					res = FR_NO_PATH;
+				break;
+			}
+			if (*(dj->fn+11)) break;		/* Last segment match. Function completed. */
+			if (!(dir[DIR_Attr] & AM_DIR)) { /* Cannot follow because it is a file */
+				res = FR_NO_PATH; break;
+   1e994:	8a 8d       	ldd	r24, Y+26	; 0x1a
+	fs->fsize = LD_DWORD(dir+DIR_FileSize);	/* File size */
+	fs->fptr = 0;						/* File pointer */
+	fs->flag = FA_OPENED;
+
+	return FR_OK;
+}
+   1e996:	9b 8d       	ldd	r25, Y+27	; 0x1b
+   1e998:	ac 8d       	ldd	r26, Y+28	; 0x1c
+   1e99a:	bd 8d       	ldd	r27, Y+29	; 0x1d
+   1e99c:	4e 89       	ldd	r20, Y+22	; 0x16
+FRESULT pf_read (
+	void* buff,		/* Pointer to the read buffer (NULL:Forward data to the stream)*/
+	WORD btr,		/* Number of bytes to read */
+	WORD* br		/* Pointer to number of bytes read */
+)
+{
+   1e99e:	5f 89       	ldd	r21, Y+23	; 0x17
+   1e9a0:	68 8d       	ldd	r22, Y+24	; 0x18
+   1e9a2:	79 8d       	ldd	r23, Y+25	; 0x19
+   1e9a4:	84 1b       	sub	r24, r20
+   1e9a6:	95 0b       	sbc	r25, r21
+   1e9a8:	a6 0b       	sbc	r26, r22
+   1e9aa:	b7 0b       	sbc	r27, r23
+   1e9ac:	a7 01       	movw	r20, r14
+   1e9ae:	60 e0       	ldi	r22, 0x00	; 0
+	DRESULT dr;
+	CLUST clst;
+	DWORD sect, remain;
+	WORD rcnt;
+	BYTE cs, *rbuff = buff;
+	FATFS *fs = FatFs;
+   1e9b0:	70 e0       	ldi	r23, 0x00	; 0
+   1e9b2:	84 17       	cp	r24, r20
+   1e9b4:	95 07       	cpc	r25, r21
+   1e9b6:	a6 07       	cpc	r26, r22
+
+
+	*br = 0;
+   1e9b8:	b7 07       	cpc	r27, r23
+   1e9ba:	08 f4       	brcc	.+2      	; 0x1e9be <pf_read+0x54>
+   1e9bc:	7c 01       	movw	r14, r24
+	if (!fs) return FR_NOT_ENABLED;		/* Check file system */
+   1e9be:	34 01       	movw	r6, r8
+   1e9c0:	41 2c       	mov	r4, r1
+   1e9c2:	32 e0       	ldi	r19, 0x02	; 2
+	if (!(fs->flag & FA_OPENED))		/* Check if opened */
+   1e9c4:	53 2e       	mov	r5, r19
+   1e9c6:	e1 14       	cp	r14, r1
+   1e9c8:	f1 04       	cpc	r15, r1
+		return FR_NOT_OPENED;
+
+	remain = fs->fsize - fs->fptr;
+   1e9ca:	09 f4       	brne	.+2      	; 0x1e9ce <pf_read+0x64>
+   1e9cc:	79 c0       	rjmp	.+242    	; 0x1eac0 <pf_read+0x156>
+   1e9ce:	8e 89       	ldd	r24, Y+22	; 0x16
+   1e9d0:	9f 89       	ldd	r25, Y+23	; 0x17
+   1e9d2:	a8 8d       	ldd	r26, Y+24	; 0x18
+   1e9d4:	b9 8d       	ldd	r27, Y+25	; 0x19
+   1e9d6:	ac 01       	movw	r20, r24
+   1e9d8:	bd 01       	movw	r22, r26
+   1e9da:	51 70       	andi	r21, 0x01	; 1
+   1e9dc:	66 27       	eor	r22, r22
+   1e9de:	77 27       	eor	r23, r23
+   1e9e0:	45 2b       	or	r20, r21
+	if (btr > remain) btr = (WORD)remain;			/* Truncate btr by remaining bytes */
+   1e9e2:	46 2b       	or	r20, r22
+   1e9e4:	47 2b       	or	r20, r23
+   1e9e6:	d1 f5       	brne	.+116    	; 0x1ea5c <pf_read+0xf2>
+   1e9e8:	da 80       	ldd	r13, Y+2	; 0x02
+   1e9ea:	da 94       	dec	r13
+   1e9ec:	ac 01       	movw	r20, r24
+   1e9ee:	bd 01       	movw	r22, r26
+   1e9f0:	29 e0       	ldi	r18, 0x09	; 9
+   1e9f2:	76 95       	lsr	r23
+			if (!sect) goto fr_abort;
+			fs->dsect = sect + cs;
+		}
+		rcnt = (WORD)(512 - (fs->fptr % 512));		/* Get partial sector data from sector buffer */
+		if (rcnt > btr) rcnt = btr;
+		dr = disk_readp(!buff ? 0 : rbuff, fs->dsect, (WORD)(fs->fptr % 512), rcnt);
+   1e9f4:	67 95       	ror	r22
+			}
+			sect = clust2sect(fs->curr_clust);		/* Get current sector */
+			if (!sect) goto fr_abort;
+			fs->dsect = sect + cs;
+		}
+		rcnt = (WORD)(512 - (fs->fptr % 512));		/* Get partial sector data from sector buffer */
+   1e9f6:	57 95       	ror	r21
+   1e9f8:	47 95       	ror	r20
+   1e9fa:	2a 95       	dec	r18
+		return FR_NOT_OPENED;
+
+	remain = fs->fsize - fs->fptr;
+	if (btr > remain) btr = (WORD)remain;			/* Truncate btr by remaining bytes */
+
+	while (btr)	{									/* Repeat until all data transferred */
+   1e9fc:	d1 f7       	brne	.-12     	; 0x1e9f2 <pf_read+0x88>
+   1e9fe:	d4 22       	and	r13, r20
+   1ea00:	c1 f4       	brne	.+48     	; 0x1ea32 <pf_read+0xc8>
+   1ea02:	89 2b       	or	r24, r25
+		if ((fs->fptr % 512) == 0) {				/* On the sector boundary? */
+   1ea04:	8a 2b       	or	r24, r26
+   1ea06:	8b 2b       	or	r24, r27
+   1ea08:	29 f4       	brne	.+10     	; 0x1ea14 <pf_read+0xaa>
+   1ea0a:	6e 8d       	ldd	r22, Y+30	; 0x1e
+   1ea0c:	7f 8d       	ldd	r23, Y+31	; 0x1f
+   1ea0e:	88 a1       	ldd	r24, Y+32	; 0x20
+   1ea10:	99 a1       	ldd	r25, Y+33	; 0x21
+   1ea12:	05 c0       	rjmp	.+10     	; 0x1ea1e <pf_read+0xb4>
+   1ea14:	6a a1       	ldd	r22, Y+34	; 0x22
+   1ea16:	7b a1       	ldd	r23, Y+35	; 0x23
+   1ea18:	8c a1       	ldd	r24, Y+36	; 0x24
+   1ea1a:	9d a1       	ldd	r25, Y+37	; 0x25
+   1ea1c:	50 dc       	rcall	.-1888   	; 0x1e2be <get_fat>
+			cs = (BYTE)(fs->fptr / 512 & (fs->csize - 1));	/* Sector offset in the cluster */
+   1ea1e:	62 30       	cpi	r22, 0x02	; 2
+   1ea20:	71 05       	cpc	r23, r1
+   1ea22:	81 05       	cpc	r24, r1
+   1ea24:	91 05       	cpc	r25, r1
+   1ea26:	08 f4       	brcc	.+2      	; 0x1ea2a <pf_read+0xc0>
+   1ea28:	4d c0       	rjmp	.+154    	; 0x1eac4 <pf_read+0x15a>
+   1ea2a:	6a a3       	std	Y+34, r22	; 0x22
+   1ea2c:	7b a3       	std	Y+35, r23	; 0x23
+   1ea2e:	8c a3       	std	Y+36, r24	; 0x24
+   1ea30:	9d a3       	std	Y+37, r25	; 0x25
+   1ea32:	6a a1       	ldd	r22, Y+34	; 0x22
+   1ea34:	7b a1       	ldd	r23, Y+35	; 0x23
+			if (!cs) {								/* On the cluster boundary? */
+   1ea36:	8c a1       	ldd	r24, Y+36	; 0x24
+				clst = (fs->fptr == 0) ?			/* On the top of the file? */
+					fs->org_clust : get_fat(fs->curr_clust);
+   1ea38:	9d a1       	ldd	r25, Y+37	; 0x25
+   1ea3a:	d2 db       	rcall	.-2140   	; 0x1e1e0 <clust2sect>
+   1ea3c:	61 15       	cp	r22, r1
+   1ea3e:	71 05       	cpc	r23, r1
+   1ea40:	81 05       	cpc	r24, r1
+   1ea42:	91 05       	cpc	r25, r1
+   1ea44:	09 f4       	brne	.+2      	; 0x1ea48 <pf_read+0xde>
+   1ea46:	3e c0       	rjmp	.+124    	; 0x1eac4 <pf_read+0x15a>
+   1ea48:	dc 01       	movw	r26, r24
+   1ea4a:	cb 01       	movw	r24, r22
+   1ea4c:	8d 0d       	add	r24, r13
+   1ea4e:	91 1d       	adc	r25, r1
+   1ea50:	a1 1d       	adc	r26, r1
+   1ea52:	b1 1d       	adc	r27, r1
+   1ea54:	8e a3       	std	Y+38, r24	; 0x26
+				if (clst <= 1) goto fr_abort;
+   1ea56:	9f a3       	std	Y+39, r25	; 0x27
+   1ea58:	a8 a7       	std	Y+40, r26	; 0x28
+   1ea5a:	b9 a7       	std	Y+41, r27	; 0x29
+   1ea5c:	2e 89       	ldd	r18, Y+22	; 0x16
+   1ea5e:	3f 89       	ldd	r19, Y+23	; 0x17
+   1ea60:	31 70       	andi	r19, 0x01	; 1
+				fs->curr_clust = clst;				/* Update current cluster */
+   1ea62:	c2 01       	movw	r24, r4
+   1ea64:	82 1b       	sub	r24, r18
+   1ea66:	93 0b       	sbc	r25, r19
+   1ea68:	67 01       	movw	r12, r14
+			}
+			sect = clust2sect(fs->curr_clust);		/* Get current sector */
+   1ea6a:	8e 15       	cp	r24, r14
+   1ea6c:	9f 05       	cpc	r25, r15
+   1ea6e:	08 f4       	brcc	.+2      	; 0x1ea72 <pf_read+0x108>
+   1ea70:	6c 01       	movw	r12, r24
+   1ea72:	4e a1       	ldd	r20, Y+38	; 0x26
+   1ea74:	5f a1       	ldd	r21, Y+39	; 0x27
+			if (!sect) goto fr_abort;
+   1ea76:	68 a5       	ldd	r22, Y+40	; 0x28
+   1ea78:	79 a5       	ldd	r23, Y+41	; 0x29
+   1ea7a:	81 14       	cp	r8, r1
+   1ea7c:	91 04       	cpc	r9, r1
+   1ea7e:	19 f4       	brne	.+6      	; 0x1ea86 <pf_read+0x11c>
+   1ea80:	80 e0       	ldi	r24, 0x00	; 0
+			fs->dsect = sect + cs;
+   1ea82:	90 e0       	ldi	r25, 0x00	; 0
+   1ea84:	01 c0       	rjmp	.+2      	; 0x1ea88 <pf_read+0x11e>
+   1ea86:	c3 01       	movw	r24, r6
+   1ea88:	86 01       	movw	r16, r12
+   1ea8a:	eb d0       	rcall	.+470    	; 0x1ec62 <disk_readp>
+   1ea8c:	81 11       	cpse	r24, r1
+   1ea8e:	1a c0       	rjmp	.+52     	; 0x1eac4 <pf_read+0x15a>
+   1ea90:	8e 89       	ldd	r24, Y+22	; 0x16
+   1ea92:	9f 89       	ldd	r25, Y+23	; 0x17
+   1ea94:	a8 8d       	ldd	r26, Y+24	; 0x18
+		}
+		rcnt = (WORD)(512 - (fs->fptr % 512));		/* Get partial sector data from sector buffer */
+   1ea96:	b9 8d       	ldd	r27, Y+25	; 0x19
+   1ea98:	8c 0d       	add	r24, r12
+   1ea9a:	9d 1d       	adc	r25, r13
+   1ea9c:	a1 1d       	adc	r26, r1
+   1ea9e:	b1 1d       	adc	r27, r1
+   1eaa0:	8e 8b       	std	Y+22, r24	; 0x16
+   1eaa2:	9f 8b       	std	Y+23, r25	; 0x17
+   1eaa4:	a8 8f       	std	Y+24, r26	; 0x18
+   1eaa6:	b9 8f       	std	Y+25, r27	; 0x19
+   1eaa8:	6c 0c       	add	r6, r12
+   1eaaa:	7d 1c       	adc	r7, r13
+		if (rcnt > btr) rcnt = btr;
+		dr = disk_readp(!buff ? 0 : rbuff, fs->dsect, (WORD)(fs->fptr % 512), rcnt);
+   1eaac:	ec 18       	sub	r14, r12
+   1eaae:	fd 08       	sbc	r15, r13
+   1eab0:	f5 01       	movw	r30, r10
+   1eab2:	80 81       	ld	r24, Z
+   1eab4:	91 81       	ldd	r25, Z+1	; 0x01
+   1eab6:	8c 0d       	add	r24, r12
+   1eab8:	9d 1d       	adc	r25, r13
+   1eaba:	91 83       	std	Z+1, r25	; 0x01
+   1eabc:	80 83       	st	Z, r24
+   1eabe:	83 cf       	rjmp	.-250    	; 0x1e9c6 <pf_read+0x5c>
+   1eac0:	80 e0       	ldi	r24, 0x00	; 0
+   1eac2:	06 c0       	rjmp	.+12     	; 0x1ead0 <pf_read+0x166>
+   1eac4:	19 82       	std	Y+1, r1	; 0x01
+   1eac6:	81 e0       	ldi	r24, 0x01	; 1
+		if (dr) goto fr_abort;
+   1eac8:	03 c0       	rjmp	.+6      	; 0x1ead0 <pf_read+0x166>
+   1eaca:	86 e0       	ldi	r24, 0x06	; 6
+		fs->fptr += rcnt; rbuff += rcnt;			/* Update pointers and counters */
+   1eacc:	01 c0       	rjmp	.+2      	; 0x1ead0 <pf_read+0x166>
+   1eace:	85 e0       	ldi	r24, 0x05	; 5
+   1ead0:	cd b7       	in	r28, 0x3d	; 61
+   1ead2:	de b7       	in	r29, 0x3e	; 62
+   1ead4:	e0 e1       	ldi	r30, 0x10	; 16
+   1ead6:	bf c4       	rjmp	.+2430   	; 0x1f456 <__epilogue_restores__+0x4>
+
+0001ead8 <send_cmd>:
+static
+BYTE send_cmd (
+	BYTE cmd,		/* 1st byte (Start + Index) */
+	DWORD arg		/* Argument (32 bits) */
+)
+{
+   1ead8:	ff 92       	push	r15
+   1eada:	0f 93       	push	r16
+   1eadc:	1f 93       	push	r17
+   1eade:	cf 93       	push	r28
+   1eae0:	df 93       	push	r29
+   1eae2:	c8 2f       	mov	r28, r24
+   1eae4:	d4 2f       	mov	r29, r20
+   1eae6:	15 2f       	mov	r17, r21
+   1eae8:	06 2f       	mov	r16, r22
+   1eaea:	f7 2e       	mov	r15, r23
+	BYTE n, res;
+
+
+	if (cmd & 0x80) {	/* ACMD<n> is the command sequense of CMD55-CMD<n> */
+   1eaec:	87 ff       	sbrs	r24, 7
+   1eaee:	08 c0       	rjmp	.+16     	; 0x1eb00 <send_cmd+0x28>
+		cmd &= 0x7F;
+		res = send_cmd(CMD55, 0);
+   1eaf0:	40 e0       	ldi	r20, 0x00	; 0
+   1eaf2:	50 e0       	ldi	r21, 0x00	; 0
+   1eaf4:	ba 01       	movw	r22, r20
+   1eaf6:	87 e7       	ldi	r24, 0x77	; 119
+   1eaf8:	ef df       	rcall	.-34     	; 0x1ead8 <send_cmd>
+   1eafa:	82 30       	cpi	r24, 0x02	; 2
+		if (res > 1) return res;
+   1eafc:	e0 f4       	brcc	.+56     	; 0x1eb36 <send_cmd+0x5e>
+   1eafe:	cf 77       	andi	r28, 0x7F	; 127
+{
+	BYTE n, res;
+
+
+	if (cmd & 0x80) {	/* ACMD<n> is the command sequense of CMD55-CMD<n> */
+		cmd &= 0x7F;
+   1eb00:	0f d1       	rcall	.+542    	; 0x1ed20 <select>
+		res = send_cmd(CMD55, 0);
+		if (res > 1) return res;
+	}
+
+	/* Select the card */
+	select();
+   1eb02:	8c 2f       	mov	r24, r28
+   1eb04:	12 d1       	rcall	.+548    	; 0x1ed2a <xmit_spi>
+
+	/* Send a command packet */
+	xmit_spi(cmd);						/* Start + Command index */
+   1eb06:	8f 2d       	mov	r24, r15
+   1eb08:	10 d1       	rcall	.+544    	; 0x1ed2a <xmit_spi>
+   1eb0a:	80 2f       	mov	r24, r16
+	xmit_spi((BYTE)(arg >> 24));		/* Argument[31..24] */
+   1eb0c:	0e d1       	rcall	.+540    	; 0x1ed2a <xmit_spi>
+   1eb0e:	81 2f       	mov	r24, r17
+   1eb10:	0c d1       	rcall	.+536    	; 0x1ed2a <xmit_spi>
+	xmit_spi((BYTE)(arg >> 16));		/* Argument[23..16] */
+   1eb12:	8d 2f       	mov	r24, r29
+   1eb14:	0a d1       	rcall	.+532    	; 0x1ed2a <xmit_spi>
+   1eb16:	c0 34       	cpi	r28, 0x40	; 64
+	xmit_spi((BYTE)(arg >> 8));			/* Argument[15..8] */
+   1eb18:	21 f0       	breq	.+8      	; 0x1eb22 <send_cmd+0x4a>
+   1eb1a:	c8 34       	cpi	r28, 0x48	; 72
+   1eb1c:	21 f0       	breq	.+8      	; 0x1eb26 <send_cmd+0x4e>
+	xmit_spi((BYTE)arg);				/* Argument[7..0] */
+   1eb1e:	81 e0       	ldi	r24, 0x01	; 1
+   1eb20:	03 c0       	rjmp	.+6      	; 0x1eb28 <send_cmd+0x50>
+   1eb22:	85 e9       	ldi	r24, 0x95	; 149
+	n = 0x01;							/* Dummy CRC + Stop */
+	if (cmd == CMD0) n = 0x95;			/* Valid CRC for CMD0(0) */
+   1eb24:	01 c0       	rjmp	.+2      	; 0x1eb28 <send_cmd+0x50>
+   1eb26:	87 e8       	ldi	r24, 0x87	; 135
+	if (cmd == CMD8) n = 0x87;			/* Valid CRC for CMD8(0x1AA) */
+   1eb28:	00 d1       	rcall	.+512    	; 0x1ed2a <xmit_spi>
+   1eb2a:	ca e0       	ldi	r28, 0x0A	; 10
+	xmit_spi(cmd);						/* Start + Command index */
+	xmit_spi((BYTE)(arg >> 24));		/* Argument[31..24] */
+	xmit_spi((BYTE)(arg >> 16));		/* Argument[23..16] */
+	xmit_spi((BYTE)(arg >> 8));			/* Argument[15..8] */
+	xmit_spi((BYTE)arg);				/* Argument[7..0] */
+	n = 0x01;							/* Dummy CRC + Stop */
+   1eb2c:	fd d0       	rcall	.+506    	; 0x1ed28 <rcv_spi>
+   1eb2e:	87 ff       	sbrs	r24, 7
+	if (cmd == CMD0) n = 0x95;			/* Valid CRC for CMD0(0) */
+   1eb30:	02 c0       	rjmp	.+4      	; 0x1eb36 <send_cmd+0x5e>
+   1eb32:	c1 50       	subi	r28, 0x01	; 1
+	if (cmd == CMD8) n = 0x87;			/* Valid CRC for CMD8(0x1AA) */
+   1eb34:	d9 f7       	brne	.-10     	; 0x1eb2c <send_cmd+0x54>
+	xmit_spi(n);
+   1eb36:	cd b7       	in	r28, 0x3d	; 61
+   1eb38:	de b7       	in	r29, 0x3e	; 62
+   1eb3a:	e5 e0       	ldi	r30, 0x05	; 5
+
+	/* Receive a command response */
+	n = 10;								/* Wait for a valid response in timeout of 10 attempts */
+	do {
+		res = rcv_spi();
+   1eb3c:	97 c4       	rjmp	.+2350   	; 0x1f46c <__epilogue_restores__+0x1a>
+
+0001eb3e <disk_initialize>:
+   1eb3e:	a4 e0       	ldi	r26, 0x04	; 4
+	} while ((res & 0x80) && --n);
+   1eb40:	b0 e0       	ldi	r27, 0x00	; 0
+   1eb42:	e4 ea       	ldi	r30, 0xA4	; 164
+   1eb44:	f5 ef       	ldi	r31, 0xF5	; 245
+   1eb46:	75 c4       	rjmp	.+2282   	; 0x1f432 <__prologue_saves__+0x18>
+
+	return res;			/* Return with the response value */
+}
+   1eb48:	de d0       	rcall	.+444    	; 0x1ed06 <init_spi>
+   1eb4a:	14 e6       	ldi	r17, 0x64	; 100
+   1eb4c:	e1 d0       	rcall	.+450    	; 0x1ed10 <dly_100us>
+   1eb4e:	11 50       	subi	r17, 0x01	; 1
+   1eb50:	e9 f7       	brne	.-6      	; 0x1eb4c <disk_initialize+0xe>
+/*-----------------------------------------------------------------------*/
+/* Initialize Disk Drive                                                 */
+/*-----------------------------------------------------------------------*/
+
+DSTATUS disk_initialize (void)
+{
+   1eb52:	1a e0       	ldi	r17, 0x0A	; 10
+   1eb54:	e8 d0       	rcall	.+464    	; 0x1ed26 <deselect>
+   1eb56:	11 50       	subi	r17, 0x01	; 1
+   1eb58:	e9 f7       	brne	.-6      	; 0x1eb54 <disk_initialize+0x16>
+   1eb5a:	40 e0       	ldi	r20, 0x00	; 0
+   1eb5c:	50 e0       	ldi	r21, 0x00	; 0
+	BYTE n, cmd, ty, ocr[4];
+	UINT tmr;
+
+
+	init_spi();							/* Initialize ports to control MMC */
+   1eb5e:	ba 01       	movw	r22, r20
+   1eb60:	80 e4       	ldi	r24, 0x40	; 64
+   1eb62:	ba df       	rcall	.-140    	; 0x1ead8 <send_cmd>
+	for (n = 100; n; n--) dly_100us();	/* 10ms delay */
+   1eb64:	81 30       	cpi	r24, 0x01	; 1
+   1eb66:	09 f0       	breq	.+2      	; 0x1eb6a <disk_initialize+0x2c>
+   1eb68:	56 c0       	rjmp	.+172    	; 0x1ec16 <disk_initialize+0xd8>
+   1eb6a:	4a ea       	ldi	r20, 0xAA	; 170
+   1eb6c:	51 e0       	ldi	r21, 0x01	; 1
+	for (n = 10; n; n--) deselect();	/* 80 Dummy clocks with CS=H */
+   1eb6e:	60 e0       	ldi	r22, 0x00	; 0
+   1eb70:	70 e0       	ldi	r23, 0x00	; 0
+   1eb72:	88 e4       	ldi	r24, 0x48	; 72
+   1eb74:	b1 df       	rcall	.-158    	; 0x1ead8 <send_cmd>
+
+	ty = 0;
+	if (send_cmd(CMD0, 0) == 1) {			/* Enter Idle state */
+   1eb76:	81 30       	cpi	r24, 0x01	; 1
+   1eb78:	39 f5       	brne	.+78     	; 0x1ebc8 <disk_initialize+0x8a>
+   1eb7a:	7e 01       	movw	r14, r28
+   1eb7c:	85 e0       	ldi	r24, 0x05	; 5
+   1eb7e:	e8 0e       	add	r14, r24
+   1eb80:	f1 1c       	adc	r15, r1
+   1eb82:	8e 01       	movw	r16, r28
+   1eb84:	0f 5f       	subi	r16, 0xFF	; 255
+   1eb86:	1f 4f       	sbci	r17, 0xFF	; 255
+		if (send_cmd(CMD8, 0x1AA) == 1) {	/* SDv2 */
+   1eb88:	cf d0       	rcall	.+414    	; 0x1ed28 <rcv_spi>
+   1eb8a:	f8 01       	movw	r30, r16
+   1eb8c:	81 93       	st	Z+, r24
+   1eb8e:	8f 01       	movw	r16, r30
+   1eb90:	ee 15       	cp	r30, r14
+   1eb92:	ff 05       	cpc	r31, r15
+   1eb94:	c9 f7       	brne	.-14     	; 0x1eb88 <disk_initialize+0x4a>
+   1eb96:	8b 81       	ldd	r24, Y+3	; 0x03
+   1eb98:	81 30       	cpi	r24, 0x01	; 1
+   1eb9a:	09 f0       	breq	.+2      	; 0x1eb9e <disk_initialize+0x60>
+   1eb9c:	3c c0       	rjmp	.+120    	; 0x1ec16 <disk_initialize+0xd8>
+   1eb9e:	8c 81       	ldd	r24, Y+4	; 0x04
+   1eba0:	8a 3a       	cpi	r24, 0xAA	; 170
+   1eba2:	09 f0       	breq	.+2      	; 0x1eba6 <disk_initialize+0x68>
+   1eba4:	38 c0       	rjmp	.+112    	; 0x1ec16 <disk_initialize+0xd8>
+   1eba6:	00 e1       	ldi	r16, 0x10	; 16
+			for (n = 0; n < 4; n++) ocr[n] = rcv_spi();		/* Get trailing return value of R7 resp */
+   1eba8:	17 e2       	ldi	r17, 0x27	; 39
+   1ebaa:	40 e0       	ldi	r20, 0x00	; 0
+   1ebac:	50 e0       	ldi	r21, 0x00	; 0
+   1ebae:	60 e0       	ldi	r22, 0x00	; 0
+   1ebb0:	70 e4       	ldi	r23, 0x40	; 64
+   1ebb2:	89 ee       	ldi	r24, 0xE9	; 233
+   1ebb4:	91 df       	rcall	.-222    	; 0x1ead8 <send_cmd>
+   1ebb6:	88 23       	and	r24, r24
+			if (ocr[2] == 0x01 && ocr[3] == 0xAA) {			/* The card can work at vdd range of 2.7-3.6V */
+   1ebb8:	b9 f1       	breq	.+110    	; 0x1ec28 <disk_initialize+0xea>
+   1ebba:	aa d0       	rcall	.+340    	; 0x1ed10 <dly_100us>
+   1ebbc:	01 50       	subi	r16, 0x01	; 1
+   1ebbe:	11 09       	sbc	r17, r1
+   1ebc0:	01 15       	cp	r16, r1
+   1ebc2:	11 05       	cpc	r17, r1
+   1ebc4:	91 f7       	brne	.-28     	; 0x1ebaa <disk_initialize+0x6c>
+   1ebc6:	27 c0       	rjmp	.+78     	; 0x1ec16 <disk_initialize+0xd8>
+   1ebc8:	40 e0       	ldi	r20, 0x00	; 0
+   1ebca:	50 e0       	ldi	r21, 0x00	; 0
+				for (tmr = 10000; tmr && send_cmd(ACMD41, 1UL << 30); tmr--) dly_100us();	/* Wait for leaving idle state (ACMD41 with HCS bit) */
+   1ebcc:	ba 01       	movw	r22, r20
+   1ebce:	89 ee       	ldi	r24, 0xE9	; 233
+   1ebd0:	83 df       	rcall	.-250    	; 0x1ead8 <send_cmd>
+   1ebd2:	82 30       	cpi	r24, 0x02	; 2
+   1ebd4:	28 f4       	brcc	.+10     	; 0x1ebe0 <disk_initialize+0xa2>
+   1ebd6:	22 e0       	ldi	r18, 0x02	; 2
+   1ebd8:	f2 2e       	mov	r15, r18
+   1ebda:	39 ee       	ldi	r19, 0xE9	; 233
+   1ebdc:	e3 2e       	mov	r14, r19
+   1ebde:	04 c0       	rjmp	.+8      	; 0x1ebe8 <disk_initialize+0xaa>
+   1ebe0:	ff 24       	eor	r15, r15
+   1ebe2:	f3 94       	inc	r15
+   1ebe4:	91 e4       	ldi	r25, 0x41	; 65
+   1ebe6:	e9 2e       	mov	r14, r25
+   1ebe8:	00 e1       	ldi	r16, 0x10	; 16
+   1ebea:	17 e2       	ldi	r17, 0x27	; 39
+   1ebec:	40 e0       	ldi	r20, 0x00	; 0
+					for (n = 0; n < 4; n++) ocr[n] = rcv_spi();
+					ty = (ocr[0] & 0x40) ? CT_SD2 | CT_BLOCK : CT_SD2;	/* SDv2 (HC or SC) */
+				}
+			}
+		} else {							/* SDv1 or MMCv3 */
+			if (send_cmd(ACMD41, 0) <= 1) 	{
+   1ebee:	50 e0       	ldi	r21, 0x00	; 0
+   1ebf0:	ba 01       	movw	r22, r20
+   1ebf2:	8e 2d       	mov	r24, r14
+   1ebf4:	71 df       	rcall	.-286    	; 0x1ead8 <send_cmd>
+   1ebf6:	88 23       	and	r24, r24
+   1ebf8:	39 f0       	breq	.+14     	; 0x1ec08 <disk_initialize+0xca>
+   1ebfa:	8a d0       	rcall	.+276    	; 0x1ed10 <dly_100us>
+   1ebfc:	01 50       	subi	r16, 0x01	; 1
+				ty = CT_SD1; cmd = ACMD41;	/* SDv1 */
+   1ebfe:	11 09       	sbc	r17, r1
+   1ec00:	01 15       	cp	r16, r1
+   1ec02:	11 05       	cpc	r17, r1
+   1ec04:	99 f7       	brne	.-26     	; 0x1ebec <disk_initialize+0xae>
+   1ec06:	07 c0       	rjmp	.+14     	; 0x1ec16 <disk_initialize+0xd8>
+			} else {
+				ty = CT_MMC; cmd = CMD1;	/* MMCv3 */
+   1ec08:	40 e0       	ldi	r20, 0x00	; 0
+   1ec0a:	52 e0       	ldi	r21, 0x02	; 2
+   1ec0c:	60 e0       	ldi	r22, 0x00	; 0
+   1ec0e:	70 e0       	ldi	r23, 0x00	; 0
+   1ec10:	80 e5       	ldi	r24, 0x50	; 80
+   1ec12:	62 df       	rcall	.-316    	; 0x1ead8 <send_cmd>
+			}
+			for (tmr = 10000; tmr && send_cmd(cmd, 0); tmr--) dly_100us();	/* Wait for leaving idle state */
+   1ec14:	81 11       	cpse	r24, r1
+   1ec16:	f1 2c       	mov	r15, r1
+   1ec18:	f0 92 10 02 	sts	0x0210, r15
+   1ec1c:	84 d0       	rcall	.+264    	; 0x1ed26 <deselect>
+   1ec1e:	81 e0       	ldi	r24, 0x01	; 1
+   1ec20:	ff 20       	and	r15, r15
+   1ec22:	e1 f0       	breq	.+56     	; 0x1ec5c <disk_initialize+0x11e>
+   1ec24:	80 e0       	ldi	r24, 0x00	; 0
+   1ec26:	1a c0       	rjmp	.+52     	; 0x1ec5c <disk_initialize+0x11e>
+   1ec28:	40 e0       	ldi	r20, 0x00	; 0
+   1ec2a:	50 e0       	ldi	r21, 0x00	; 0
+   1ec2c:	ba 01       	movw	r22, r20
+   1ec2e:	8a e7       	ldi	r24, 0x7A	; 122
+   1ec30:	53 df       	rcall	.-346    	; 0x1ead8 <send_cmd>
+   1ec32:	81 11       	cpse	r24, r1
+			if (!tmr || send_cmd(CMD16, 512) != 0)			/* Set R/W block length to 512 */
+   1ec34:	f0 cf       	rjmp	.-32     	; 0x1ec16 <disk_initialize+0xd8>
+   1ec36:	8e 01       	movw	r16, r28
+   1ec38:	0f 5f       	subi	r16, 0xFF	; 255
+   1ec3a:	1f 4f       	sbci	r17, 0xFF	; 255
+   1ec3c:	75 d0       	rcall	.+234    	; 0x1ed28 <rcv_spi>
+   1ec3e:	f8 01       	movw	r30, r16
+   1ec40:	81 93       	st	Z+, r24
+   1ec42:	8f 01       	movw	r16, r30
+				ty = 0;
+   1ec44:	ee 15       	cp	r30, r14
+		}
+	}
+	CardType = ty;
+   1ec46:	ff 05       	cpc	r31, r15
+   1ec48:	c9 f7       	brne	.-14     	; 0x1ec3c <disk_initialize+0xfe>
+	deselect();
+   1ec4a:	89 81       	ldd	r24, Y+1	; 0x01
+   1ec4c:	86 ff       	sbrs	r24, 6
+
+	return ty ? 0 : STA_NOINIT;
+   1ec4e:	03 c0       	rjmp	.+6      	; 0x1ec56 <disk_initialize+0x118>
+   1ec50:	4c e0       	ldi	r20, 0x0C	; 12
+   1ec52:	f4 2e       	mov	r15, r20
+   1ec54:	e1 cf       	rjmp	.-62     	; 0x1ec18 <disk_initialize+0xda>
+   1ec56:	84 e0       	ldi	r24, 0x04	; 4
+	if (send_cmd(CMD0, 0) == 1) {			/* Enter Idle state */
+		if (send_cmd(CMD8, 0x1AA) == 1) {	/* SDv2 */
+			for (n = 0; n < 4; n++) ocr[n] = rcv_spi();		/* Get trailing return value of R7 resp */
+			if (ocr[2] == 0x01 && ocr[3] == 0xAA) {			/* The card can work at vdd range of 2.7-3.6V */
+				for (tmr = 10000; tmr && send_cmd(ACMD41, 1UL << 30); tmr--) dly_100us();	/* Wait for leaving idle state (ACMD41 with HCS bit) */
+				if (tmr && send_cmd(CMD58, 0) == 0) {		/* Check CCS bit in the OCR */
+   1ec58:	f8 2e       	mov	r15, r24
+   1ec5a:	de cf       	rjmp	.-68     	; 0x1ec18 <disk_initialize+0xda>
+   1ec5c:	24 96       	adiw	r28, 0x04	; 4
+   1ec5e:	e6 e0       	ldi	r30, 0x06	; 6
+   1ec60:	04 c4       	rjmp	.+2056   	; 0x1f46a <__epilogue_restores__+0x18>
+
+0001ec62 <disk_readp>:
+   1ec62:	a1 e0       	ldi	r26, 0x01	; 1
+   1ec64:	b0 e0       	ldi	r27, 0x00	; 0
+   1ec66:	e6 e3       	ldi	r30, 0x36	; 54
+   1ec68:	f6 ef       	ldi	r31, 0xF6	; 246
+   1ec6a:	df c3       	rjmp	.+1982   	; 0x1f42a <__prologue_saves__+0x10>
+   1ec6c:	d8 2e       	mov	r13, r24
+					for (n = 0; n < 4; n++) ocr[n] = rcv_spi();
+   1ec6e:	c9 2e       	mov	r12, r25
+   1ec70:	79 01       	movw	r14, r18
+   1ec72:	80 91 10 02 	lds	r24, 0x0210
+   1ec76:	83 fd       	sbrc	r24, 3
+   1ec78:	07 c0       	rjmp	.+14     	; 0x1ec88 <disk_readp+0x26>
+   1ec7a:	e9 e0       	ldi	r30, 0x09	; 9
+   1ec7c:	44 0f       	add	r20, r20
+					ty = (ocr[0] & 0x40) ? CT_SD2 | CT_BLOCK : CT_SD2;	/* SDv2 (HC or SC) */
+   1ec7e:	55 1f       	adc	r21, r21
+   1ec80:	66 1f       	adc	r22, r22
+   1ec82:	77 1f       	adc	r23, r23
+   1ec84:	ea 95       	dec	r30
+   1ec86:	d1 f7       	brne	.-12     	; 0x1ec7c <disk_readp+0x1a>
+   1ec88:	81 e5       	ldi	r24, 0x51	; 81
+   1ec8a:	26 df       	rcall	.-436    	; 0x1ead8 <send_cmd>
+   1ec8c:	88 23       	and	r24, r24
+   1ec8e:	11 f0       	breq	.+4      	; 0x1ec94 <disk_readp+0x32>
+	}
+	CardType = ty;
+	deselect();
+
+	return ty ? 0 : STA_NOINIT;
+}
+   1ec90:	81 e0       	ldi	r24, 0x01	; 1
+   1ec92:	33 c0       	rjmp	.+102    	; 0x1ecfa <disk_readp+0x98>
+   1ec94:	60 e4       	ldi	r22, 0x40	; 64
+   1ec96:	a6 2e       	mov	r10, r22
+	BYTE *buff,		/* Pointer to the read buffer (NULL:Read bytes are forwarded to the stream) */
+	DWORD lba,		/* Sector number (LBA) */
+	WORD ofs,		/* Byte offset to read from (0..511) */
+	WORD cnt		/* Number of bytes to read (ofs + cnt mus be <= 512) */
+)
+{
+   1ec98:	6c e9       	ldi	r22, 0x9C	; 156
+   1ec9a:	b6 2e       	mov	r11, r22
+   1ec9c:	45 d0       	rcall	.+138    	; 0x1ed28 <rcv_spi>
+   1ec9e:	8f 3f       	cpi	r24, 0xFF	; 255
+   1eca0:	39 f4       	brne	.+14     	; 0x1ecb0 <disk_readp+0x4e>
+   1eca2:	81 e0       	ldi	r24, 0x01	; 1
+   1eca4:	a8 1a       	sub	r10, r24
+   1eca6:	b1 08       	sbc	r11, r1
+   1eca8:	a1 14       	cp	r10, r1
+	DRESULT res;
+	BYTE rc;
+	WORD bc;
+
+
+	if (!(CardType & CT_BLOCK)) lba *= 512;		/* Convert to byte address if needed */
+   1ecaa:	b1 04       	cpc	r11, r1
+   1ecac:	b9 f7       	brne	.-18     	; 0x1ec9c <disk_readp+0x3a>
+   1ecae:	f0 cf       	rjmp	.-32     	; 0x1ec90 <disk_readp+0x2e>
+   1ecb0:	8e 3f       	cpi	r24, 0xFE	; 254
+   1ecb2:	71 f7       	brne	.-36     	; 0x1ec90 <disk_readp+0x2e>
+   1ecb4:	52 e0       	ldi	r21, 0x02	; 2
+   1ecb6:	a5 2e       	mov	r10, r21
+   1ecb8:	ba 2c       	mov	r11, r10
+   1ecba:	a0 1a       	sub	r10, r16
+   1ecbc:	b1 0a       	sbc	r11, r17
+   1ecbe:	ae 18       	sub	r10, r14
+
+	res = RES_ERROR;
+	if (send_cmd(CMD17, lba) == 0) {		/* READ_SINGLE_BLOCK */
+   1ecc0:	bf 08       	sbc	r11, r15
+   1ecc2:	e1 14       	cp	r14, r1
+   1ecc4:	f1 04       	cpc	r15, r1
+   1ecc6:	19 f4       	brne	.+6      	; 0x1ecce <disk_readp+0x6c>
+   1ecc8:	ed 2c       	mov	r14, r13
+	WORD bc;
+
+
+	if (!(CardType & CT_BLOCK)) lba *= 512;		/* Convert to byte address if needed */
+
+	res = RES_ERROR;
+   1ecca:	fc 2c       	mov	r15, r12
+   1eccc:	05 c0       	rjmp	.+10     	; 0x1ecd8 <disk_readp+0x76>
+	if (send_cmd(CMD17, lba) == 0) {		/* READ_SINGLE_BLOCK */
+   1ecce:	2c d0       	rcall	.+88     	; 0x1ed28 <rcv_spi>
+   1ecd0:	e1 e0       	ldi	r30, 0x01	; 1
+   1ecd2:	ee 1a       	sub	r14, r30
+   1ecd4:	f1 08       	sbc	r15, r1
+
+		bc = 40000;
+		do {							/* Wait for data packet */
+			rc = rcv_spi();
+   1ecd6:	f5 cf       	rjmp	.-22     	; 0x1ecc2 <disk_readp+0x60>
+   1ecd8:	27 d0       	rcall	.+78     	; 0x1ed28 <rcv_spi>
+		} while (rc == 0xFF && --bc);
+   1ecda:	f7 01       	movw	r30, r14
+   1ecdc:	81 93       	st	Z+, r24
+   1ecde:	7f 01       	movw	r14, r30
+   1ece0:	01 50       	subi	r16, 0x01	; 1
+   1ece2:	11 09       	sbc	r17, r1
+   1ece4:	01 15       	cp	r16, r1
+   1ece6:	11 05       	cpc	r17, r1
+   1ece8:	b9 f7       	brne	.-18     	; 0x1ecd8 <disk_readp+0x76>
+   1ecea:	1e d0       	rcall	.+60     	; 0x1ed28 <rcv_spi>
+
+		if (rc == 0xFE) {				/* A data packet arrived */
+   1ecec:	f1 e0       	ldi	r31, 0x01	; 1
+   1ecee:	af 1a       	sub	r10, r31
+			bc = 514 - ofs - cnt;
+   1ecf0:	b1 08       	sbc	r11, r1
+   1ecf2:	a1 14       	cp	r10, r1
+   1ecf4:	b1 04       	cpc	r11, r1
+   1ecf6:	c9 f7       	brne	.-14     	; 0x1ecea <disk_readp+0x88>
+   1ecf8:	80 e0       	ldi	r24, 0x00	; 0
+   1ecfa:	89 83       	std	Y+1, r24	; 0x01
+   1ecfc:	14 d0       	rcall	.+40     	; 0x1ed26 <deselect>
+
+			/* Skip leading bytes */
+			if (ofs) {
+   1ecfe:	89 81       	ldd	r24, Y+1	; 0x01
+   1ed00:	21 96       	adiw	r28, 0x01	; 1
+   1ed02:	ea e0       	ldi	r30, 0x0A	; 10
+   1ed04:	ae c3       	rjmp	.+1884   	; 0x1f462 <__epilogue_restores__+0x10>
+
+0001ed06 <init_spi>:
+   1ed06:	9d 9a       	sbi	0x13, 5	; 19
+   1ed08:	22 9a       	sbi	0x04, 2	; 4
+				do rcv_spi(); while (--ofs);
+   1ed0a:	21 9a       	sbi	0x04, 1	; 4
+   1ed0c:	2b 9a       	sbi	0x05, 3	; 5
+   1ed0e:	08 95       	ret
+
+0001ed10 <dly_100us>:
+   1ed10:	80 ea       	ldi	r24, 0xA0	; 160
+   1ed12:	31 97       	sbiw	r30, 0x01	; 1
+   1ed14:	31 97       	sbiw	r30, 0x01	; 1
+			}
+
+			/* Receive a part of the sector */
+			do {
+				*buff++ = rcv_spi();
+   1ed16:	31 97       	sbiw	r30, 0x01	; 1
+   1ed18:	00 00       	nop
+   1ed1a:	8a 95       	dec	r24
+   1ed1c:	d1 f7       	brne	.-12     	; 0x1ed12 <dly_100us+0x2>
+   1ed1e:	08 95       	ret
+
+0001ed20 <select>:
+			} while (--cnt);
+   1ed20:	02 d0       	rcall	.+4      	; 0x1ed26 <deselect>
+   1ed22:	a5 98       	cbi	0x14, 5	; 20
+   1ed24:	01 c0       	rjmp	.+2      	; 0x1ed28 <rcv_spi>
+
+0001ed26 <deselect>:
+   1ed26:	a5 9a       	sbi	0x14, 5	; 20
+
+0001ed28 <rcv_spi>:
+   1ed28:	8f ef       	ldi	r24, 0xFF	; 255
+
+0001ed2a <xmit_spi>:
+
+			/* Skip trailing bytes and CRC */
+			do rcv_spi(); while (--bc);
+   1ed2a:	98 e0       	ldi	r25, 0x08	; 8
+   1ed2c:	87 fd       	sbrc	r24, 7
+   1ed2e:	2a 9a       	sbi	0x05, 2	; 5
+   1ed30:	87 ff       	sbrs	r24, 7
+   1ed32:	2a 98       	cbi	0x05, 2	; 5
+   1ed34:	88 0f       	add	r24, r24
+   1ed36:	1b 99       	sbic	0x03, 3	; 3
+   1ed38:	83 95       	inc	r24
+
+			res = RES_OK;
+   1ed3a:	29 9a       	sbi	0x05, 1	; 5
+		}
+	}
+
+	deselect();
+   1ed3c:	29 98       	cbi	0x05, 1	; 5
+   1ed3e:	9a 95       	dec	r25
+   1ed40:	a9 f7       	brne	.-22     	; 0x1ed2c <xmit_spi+0x2>
+
+	return res;
+}
+   1ed42:	08 95       	ret
+
+0001ed44 <flash_erase>:
+   1ed44:	fb 01       	movw	r30, r22
+   1ed46:	8b bf       	out	0x3b, r24	; 59
+   1ed48:	83 e0       	ldi	r24, 0x03	; 3
+   1ed4a:	80 93 57 00 	sts	0x0057, r24
+#endif
+
+	; Initiate erase operation
+	ldi	r24, 0b00000011
+	sts	_SFR_MEM_ADDR(SPMCSR), r24
+	spm
+   1ed4e:	e8 95       	spm
+
+	; Wait for end of erase operation
+1:	lds	r24, _SFR_MEM_ADDR(SPMCSR)
+   1ed50:	80 91 57 00 	lds	r24, 0x0057
+	sbrc	r24, 0
+   1ed54:	80 fd       	sbrc	r24, 0
+	rjmp	1b
+   1ed56:	fc cf       	rjmp	.-8      	; 0x1ed50 <flash_erase+0xc>
+
+	; Re-enable read access to the flash
+	ldi	r24, 0b00010001
+   1ed58:	81 e1       	ldi	r24, 0x11	; 17
+	sts	_SFR_MEM_ADDR(SPMCSR), r24
+   1ed5a:	80 93 57 00 	sts	0x0057, r24
+	spm
+   1ed5e:	e8 95       	spm
+
+9:	ret
+   1ed60:	08 95       	ret
+
+0001ed62 <flash_write>:
+; void flash_write (DWORD flash_addr, const BYTE* data);
+
+.global flash_write
+.func flash_write
+flash_write:
+	push	r0
+   1ed62:	0f 92       	push	r0
+	push	r1
+   1ed64:	1f 92       	push	r1
+
+#if FLASHEND >= 0x10000
+	out	_SFR_IO_ADDR(RAMPZ), r24
+   1ed66:	8b bf       	out	0x3b, r24	; 59
+#endif
+
+	; Fill page buffer
+	movw	ZL, r22
+   1ed68:	fb 01       	movw	r30, r22
+	movw	XL, r20
+   1ed6a:	da 01       	movw	r26, r20
+	ldi	r25, lo8(SPM_PAGESIZE/2)
+   1ed6c:	90 e8       	ldi	r25, 0x80	; 128
+1:	ld	r0, X+
+   1ed6e:	0d 90       	ld	r0, X+
+	ld	r1, X+
+   1ed70:	1d 90       	ld	r1, X+
+	ldi	r24, 0b00000001
+   1ed72:	81 e0       	ldi	r24, 0x01	; 1
+	sts	_SFR_MEM_ADDR(SPMCSR), r24
+   1ed74:	80 93 57 00 	sts	0x0057, r24
+	spm
+   1ed78:	e8 95       	spm
+	adiw	ZL, 2
+   1ed7a:	32 96       	adiw	r30, 0x02	; 2
+	dec	r25
+   1ed7c:	9a 95       	dec	r25
+	brne	1b
+   1ed7e:	b9 f7       	brne	.-18     	; 0x1ed6e <flash_write+0xc>
+
+	; Initiate write operation
+	movw	ZL, r22
+   1ed80:	fb 01       	movw	r30, r22
+	ldi	r24, 0b00000101
+   1ed82:	85 e0       	ldi	r24, 0x05	; 5
+	sts	_SFR_MEM_ADDR(SPMCSR), r24
+   1ed84:	80 93 57 00 	sts	0x0057, r24
+	spm
+   1ed88:	e8 95       	spm
+
+	; Wait for end of write operation
+2:	lds	r24, _SFR_MEM_ADDR(SPMCSR)
+   1ed8a:	80 91 57 00 	lds	r24, 0x0057
+	sbrc	r24, 0
+   1ed8e:	80 fd       	sbrc	r24, 0
+	rjmp	2b
+   1ed90:	fc cf       	rjmp	.-8      	; 0x1ed8a <flash_write+0x28>
+
+	; Re-enable read access to the flash
+	ldi	r24, 0b00010001
+   1ed92:	81 e1       	ldi	r24, 0x11	; 17
+	sts	_SFR_MEM_ADDR(SPMCSR), r24
+   1ed94:	80 93 57 00 	sts	0x0057, r24
+	spm
+   1ed98:	e8 95       	spm
+
+9:	pop	r1
+   1ed9a:	1f 90       	pop	r1
+	pop	r0
+   1ed9c:	0f 90       	pop	r0
+	ret
+   1ed9e:	08 95       	ret
+
+0001eda0 <main>:
+void (*app_start)(void) = 0x0000;
+
+
+//*****************************************************************************
+int main(void)
+{
+   1eda0:	a5 e2       	ldi	r26, 0x25	; 37
+   1eda2:	b1 e0       	ldi	r27, 0x01	; 1
+   1eda4:	e5 ed       	ldi	r30, 0xD5	; 213
+   1eda6:	f6 ef       	ldi	r31, 0xF6	; 246
+   1eda8:	38 c3       	rjmp	.+1648   	; 0x1f41a <__prologue_saves__>
+   1edaa:	01 e2       	ldi	r16, 0x21	; 33
+	unsigned int	rcvdCharCntr	=	0;
+#endif
+		
+	//*	some chips dont set the stack properly
+	asm volatile ( ".set __stack, %0" :: "i" (RAMEND) );
+	asm volatile ( "ldi	16, %0" :: "i" (RAMEND >> 8) );
+   1edac:	0e bf       	out	0x3e, r16	; 62
+	asm volatile ( "out %0,16" :: "i" (AVR_STACK_POINTER_HI_ADDR) );
+   1edae:	0f ef       	ldi	r16, 0xFF	; 255
+	asm volatile ( "ldi	16, %0" :: "i" (RAMEND & 0x0ff) );
+   1edb0:	0d bf       	out	0x3d, r16	; 61
+	asm volatile ( "out %0,16" :: "i" (AVR_STACK_POINTER_LO_ADDR) );
+   1edb2:	14 b7       	in	r17, 0x34	; 52
+#ifdef _FIX_ISSUE_181_
+	//************************************************************************
+	//*	Dec 29,	2011	<MLS> Issue #181, added watch dog timmer support
+	//*	handle the watch dog timer
+	uint8_t	mcuStatusReg;
+	mcuStatusReg	=	MCUSR;
+   1edb4:	f8 94       	cli
+
+	__asm__ __volatile__ ("cli");
+   1edb6:	a8 95       	wdr
+	__asm__ __volatile__ ("wdr");
+   1edb8:	14 be       	out	0x34, r1	; 52
+	MCUSR	=	0;
+   1edba:	80 91 60 00 	lds	r24, 0x0060
+	WDTCSR	|=	_BV(WDCE) | _BV(WDE);
+   1edbe:	88 61       	ori	r24, 0x18	; 24
+   1edc0:	80 93 60 00 	sts	0x0060, r24
+   1edc4:	10 92 60 00 	sts	0x0060, r1
+	WDTCSR	=	0;
+   1edc8:	78 94       	sei
+	__asm__ __volatile__ ("sei");
+   1edca:	cd d9       	rcall	.-3174   	; 0x1e166 <load_firmware>
+	
+	#ifdef PFF
+	load_firmware();
+   1edcc:	13 ff       	sbrs	r17, 3
+   1edce:	05 c0       	rjmp	.+10     	; 0x1edda <main+0x3a>
+	#endif
+	
+	// check if WDT generated the reset, if so, go straight to app
+	if (mcuStatusReg & _BV(WDRF))
+   1edd0:	e0 91 0c 02 	lds	r30, 0x020C
+	{
+	
+		app_start();
+   1edd4:	f0 91 0d 02 	lds	r31, 0x020D
+   1edd8:	09 95       	icall
+   1edda:	27 9a       	sbi	0x04, 7	; 4
+   1eddc:	2f 9a       	sbi	0x05, 7	; 5
+	 * Branch to bootloader or application code ?
+	 */
+
+#ifndef REMOVE_BOOTLOADER_LED
+	/* PROG_PIN pulled low, indicate with LED that bootloader is active */
+	PROGLED_DDR		|=	(1<<PROGLED_PIN);
+   1edde:	80 91 c0 00 	lds	r24, 0x00C0
+	/*
+	 * Init UART
+	 * set baudrate and enable USART receiver and transmiter without interrupts
+	 */
+#if UART_BAUDRATE_DOUBLE_SPEED
+	UART_STATUS_REG		|=	(1 <<UART_DOUBLE_SPEED);
+   1ede2:	82 60       	ori	r24, 0x02	; 2
+   1ede4:	80 93 c0 00 	sts	0x00C0, r24
+   1ede8:	80 e1       	ldi	r24, 0x10	; 16
+   1edea:	80 93 c4 00 	sts	0x00C4, r24
+#endif
+	UART_BAUD_RATE_LOW	=	UART_BAUD_SELECT(BAUDRATE,F_CPU);
+   1edee:	88 e1       	ldi	r24, 0x18	; 24
+   1edf0:	80 93 c1 00 	sts	0x00C1, r24
+	UART_CONTROL_REG	=	(1 << UART_ENABLE_RECEIVER) | (1 << UART_ENABLE_TRANSMITTER);
+   1edf4:	00 00       	nop
+   1edf6:	c1 2c       	mov	r12, r1
+
+	asm volatile ("nop");			// wait until port has changed
+   1edf8:	d1 2c       	mov	r13, r1
+	}
+	//************************************************************************
+#endif
+
+
+	boot_timer	=	0;
+   1edfa:	76 01       	movw	r14, r12
+   1edfc:	87 ec       	ldi	r24, 0xC7	; 199
+   1edfe:	88 2e       	mov	r8, r24
+			if (boot_timer > boot_timeout)
+			{
+				boot_state	=	1; // (after ++ -> boot_state=2 bootloader timeout, jump to main 0x00000 )
+			}
+		#ifdef BLINK_LED_WHILE_WAITING
+			if ((boot_timer % _BLINK_LOOP_COUNT_) == 0)
+   1ee00:	8b e1       	ldi	r24, 0x1B	; 27
+   1ee02:	98 2e       	mov	r9, r24
+   1ee04:	a1 2c       	mov	r10, r1
+   1ee06:	b1 2c       	mov	r11, r1
+   1ee08:	00 e0       	ldi	r16, 0x00	; 0
+   1ee0a:	10 e0       	ldi	r17, 0x00	; 0
+void (*app_start)(void) = 0x0000;
+
+
+//*****************************************************************************
+int main(void)
+{
+   1ee0c:	80 91 c0 00 	lds	r24, 0x00C0
+
+
+//************************************************************************
+static int	Serial_Available(void)
+{
+	return(UART_STATUS_REG & (1 << UART_RECEIVE_COMPLETE));	// wait for data
+   1ee10:	87 ff       	sbrs	r24, 7
+   1ee12:	07 c0       	rjmp	.+14     	; 0x1ee22 <main+0x82>
+	delay_ms(100);
+#endif
+
+	while (boot_state==0)
+	{
+		while ((!(Serial_Available())) && (boot_state == 0))		// wait for data
+   1ee14:	a8 01       	movw	r20, r16
+   1ee16:	4f 5f       	subi	r20, 0xFF	; 255
+				//*	toggle the LED
+				PROGLED_PORT	^=	(1<<PROGLED_PIN);	// turn LED ON
+			}
+		#endif
+		}
+		boot_state++; // ( if boot_state=1 bootloader received byte from UART, enter bootloader mode)
+   1ee18:	5f 4f       	sbci	r21, 0xFF	; 255
+   1ee1a:	41 15       	cp	r20, r1
+   1ee1c:	51 05       	cpc	r21, r1
+	sendchar(0x0a);
+
+	delay_ms(100);
+#endif
+
+	while (boot_state==0)
+   1ee1e:	a1 f3       	breq	.-24     	; 0x1ee08 <main+0x68>
+   1ee20:	25 c0       	rjmp	.+74     	; 0x1ee6c <main+0xcc>
+   1ee22:	01 15       	cp	r16, r1
+   1ee24:	11 05       	cpc	r17, r1
+	{
+		while ((!(Serial_Available())) && (boot_state == 0))		// wait for data
+   1ee26:	b1 f7       	brne	.-20     	; 0x1ee14 <main+0x74>
+   1ee28:	25 e0       	ldi	r18, 0x05	; 5
+   1ee2a:	2a 95       	dec	r18
+   1ee2c:	f1 f7       	brne	.-4      	; 0x1ee2a <main+0x8a>
+   1ee2e:	00 00       	nop
+   1ee30:	4f ef       	ldi	r20, 0xFF	; 255
+   1ee32:	c4 1a       	sub	r12, r20
+		{
+			_delay_ms(0.001);
+			boot_timer++;
+   1ee34:	d4 0a       	sbc	r13, r20
+   1ee36:	e4 0a       	sbc	r14, r20
+   1ee38:	f4 0a       	sbc	r15, r20
+   1ee3a:	91 e0       	ldi	r25, 0x01	; 1
+   1ee3c:	80 e0       	ldi	r24, 0x00	; 0
+			if (boot_timer > boot_timeout)
+   1ee3e:	a1 e2       	ldi	r26, 0x21	; 33
+   1ee40:	ca 16       	cp	r12, r26
+   1ee42:	ae e4       	ldi	r26, 0x4E	; 78
+   1ee44:	da 06       	cpc	r13, r26
+   1ee46:	e1 04       	cpc	r14, r1
+   1ee48:	f1 04       	cpc	r15, r1
+   1ee4a:	08 f4       	brcc	.+2      	; 0x1ee4e <main+0xae>
+   1ee4c:	90 e0       	ldi	r25, 0x00	; 0
+   1ee4e:	09 2f       	mov	r16, r25
+   1ee50:	18 2f       	mov	r17, r24
+			{
+				boot_state	=	1; // (after ++ -> boot_state=2 bootloader timeout, jump to main 0x00000 )
+   1ee52:	c7 01       	movw	r24, r14
+   1ee54:	b6 01       	movw	r22, r12
+			}
+		#ifdef BLINK_LED_WHILE_WAITING
+			if ((boot_timer % _BLINK_LOOP_COUNT_) == 0)
+   1ee56:	a5 01       	movw	r20, r10
+   1ee58:	94 01       	movw	r18, r8
+   1ee5a:	bd d2       	rcall	.+1402   	; 0x1f3d6 <__udivmodsi4>
+   1ee5c:	67 2b       	or	r22, r23
+   1ee5e:	68 2b       	or	r22, r24
+   1ee60:	69 2b       	or	r22, r25
+   1ee62:	a1 f6       	brne	.-88     	; 0x1ee0c <main+0x6c>
+   1ee64:	85 b1       	in	r24, 0x05	; 5
+   1ee66:	80 58       	subi	r24, 0x80	; 128
+   1ee68:	85 b9       	out	0x05, r24	; 5
+			{
+				//*	toggle the LED
+				PROGLED_PORT	^=	(1<<PROGLED_PIN);	// turn LED ON
+   1ee6a:	d0 cf       	rjmp	.-96     	; 0x1ee0c <main+0x6c>
+   1ee6c:	41 30       	cpi	r20, 0x01	; 1
+   1ee6e:	51 05       	cpc	r21, r1
+   1ee70:	09 f0       	breq	.+2      	; 0x1ee74 <main+0xd4>
+		}
+		boot_state++; // ( if boot_state=1 bootloader received byte from UART, enter bootloader mode)
+	}
+
+
+	if (boot_state==1)
+   1ee72:	8a c2       	rjmp	.+1300   	; 0x1f388 <main+0x5e8>
+   1ee74:	c2 5e       	subi	r28, 0xE2	; 226
+   1ee76:	de 4f       	sbci	r29, 0xFE	; 254
+   1ee78:	18 82       	st	Y, r1
+   1ee7a:	ce 51       	subi	r28, 0x1E	; 30
+   1ee7c:	d1 40       	sbci	r29, 0x01	; 1
+   1ee7e:	91 2c       	mov	r9, r1
+   1ee80:	21 2c       	mov	r2, r1
+   1ee82:	31 2c       	mov	r3, r1
+   1ee84:	41 2c       	mov	r4, r1
+   1ee86:	51 2c       	mov	r5, r1
+   1ee88:	32 01       	movw	r6, r4
+   1ee8a:	c1 2c       	mov	r12, r1
+   1ee8c:	d1 2c       	mov	r13, r1
+   1ee8e:	76 01       	movw	r14, r12
+   1ee90:	6b be       	out	0x3b, r6	; 59
+   1ee92:	f2 01       	movw	r30, r4
+   1ee94:	87 91       	elpm	r24, Z+
+		count++;
+		if (count > MAX_TIME_COUNT)
+		{
+		unsigned int	data;
+		#if (FLASHEND > 0x10000)
+			data	=	pgm_read_word_far(0);	//*	get the first word of the user program
+   1ee96:	96 91       	elpm	r25, Z
+   1ee98:	cd 5d       	subi	r28, 0xDD	; 221
+   1ee9a:	de 4f       	sbci	r29, 0xFE	; 254
+   1ee9c:	99 83       	std	Y+1, r25	; 0x01
+   1ee9e:	88 83       	st	Y, r24
+   1eea0:	c3 52       	subi	r28, 0x23	; 35
+   1eea2:	d1 40       	sbci	r29, 0x01	; 1
+   1eea4:	20 e0       	ldi	r18, 0x00	; 0
+   1eea6:	30 e0       	ldi	r19, 0x00	; 0
+   1eea8:	60 e0       	ldi	r22, 0x00	; 0
+	}
+	//************************************************************************
+#endif
+
+
+	boot_timer	=	0;
+   1eeaa:	41 30       	cpi	r20, 0x01	; 1
+   1eeac:	51 05       	cpc	r21, r1
+   1eeae:	e9 f0       	breq	.+58     	; 0x1eeea <main+0x14a>
+			 * Collect received bytes to a complete message
+			 */
+			msgParseState	=	ST_START;
+			while ( msgParseState != ST_PROCESS )
+			{
+				if (boot_state==1)
+   1eeb0:	80 e0       	ldi	r24, 0x00	; 0
+   1eeb2:	90 e0       	ldi	r25, 0x00	; 0
+   1eeb4:	dc 01       	movw	r26, r24
+		#if (FLASHEND > 0x10000)
+			data	=	pgm_read_word_far(0);	//*	get the first word of the user program
+		#else
+			data	=	pgm_read_word_near(0);	//*	get the first word of the user program
+		#endif
+			if (data != 0xffff)					//*	make sure its valid before jumping to it.
+   1eeb6:	40 91 c0 00 	lds	r20, 0x00C0
+   1eeba:	47 fd       	sbrc	r20, 7
+//*****************************************************************************
+static unsigned char recchar_timeout(void)
+{
+uint32_t count = 0;
+
+	while (!(UART_STATUS_REG & (1 << UART_RECEIVE_COMPLETE)))
+   1eebc:	16 c0       	rjmp	.+44     	; 0x1eeea <main+0x14a>
+   1eebe:	01 96       	adiw	r24, 0x01	; 1
+   1eec0:	a1 1d       	adc	r26, r1
+   1eec2:	b1 1d       	adc	r27, r1
+	{
+		// wait for data
+		count++;
+   1eec4:	81 30       	cpi	r24, 0x01	; 1
+   1eec6:	e2 e1       	ldi	r30, 0x12	; 18
+   1eec8:	9e 07       	cpc	r25, r30
+		if (count > MAX_TIME_COUNT)
+   1eeca:	ea e7       	ldi	r30, 0x7A	; 122
+   1eecc:	ae 07       	cpc	r26, r30
+   1eece:	b1 05       	cpc	r27, r1
+   1eed0:	90 f3       	brcs	.-28     	; 0x1eeb6 <main+0x116>
+   1eed2:	cd 5d       	subi	r28, 0xDD	; 221
+   1eed4:	de 4f       	sbci	r29, 0xFE	; 254
+   1eed6:	88 81       	ld	r24, Y
+		#if (FLASHEND > 0x10000)
+			data	=	pgm_read_word_far(0);	//*	get the first word of the user program
+		#else
+			data	=	pgm_read_word_near(0);	//*	get the first word of the user program
+		#endif
+			if (data != 0xffff)					//*	make sure its valid before jumping to it.
+   1eed8:	99 81       	ldd	r25, Y+1	; 0x01
+   1eeda:	c3 52       	subi	r28, 0x23	; 35
+   1eedc:	d1 40       	sbci	r29, 0x01	; 1
+   1eede:	01 96       	adiw	r24, 0x01	; 1
+   1eee0:	39 f3       	breq	.-50     	; 0x1eeb0 <main+0x110>
+   1eee2:	ee 27       	eor	r30, r30
+   1eee4:	ff 27       	eor	r31, r31
+   1eee6:	09 94       	ijmp
+			{
+				asm volatile(
+   1eee8:	e3 cf       	rjmp	.-58     	; 0x1eeb0 <main+0x110>
+   1eeea:	40 91 c6 00 	lds	r20, 0x00C6
+   1eeee:	63 30       	cpi	r22, 0x03	; 3
+						);
+			}
+			count	=	0;
+		}
+	}
+	return UART_DATA_REG;
+   1eef0:	01 f1       	breq	.+64     	; 0x1ef32 <main+0x192>
+   1eef2:	20 f4       	brcc	.+8      	; 0x1eefc <main+0x15c>
+				{
+					exPointCntr	=	0;
+				}
+			#endif
+
+				switch (msgParseState)
+   1eef4:	61 30       	cpi	r22, 0x01	; 1
+   1eef6:	71 f0       	breq	.+28     	; 0x1ef14 <main+0x174>
+   1eef8:	38 f0       	brcs	.+14     	; 0x1ef08 <main+0x168>
+   1eefa:	14 c0       	rjmp	.+40     	; 0x1ef24 <main+0x184>
+   1eefc:	65 30       	cpi	r22, 0x05	; 5
+   1eefe:	29 f1       	breq	.+74     	; 0x1ef4a <main+0x1aa>
+   1ef00:	e0 f0       	brcs	.+56     	; 0x1ef3a <main+0x19a>
+   1ef02:	66 30       	cpi	r22, 0x06	; 6
+   1ef04:	91 f1       	breq	.+100    	; 0x1ef6a <main+0x1ca>
+   1ef06:	7c c0       	rjmp	.+248    	; 0x1f000 <main+0x260>
+   1ef08:	4b 31       	cpi	r20, 0x1B	; 27
+   1ef0a:	09 f4       	brne	.+2      	; 0x1ef0e <main+0x16e>
+   1ef0c:	51 c2       	rjmp	.+1186   	; 0x1f3b0 <main+0x610>
+				{
+					case ST_START:
+						if ( c == MESSAGE_START )
+   1ef0e:	40 e0       	ldi	r20, 0x00	; 0
+   1ef10:	50 e0       	ldi	r21, 0x00	; 0
+   1ef12:	cb cf       	rjmp	.-106    	; 0x1eeaa <main+0x10a>
+   1ef14:	94 26       	eor	r9, r20
+   1ef16:	c2 5e       	subi	r28, 0xE2	; 226
+   1ef18:	de 4f       	sbci	r29, 0xFE	; 254
+
+					case ST_GET_SEQ_NUM:
+					#ifdef _FIX_ISSUE_505_
+						seqNum			=	c;
+						msgParseState	=	ST_MSG_SIZE_1;
+						checksum		^=	c;
+   1ef1a:	48 83       	st	Y, r20
+						else
+						{
+							msgParseState	=	ST_START;
+						}
+					#endif
+						break;
+   1ef1c:	ce 51       	subi	r28, 0x1E	; 30
+   1ef1e:	d1 40       	sbci	r29, 0x01	; 1
+   1ef20:	62 e0       	ldi	r22, 0x02	; 2
+   1ef22:	f5 cf       	rjmp	.-22     	; 0x1ef0e <main+0x16e>
+   1ef24:	24 2f       	mov	r18, r20
+						break;
+
+					case ST_GET_SEQ_NUM:
+					#ifdef _FIX_ISSUE_505_
+						seqNum			=	c;
+						msgParseState	=	ST_MSG_SIZE_1;
+   1ef26:	30 e0       	ldi	r19, 0x00	; 0
+						else
+						{
+							msgParseState	=	ST_START;
+						}
+					#endif
+						break;
+   1ef28:	32 2f       	mov	r19, r18
+
+					case ST_MSG_SIZE_1:
+						msgLength		=	c<<8;
+   1ef2a:	22 27       	eor	r18, r18
+   1ef2c:	94 26       	eor	r9, r20
+   1ef2e:	63 e0       	ldi	r22, 0x03	; 3
+   1ef30:	ee cf       	rjmp	.-36     	; 0x1ef0e <main+0x16e>
+						msgParseState	=	ST_MSG_SIZE_2;
+						checksum		^=	c;
+   1ef32:	24 2b       	or	r18, r20
+					#endif
+						break;
+
+					case ST_MSG_SIZE_1:
+						msgLength		=	c<<8;
+						msgParseState	=	ST_MSG_SIZE_2;
+   1ef34:	94 26       	eor	r9, r20
+						checksum		^=	c;
+						break;
+   1ef36:	64 e0       	ldi	r22, 0x04	; 4
+
+					case ST_MSG_SIZE_2:
+						msgLength		|=	c;
+   1ef38:	ea cf       	rjmp	.-44     	; 0x1ef0e <main+0x16e>
+						msgParseState	=	ST_GET_TOKEN;
+						checksum		^=	c;
+   1ef3a:	4e 30       	cpi	r20, 0x0E	; 14
+						checksum		^=	c;
+						break;
+
+					case ST_MSG_SIZE_2:
+						msgLength		|=	c;
+						msgParseState	=	ST_GET_TOKEN;
+   1ef3c:	09 f0       	breq	.+2      	; 0x1ef40 <main+0x1a0>
+						checksum		^=	c;
+						break;
+   1ef3e:	3f c2       	rjmp	.+1150   	; 0x1f3be <main+0x61e>
+
+					case ST_GET_TOKEN:
+						if ( c == TOKEN )
+   1ef40:	94 26       	eor	r9, r20
+   1ef42:	21 2c       	mov	r2, r1
+   1ef44:	31 2c       	mov	r3, r1
+						{
+							msgParseState	=	ST_GET_DATA;
+							checksum		^=	c;
+   1ef46:	65 e0       	ldi	r22, 0x05	; 5
+							ii				=	0;
+   1ef48:	e2 cf       	rjmp	.-60     	; 0x1ef0e <main+0x16e>
+   1ef4a:	c1 01       	movw	r24, r2
+						break;
+
+					case ST_GET_TOKEN:
+						if ( c == TOKEN )
+						{
+							msgParseState	=	ST_GET_DATA;
+   1ef4c:	01 96       	adiw	r24, 0x01	; 1
+   1ef4e:	e1 e0       	ldi	r30, 0x01	; 1
+							msgParseState	=	ST_START;
+						}
+						break;
+
+					case ST_GET_DATA:
+						msgBuffer[ii++]	=	c;
+   1ef50:	f0 e0       	ldi	r31, 0x00	; 0
+   1ef52:	ec 0f       	add	r30, r28
+   1ef54:	fd 1f       	adc	r31, r29
+   1ef56:	e2 0d       	add	r30, r2
+   1ef58:	f3 1d       	adc	r31, r3
+   1ef5a:	40 83       	st	Z, r20
+   1ef5c:	94 26       	eor	r9, r20
+   1ef5e:	82 17       	cp	r24, r18
+   1ef60:	93 07       	cpc	r25, r19
+						checksum		^=	c;
+   1ef62:	09 f4       	brne	.+2      	; 0x1ef66 <main+0x1c6>
+						if (ii == msgLength )
+   1ef64:	29 c2       	rjmp	.+1106   	; 0x1f3b8 <main+0x618>
+   1ef66:	1c 01       	movw	r2, r24
+   1ef68:	d2 cf       	rjmp	.-92     	; 0x1ef0e <main+0x16e>
+   1ef6a:	49 11       	cpse	r20, r9
+   1ef6c:	28 c2       	rjmp	.+1104   	; 0x1f3be <main+0x61e>
+   1ef6e:	89 81       	ldd	r24, Y+1	; 0x01
+							msgParseState	=	ST_GET_CHECK;
+						}
+						break;
+
+					case ST_GET_CHECK:
+						if ( c == checksum )
+   1ef70:	83 31       	cpi	r24, 0x13	; 19
+   1ef72:	09 f4       	brne	.+2      	; 0x1ef76 <main+0x1d6>
+
+			/*
+			 * Now process the STK500 commands, see Atmel Appnote AVR068
+			 */
+
+			switch (msgBuffer[0])
+   1ef74:	e3 c0       	rjmp	.+454    	; 0x1f13c <main+0x39c>
+   1ef76:	60 f5       	brcc	.+88     	; 0x1efd0 <main+0x230>
+   1ef78:	86 30       	cpi	r24, 0x06	; 6
+   1ef7a:	09 f4       	brne	.+2      	; 0x1ef7e <main+0x1de>
+   1ef7c:	cc c0       	rjmp	.+408    	; 0x1f116 <main+0x376>
+   1ef7e:	00 f5       	brcc	.+64     	; 0x1efc0 <main+0x220>
+   1ef80:	82 30       	cpi	r24, 0x02	; 2
+   1ef82:	09 f4       	brne	.+2      	; 0x1ef86 <main+0x1e6>
+   1ef84:	41 c0       	rjmp	.+130    	; 0x1f008 <main+0x268>
+   1ef86:	83 30       	cpi	r24, 0x03	; 3
+   1ef88:	09 f4       	brne	.+2      	; 0x1ef8c <main+0x1ec>
+   1ef8a:	6b c0       	rjmp	.+214    	; 0x1f062 <main+0x2c2>
+   1ef8c:	81 30       	cpi	r24, 0x01	; 1
+   1ef8e:	09 f0       	breq	.+2      	; 0x1ef92 <main+0x1f2>
+   1ef90:	a9 c1       	rjmp	.+850    	; 0x1f2e4 <main+0x544>
+   1ef92:	1a 82       	std	Y+2, r1	; 0x02
+   1ef94:	88 e0       	ldi	r24, 0x08	; 8
+   1ef96:	8b 83       	std	Y+3, r24	; 0x03
+					}
+					break;
+	#endif
+				case CMD_SIGN_ON:
+					msgLength		=	11;
+					msgBuffer[1] 	=	STATUS_CMD_OK;
+   1ef98:	81 e4       	ldi	r24, 0x41	; 65
+					msgBuffer[2] 	=	8;
+   1ef9a:	8c 83       	std	Y+4, r24	; 0x04
+   1ef9c:	86 e5       	ldi	r24, 0x56	; 86
+					msgBuffer[3] 	=	'A';
+   1ef9e:	8d 83       	std	Y+5, r24	; 0x05
+   1efa0:	82 e5       	ldi	r24, 0x52	; 82
+					msgBuffer[4] 	=	'V';
+   1efa2:	8e 83       	std	Y+6, r24	; 0x06
+   1efa4:	89 e4       	ldi	r24, 0x49	; 73
+					msgBuffer[5] 	=	'R';
+   1efa6:	8f 83       	std	Y+7, r24	; 0x07
+   1efa8:	83 e5       	ldi	r24, 0x53	; 83
+					msgBuffer[6] 	=	'I';
+   1efaa:	88 87       	std	Y+8, r24	; 0x08
+   1efac:	80 e5       	ldi	r24, 0x50	; 80
+					msgBuffer[7] 	=	'S';
+   1efae:	89 87       	std	Y+9, r24	; 0x09
+   1efb0:	8f e5       	ldi	r24, 0x5F	; 95
+					msgBuffer[8] 	=	'P';
+   1efb2:	8a 87       	std	Y+10, r24	; 0x0a
+   1efb4:	82 e3       	ldi	r24, 0x32	; 50
+					msgBuffer[9] 	=	'_';
+   1efb6:	8b 87       	std	Y+11, r24	; 0x0b
+   1efb8:	81 2c       	mov	r8, r1
+					msgBuffer[10]	=	'2';
+   1efba:	0b e0       	ldi	r16, 0x0B	; 11
+   1efbc:	10 e0       	ldi	r17, 0x00	; 0
+					break;
+   1efbe:	97 c1       	rjmp	.+814    	; 0x1f2ee <main+0x54e>
+						}
+					}
+					break;
+	#endif
+				case CMD_SIGN_ON:
+					msgLength		=	11;
+   1efc0:	81 31       	cpi	r24, 0x11	; 17
+   1efc2:	09 f4       	brne	.+2      	; 0x1efc6 <main+0x226>
+					msgBuffer[6] 	=	'I';
+					msgBuffer[7] 	=	'S';
+					msgBuffer[8] 	=	'P';
+					msgBuffer[9] 	=	'_';
+					msgBuffer[10]	=	'2';
+					break;
+   1efc4:	5b c0       	rjmp	.+182    	; 0x1f07c <main+0x2dc>
+
+			/*
+			 * Now process the STK500 commands, see Atmel Appnote AVR068
+			 */
+
+			switch (msgBuffer[0])
+   1efc6:	08 f0       	brcs	.+2      	; 0x1efca <main+0x22a>
+   1efc8:	9d c0       	rjmp	.+314    	; 0x1f104 <main+0x364>
+   1efca:	80 31       	cpi	r24, 0x10	; 16
+   1efcc:	e9 f0       	breq	.+58     	; 0x1f008 <main+0x268>
+   1efce:	8a c1       	rjmp	.+788    	; 0x1f2e4 <main+0x544>
+   1efd0:	88 31       	cpi	r24, 0x18	; 24
+   1efd2:	09 f4       	brne	.+2      	; 0x1efd6 <main+0x236>
+   1efd4:	6f c0       	rjmp	.+222    	; 0x1f0b4 <main+0x314>
+   1efd6:	48 f4       	brcc	.+18     	; 0x1efea <main+0x24a>
+   1efd8:	85 31       	cpi	r24, 0x15	; 21
+   1efda:	09 f4       	brne	.+2      	; 0x1efde <main+0x23e>
+   1efdc:	af c0       	rjmp	.+350    	; 0x1f13c <main+0x39c>
+   1efde:	08 f4       	brcc	.+2      	; 0x1efe2 <main+0x242>
+   1efe0:	31 c1       	rjmp	.+610    	; 0x1f244 <main+0x4a4>
+   1efe2:	86 31       	cpi	r24, 0x16	; 22
+   1efe4:	09 f4       	brne	.+2      	; 0x1efe8 <main+0x248>
+   1efe6:	2e c1       	rjmp	.+604    	; 0x1f244 <main+0x4a4>
+   1efe8:	7d c1       	rjmp	.+762    	; 0x1f2e4 <main+0x544>
+   1efea:	8a 31       	cpi	r24, 0x1A	; 26
+   1efec:	09 f4       	brne	.+2      	; 0x1eff0 <main+0x250>
+   1efee:	55 c0       	rjmp	.+170    	; 0x1f09a <main+0x2fa>
+   1eff0:	08 f4       	brcc	.+2      	; 0x1eff4 <main+0x254>
+   1eff2:	76 c0       	rjmp	.+236    	; 0x1f0e0 <main+0x340>
+   1eff4:	8b 31       	cpi	r24, 0x1B	; 27
+   1eff6:	09 f4       	brne	.+2      	; 0x1effa <main+0x25a>
+   1eff8:	45 c0       	rjmp	.+138    	; 0x1f084 <main+0x2e4>
+   1effa:	8d 31       	cpi	r24, 0x1D	; 29
+   1effc:	39 f0       	breq	.+14     	; 0x1f00c <main+0x26c>
+   1effe:	72 c1       	rjmp	.+740    	; 0x1f2e4 <main+0x544>
+   1f000:	67 30       	cpi	r22, 0x07	; 7
+   1f002:	09 f4       	brne	.+2      	; 0x1f006 <main+0x266>
+   1f004:	b4 cf       	rjmp	.-152    	; 0x1ef6e <main+0x1ce>
+		{
+			/*
+			 * Collect received bytes to a complete message
+			 */
+			msgParseState	=	ST_START;
+			while ( msgParseState != ST_PROCESS )
+   1f006:	83 cf       	rjmp	.-250    	; 0x1ef0e <main+0x16e>
+   1f008:	81 2c       	mov	r8, r1
+   1f00a:	3a c0       	rjmp	.+116    	; 0x1f080 <main+0x2e0>
+   1f00c:	8d 81       	ldd	r24, Y+5	; 0x05
+
+			/*
+			 * Now process the STK500 commands, see Atmel Appnote AVR068
+			 */
+
+			switch (msgBuffer[0])
+   1f00e:	80 33       	cpi	r24, 0x30	; 48
+   1f010:	39 f4       	brne	.+14     	; 0x1f020 <main+0x280>
+				case CMD_SPI_MULTI:
+					{
+						unsigned char answerByte;
+						unsigned char flag=0;
+
+						if ( msgBuffer[4]== 0x30 )
+   1f012:	9f 81       	ldd	r25, Y+7	; 0x07
+   1f014:	99 23       	and	r25, r25
+   1f016:	b1 f0       	breq	.+44     	; 0x1f044 <main+0x2a4>
+						{
+							unsigned char signatureIndex	=	msgBuffer[6];
+   1f018:	91 30       	cpi	r25, 0x01	; 1
+
+							if ( signatureIndex == 0 )
+   1f01a:	b1 f4       	brne	.+44     	; 0x1f048 <main+0x2a8>
+   1f01c:	97 e9       	ldi	r25, 0x97	; 151
+							{
+								answerByte	=	(SIGNATURE_BYTES >> 16) & 0x000000FF;
+							}
+							else if ( signatureIndex == 1 )
+   1f01e:	17 c0       	rjmp	.+46     	; 0x1f04e <main+0x2ae>
+   1f020:	98 2f       	mov	r25, r24
+							{
+								answerByte	=	(SIGNATURE_BYTES >> 8) & 0x000000FF;
+   1f022:	90 75       	andi	r25, 0x50	; 80
+   1f024:	99 f0       	breq	.+38     	; 0x1f04c <main+0x2ac>
+							else
+							{
+								answerByte	=	SIGNATURE_BYTES & 0x000000FF;
+							}
+						}
+						else if ( msgBuffer[4] & 0x50 )
+   1f026:	80 35       	cpi	r24, 0x50	; 80
+   1f028:	21 f4       	brne	.+8      	; 0x1f032 <main+0x292>
+   1f02a:	99 e0       	ldi	r25, 0x09	; 9
+						//*	Issue 544: 	stk500v2 bootloader doesn't support reading fuses
+						//*	I cant find the docs that say what these are supposed to be but this was figured out by trial and error
+						//	answerByte	=	boot_lock_fuse_bits_get(GET_LOW_FUSE_BITS);
+						//	answerByte	=	boot_lock_fuse_bits_get(GET_HIGH_FUSE_BITS);
+						//	answerByte	=	boot_lock_fuse_bits_get(GET_EXTENDED_FUSE_BITS);
+							if (msgBuffer[4] == 0x50)
+   1f02c:	e0 e0       	ldi	r30, 0x00	; 0
+   1f02e:	f0 e0       	ldi	r31, 0x00	; 0
+							{
+								answerByte	=	boot_lock_fuse_bits_get(GET_LOW_FUSE_BITS);
+   1f030:	05 c0       	rjmp	.+10     	; 0x1f03c <main+0x29c>
+   1f032:	88 35       	cpi	r24, 0x58	; 88
+   1f034:	59 f4       	brne	.+22     	; 0x1f04c <main+0x2ac>
+   1f036:	e3 e0       	ldi	r30, 0x03	; 3
+							}
+							else if (msgBuffer[4] == 0x58)
+   1f038:	f0 e0       	ldi	r31, 0x00	; 0
+   1f03a:	99 e0       	ldi	r25, 0x09	; 9
+							{
+								answerByte	=	boot_lock_fuse_bits_get(GET_HIGH_FUSE_BITS);
+   1f03c:	90 93 57 00 	sts	0x0057, r25
+   1f040:	94 91       	lpm	r25, Z
+   1f042:	05 c0       	rjmp	.+10     	; 0x1f04e <main+0x2ae>
+   1f044:	9e e1       	ldi	r25, 0x1E	; 30
+   1f046:	03 c0       	rjmp	.+6      	; 0x1f04e <main+0x2ae>
+   1f048:	93 e0       	ldi	r25, 0x03	; 3
+						{
+							unsigned char signatureIndex	=	msgBuffer[6];
+
+							if ( signatureIndex == 0 )
+							{
+								answerByte	=	(SIGNATURE_BYTES >> 16) & 0x000000FF;
+   1f04a:	01 c0       	rjmp	.+2      	; 0x1f04e <main+0x2ae>
+   1f04c:	90 e0       	ldi	r25, 0x00	; 0
+							{
+								answerByte	=	(SIGNATURE_BYTES >> 8) & 0x000000FF;
+							}
+							else
+							{
+								answerByte	=	SIGNATURE_BYTES & 0x000000FF;
+   1f04e:	1a 82       	std	Y+2, r1	; 0x02
+   1f050:	1b 82       	std	Y+3, r1	; 0x03
+								answerByte	=	0;
+							}
+						}
+						else
+						{
+							answerByte	=	0; // for all others command are not implemented, return dummy value for AVRDUDE happy <Worapoht>
+   1f052:	8c 83       	std	Y+4, r24	; 0x04
+						}
+						if ( !flag )
+						{
+							msgLength		=	7;
+							msgBuffer[1]	=	STATUS_CMD_OK;
+   1f054:	1d 82       	std	Y+5, r1	; 0x05
+							msgBuffer[2]	=	0;
+   1f056:	9e 83       	std	Y+6, r25	; 0x06
+							msgBuffer[3]	=	msgBuffer[4];
+   1f058:	1f 82       	std	Y+7, r1	; 0x07
+							msgBuffer[4]	=	0;
+   1f05a:	81 2c       	mov	r8, r1
+							msgBuffer[5]	=	answerByte;
+   1f05c:	07 e0       	ldi	r16, 0x07	; 7
+							msgBuffer[6]	=	STATUS_CMD_OK;
+   1f05e:	10 e0       	ldi	r17, 0x00	; 0
+   1f060:	46 c1       	rjmp	.+652    	; 0x1f2ee <main+0x54e>
+						{
+							answerByte	=	0; // for all others command are not implemented, return dummy value for AVRDUDE happy <Worapoht>
+						}
+						if ( !flag )
+						{
+							msgLength		=	7;
+   1f062:	ea 81       	ldd	r30, Y+2	; 0x02
+   1f064:	e0 59       	subi	r30, 0x90	; 144
+   1f066:	e3 30       	cpi	r30, 0x03	; 3
+   1f068:	28 f4       	brcc	.+10     	; 0x1f074 <main+0x2d4>
+   1f06a:	f0 e0       	ldi	r31, 0x00	; 0
+   1f06c:	e0 50       	subi	r30, 0x00	; 0
+   1f06e:	fe 4f       	sbci	r31, 0xFE	; 254
+   1f070:	80 81       	ld	r24, Z
+   1f072:	01 c0       	rjmp	.+2      	; 0x1f076 <main+0x2d6>
+   1f074:	80 e0       	ldi	r24, 0x00	; 0
+   1f076:	1a 82       	std	Y+2, r1	; 0x02
+   1f078:	8b 83       	std	Y+3, r24	; 0x03
+
+				case CMD_GET_PARAMETER:
+					{
+						unsigned char value;
+
+						switch(msgBuffer[1])
+   1f07a:	40 c0       	rjmp	.+128    	; 0x1f0fc <main+0x35c>
+						default:
+							value	=	0;
+							break;
+						}
+						msgLength		=	3;
+						msgBuffer[1]	=	STATUS_CMD_OK;
+   1f07c:	88 24       	eor	r8, r8
+						msgBuffer[2]	=	value;
+   1f07e:	83 94       	inc	r8
+   1f080:	1a 82       	std	Y+2, r1	; 0x02
+					}
+					break;
+
+				case CMD_LEAVE_PROGMODE_ISP:
+					isLeave	=	1;
+   1f082:	33 c1       	rjmp	.+614    	; 0x1f2ea <main+0x54a>
+   1f084:	8d 81       	ldd	r24, Y+5	; 0x05
+					//*	fall thru
+
+				case CMD_SET_PARAMETER:
+				case CMD_ENTER_PROGMODE_ISP:
+					msgLength		=	2;
+					msgBuffer[1]	=	STATUS_CMD_OK;
+   1f086:	88 23       	and	r24, r24
+   1f088:	21 f0       	breq	.+8      	; 0x1f092 <main+0x2f2>
+					break;
+
+				case CMD_READ_SIGNATURE_ISP:
+					{
+						unsigned char signatureIndex	=	msgBuffer[4];
+   1f08a:	81 30       	cpi	r24, 0x01	; 1
+						unsigned char signature;
+
+						if ( signatureIndex == 0 )
+   1f08c:	21 f4       	brne	.+8      	; 0x1f096 <main+0x2f6>
+   1f08e:	87 e9       	ldi	r24, 0x97	; 151
+							signature	=	(SIGNATURE_BYTES >>16) & 0x000000FF;
+						else if ( signatureIndex == 1 )
+   1f090:	24 c0       	rjmp	.+72     	; 0x1f0da <main+0x33a>
+   1f092:	8e e1       	ldi	r24, 0x1E	; 30
+							signature	=	(SIGNATURE_BYTES >> 8) & 0x000000FF;
+   1f094:	22 c0       	rjmp	.+68     	; 0x1f0da <main+0x33a>
+   1f096:	83 e0       	ldi	r24, 0x03	; 3
+					{
+						unsigned char signatureIndex	=	msgBuffer[4];
+						unsigned char signature;
+
+						if ( signatureIndex == 0 )
+							signature	=	(SIGNATURE_BYTES >>16) & 0x000000FF;
+   1f098:	20 c0       	rjmp	.+64     	; 0x1f0da <main+0x33a>
+   1f09a:	1a 82       	std	Y+2, r1	; 0x02
+						else if ( signatureIndex == 1 )
+							signature	=	(SIGNATURE_BYTES >> 8) & 0x000000FF;
+						else
+							signature	=	SIGNATURE_BYTES & 0x000000FF;
+   1f09c:	e1 e0       	ldi	r30, 0x01	; 1
+   1f09e:	f0 e0       	ldi	r31, 0x00	; 0
+					}
+					break;
+
+				case CMD_READ_LOCK_ISP:
+					msgLength		=	4;
+					msgBuffer[1]	=	STATUS_CMD_OK;
+   1f0a0:	89 e0       	ldi	r24, 0x09	; 9
+					msgBuffer[2]	=	boot_lock_fuse_bits_get( GET_LOCK_BITS );
+   1f0a2:	80 93 57 00 	sts	0x0057, r24
+   1f0a6:	e4 91       	lpm	r30, Z
+   1f0a8:	eb 83       	std	Y+3, r30	; 0x03
+   1f0aa:	1c 82       	std	Y+4, r1	; 0x04
+   1f0ac:	81 2c       	mov	r8, r1
+   1f0ae:	04 e0       	ldi	r16, 0x04	; 4
+					msgBuffer[3]	=	STATUS_CMD_OK;
+   1f0b0:	10 e0       	ldi	r17, 0x00	; 0
+					break;
+   1f0b2:	1d c1       	rjmp	.+570    	; 0x1f2ee <main+0x54e>
+						msgBuffer[3]	=	STATUS_CMD_OK;
+					}
+					break;
+
+				case CMD_READ_LOCK_ISP:
+					msgLength		=	4;
+   1f0b4:	8b 81       	ldd	r24, Y+3	; 0x03
+   1f0b6:	80 35       	cpi	r24, 0x50	; 80
+					msgBuffer[1]	=	STATUS_CMD_OK;
+					msgBuffer[2]	=	boot_lock_fuse_bits_get( GET_LOCK_BITS );
+					msgBuffer[3]	=	STATUS_CMD_OK;
+					break;
+   1f0b8:	51 f4       	brne	.+20     	; 0x1f0ce <main+0x32e>
+
+				case CMD_READ_FUSE_ISP:
+					{
+						unsigned char fuseBits;
+
+						if ( msgBuffer[2] == 0x50 )
+   1f0ba:	8c 81       	ldd	r24, Y+4	; 0x04
+   1f0bc:	88 30       	cpi	r24, 0x08	; 8
+   1f0be:	19 f4       	brne	.+6      	; 0x1f0c6 <main+0x326>
+						{
+							if ( msgBuffer[3] == 0x08 )
+   1f0c0:	e2 e0       	ldi	r30, 0x02	; 2
+   1f0c2:	f0 e0       	ldi	r31, 0x00	; 0
+   1f0c4:	06 c0       	rjmp	.+12     	; 0x1f0d2 <main+0x332>
+								fuseBits	=	boot_lock_fuse_bits_get( GET_EXTENDED_FUSE_BITS );
+   1f0c6:	89 e0       	ldi	r24, 0x09	; 9
+   1f0c8:	e0 e0       	ldi	r30, 0x00	; 0
+   1f0ca:	f0 e0       	ldi	r31, 0x00	; 0
+							else
+								fuseBits	=	boot_lock_fuse_bits_get( GET_LOW_FUSE_BITS );
+   1f0cc:	03 c0       	rjmp	.+6      	; 0x1f0d4 <main+0x334>
+   1f0ce:	e3 e0       	ldi	r30, 0x03	; 3
+   1f0d0:	f0 e0       	ldi	r31, 0x00	; 0
+   1f0d2:	89 e0       	ldi	r24, 0x09	; 9
+						}
+						else
+						{
+							fuseBits	=	boot_lock_fuse_bits_get( GET_HIGH_FUSE_BITS );
+   1f0d4:	80 93 57 00 	sts	0x0057, r24
+   1f0d8:	84 91       	lpm	r24, Z
+   1f0da:	1a 82       	std	Y+2, r1	; 0x02
+   1f0dc:	8b 83       	std	Y+3, r24	; 0x03
+   1f0de:	e5 cf       	rjmp	.-54     	; 0x1f0aa <main+0x30a>
+						}
+						msgLength		=	4;
+						msgBuffer[1]	=	STATUS_CMD_OK;
+   1f0e0:	8d 81       	ldd	r24, Y+5	; 0x05
+						msgBuffer[2]	=	fuseBits;
+   1f0e2:	83 6c       	ori	r24, 0xC3	; 195
+   1f0e4:	99 e0       	ldi	r25, 0x09	; 9
+	#ifndef REMOVE_PROGRAM_LOCK_BIT_SUPPORT
+				case CMD_PROGRAM_LOCK_ISP:
+					{
+						unsigned char lockBits	=	msgBuffer[4];
+
+						lockBits	=	(~lockBits) & 0x3C;	// mask BLBxx bits
+   1f0e6:	e1 e0       	ldi	r30, 0x01	; 1
+						boot_lock_bits_set(lockBits);		// and program it
+   1f0e8:	f0 e0       	ldi	r31, 0x00	; 0
+   1f0ea:	08 2e       	mov	r0, r24
+   1f0ec:	90 93 57 00 	sts	0x0057, r25
+   1f0f0:	e8 95       	spm
+   1f0f2:	07 b6       	in	r0, 0x37	; 55
+   1f0f4:	00 fc       	sbrc	r0, 0
+   1f0f6:	fd cf       	rjmp	.-6      	; 0x1f0f2 <main+0x352>
+						boot_spm_busy_wait();
+   1f0f8:	1a 82       	std	Y+2, r1	; 0x02
+   1f0fa:	1b 82       	std	Y+3, r1	; 0x03
+   1f0fc:	81 2c       	mov	r8, r1
+
+						msgLength		=	3;
+						msgBuffer[1]	=	STATUS_CMD_OK;
+   1f0fe:	03 e0       	ldi	r16, 0x03	; 3
+						msgBuffer[2]	=	STATUS_CMD_OK;
+   1f100:	10 e0       	ldi	r17, 0x00	; 0
+					}
+					break;
+   1f102:	f5 c0       	rjmp	.+490    	; 0x1f2ee <main+0x54e>
+
+						lockBits	=	(~lockBits) & 0x3C;	// mask BLBxx bits
+						boot_lock_bits_set(lockBits);		// and program it
+						boot_spm_busy_wait();
+
+						msgLength		=	3;
+   1f104:	80 ec       	ldi	r24, 0xC0	; 192
+   1f106:	8a 83       	std	Y+2, r24	; 0x02
+						msgBuffer[1]	=	STATUS_CMD_OK;
+						msgBuffer[2]	=	STATUS_CMD_OK;
+					}
+					break;
+   1f108:	81 2c       	mov	r8, r1
+	#endif
+				case CMD_CHIP_ERASE_ISP:
+					eraseAddress	=	0;
+					msgLength		=	2;
+				//	msgBuffer[1]	=	STATUS_CMD_OK;
+					msgBuffer[1]	=	STATUS_CMD_FAILED;	//*	isue 543, return FAILED instead of OK
+   1f10a:	02 e0       	ldi	r16, 0x02	; 2
+   1f10c:	10 e0       	ldi	r17, 0x00	; 0
+					break;
+   1f10e:	41 2c       	mov	r4, r1
+					}
+					break;
+	#endif
+				case CMD_CHIP_ERASE_ISP:
+					eraseAddress	=	0;
+					msgLength		=	2;
+   1f110:	51 2c       	mov	r5, r1
+   1f112:	32 01       	movw	r6, r4
+						msgBuffer[2]	=	STATUS_CMD_OK;
+					}
+					break;
+	#endif
+				case CMD_CHIP_ERASE_ISP:
+					eraseAddress	=	0;
+   1f114:	ec c0       	rjmp	.+472    	; 0x1f2ee <main+0x54e>
+   1f116:	8a 81       	ldd	r24, Y+2	; 0x02
+   1f118:	cb 80       	ldd	r12, Y+3	; 0x03
+					msgLength		=	2;
+				//	msgBuffer[1]	=	STATUS_CMD_OK;
+					msgBuffer[1]	=	STATUS_CMD_FAILED;	//*	isue 543, return FAILED instead of OK
+					break;
+   1f11a:	d1 2c       	mov	r13, r1
+
+				case CMD_LOAD_ADDRESS:
+	#if defined(RAMPZ)
+					address	=	( ((address_t)(msgBuffer[1])<<24)|((address_t)(msgBuffer[2])<<16)|((address_t)(msgBuffer[3])<<8)|(msgBuffer[4]) )<<1;
+   1f11c:	e1 2c       	mov	r14, r1
+   1f11e:	f1 2c       	mov	r15, r1
+   1f120:	76 01       	movw	r14, r12
+   1f122:	dd 24       	eor	r13, r13
+   1f124:	cc 24       	eor	r12, r12
+   1f126:	f8 2a       	or	r15, r24
+   1f128:	8d 81       	ldd	r24, Y+5	; 0x05
+   1f12a:	c8 2a       	or	r12, r24
+   1f12c:	8c 81       	ldd	r24, Y+4	; 0x04
+   1f12e:	d8 2a       	or	r13, r24
+   1f130:	cc 0c       	add	r12, r12
+   1f132:	dd 1c       	adc	r13, r13
+   1f134:	ee 1c       	adc	r14, r14
+   1f136:	ff 1c       	adc	r15, r15
+   1f138:	1a 82       	std	Y+2, r1	; 0x02
+   1f13a:	d6 c0       	rjmp	.+428    	; 0x1f2e8 <main+0x548>
+   1f13c:	0a 81       	ldd	r16, Y+2	; 0x02
+	#else
+					address	=	( ((msgBuffer[3])<<8)|(msgBuffer[4]) )<<1;		//convert word to byte address
+	#endif
+					msgLength		=	2;
+					msgBuffer[1]	=	STATUS_CMD_OK;
+   1f13e:	10 e0       	ldi	r17, 0x00	; 0
+   1f140:	10 2f       	mov	r17, r16
+					break;
+
+				case CMD_PROGRAM_FLASH_ISP:
+				case CMD_PROGRAM_EEPROM_ISP:
+					{
+						unsigned int	size	=	((msgBuffer[1])<<8) | msgBuffer[2];
+   1f142:	00 27       	eor	r16, r16
+   1f144:	9b 81       	ldd	r25, Y+3	; 0x03
+   1f146:	09 2b       	or	r16, r25
+   1f148:	83 31       	cpi	r24, 0x13	; 19
+   1f14a:	09 f0       	breq	.+2      	; 0x1f14e <main+0x3ae>
+   1f14c:	46 c0       	rjmp	.+140    	; 0x1f1da <main+0x43a>
+						unsigned int	data;
+						unsigned char	highByte, lowByte;
+						address_t		tempaddress	=	address;
+
+
+						if ( msgBuffer[0] == CMD_PROGRAM_FLASH_ISP )
+   1f14e:	41 14       	cp	r4, r1
+   1f150:	f0 ec       	ldi	r31, 0xC0	; 192
+   1f152:	5f 06       	cpc	r5, r31
+						{
+							// erase only main section (bootloader protection)
+							if (eraseAddress < APP_END )
+   1f154:	f1 e0       	ldi	r31, 0x01	; 1
+   1f156:	6f 06       	cpc	r6, r31
+   1f158:	71 04       	cpc	r7, r1
+   1f15a:	70 f4       	brcc	.+28     	; 0x1f178 <main+0x3d8>
+   1f15c:	83 e0       	ldi	r24, 0x03	; 3
+   1f15e:	f2 01       	movw	r30, r4
+   1f160:	60 92 5b 00 	sts	0x005B, r6
+							{
+								boot_page_erase(eraseAddress);	// Perform page erase
+   1f164:	80 93 57 00 	sts	0x0057, r24
+   1f168:	e8 95       	spm
+   1f16a:	07 b6       	in	r0, 0x37	; 55
+   1f16c:	00 fc       	sbrc	r0, 0
+   1f16e:	fd cf       	rjmp	.-6      	; 0x1f16a <main+0x3ca>
+								boot_spm_busy_wait();		// Wait until the memory is erased.
+   1f170:	2f ef       	ldi	r18, 0xFF	; 255
+   1f172:	52 1a       	sub	r5, r18
+   1f174:	62 0a       	sbc	r6, r18
+								eraseAddress += SPM_PAGESIZE;	// point to next page to be erase
+   1f176:	72 0a       	sbc	r7, r18
+   1f178:	2b 85       	ldd	r18, Y+11	; 0x0b
+   1f17a:	b7 01       	movw	r22, r14
+   1f17c:	a6 01       	movw	r20, r12
+   1f17e:	ce 01       	movw	r24, r28
+						if ( signatureIndex == 0 )
+							signature	=	(SIGNATURE_BYTES >>16) & 0x000000FF;
+						else if ( signatureIndex == 1 )
+							signature	=	(SIGNATURE_BYTES >> 8) & 0x000000FF;
+						else
+							signature	=	SIGNATURE_BYTES & 0x000000FF;
+   1f180:	0b 96       	adiw	r24, 0x0b	; 11
+   1f182:	bb 24       	eor	r11, r11
+   1f184:	b3 94       	inc	r11
+   1f186:	dc 01       	movw	r26, r24
+							do {
+								lowByte		=	*p++;
+								highByte 	=	*p++;
+
+								data		=	(highByte << 8) | lowByte;
+								boot_page_fill(address,data);
+   1f188:	12 96       	adiw	r26, 0x02	; 2
+   1f18a:	cd 01       	movw	r24, r26
+   1f18c:	fd 01       	movw	r30, r26
+   1f18e:	31 97       	sbiw	r30, 0x01	; 1
+   1f190:	e0 81       	ld	r30, Z
+   1f192:	30 e0       	ldi	r19, 0x00	; 0
+   1f194:	3e 2b       	or	r19, r30
+							/* Write FLASH */
+							do {
+								lowByte		=	*p++;
+								highByte 	=	*p++;
+
+								data		=	(highByte << 8) | lowByte;
+   1f196:	09 01       	movw	r0, r18
+   1f198:	fa 01       	movw	r30, r20
+   1f19a:	60 93 5b 00 	sts	0x005B, r22
+								boot_page_fill(address,data);
+   1f19e:	b0 92 57 00 	sts	0x0057, r11
+   1f1a2:	e8 95       	spm
+   1f1a4:	11 24       	eor	r1, r1
+   1f1a6:	4e 5f       	subi	r20, 0xFE	; 254
+   1f1a8:	5f 4f       	sbci	r21, 0xFF	; 255
+   1f1aa:	6f 4f       	sbci	r22, 0xFF	; 255
+
+								address	=	address + 2;	// Select next word in memory
+   1f1ac:	7f 4f       	sbci	r23, 0xFF	; 255
+   1f1ae:	02 50       	subi	r16, 0x02	; 2
+   1f1b0:	11 09       	sbc	r17, r1
+   1f1b2:	01 15       	cp	r16, r1
+								size	-=	2;				// Reduce number of bytes to write by two
+   1f1b4:	11 05       	cpc	r17, r1
+   1f1b6:	11 f0       	breq	.+4      	; 0x1f1bc <main+0x41c>
+							} while (size);					// Loop until all bytes written
+   1f1b8:	2c 91       	ld	r18, X
+   1f1ba:	e5 cf       	rjmp	.-54     	; 0x1f186 <main+0x3e6>
+   1f1bc:	85 e0       	ldi	r24, 0x05	; 5
+							}
+
+							/* Write FLASH */
+							do {
+								lowByte		=	*p++;
+								highByte 	=	*p++;
+   1f1be:	f6 01       	movw	r30, r12
+   1f1c0:	e0 92 5b 00 	sts	0x005B, r14
+
+								address	=	address + 2;	// Select next word in memory
+								size	-=	2;				// Reduce number of bytes to write by two
+							} while (size);					// Loop until all bytes written
+
+							boot_page_write(tempaddress);
+   1f1c4:	80 93 57 00 	sts	0x0057, r24
+   1f1c8:	e8 95       	spm
+   1f1ca:	07 b6       	in	r0, 0x37	; 55
+   1f1cc:	00 fc       	sbrc	r0, 0
+   1f1ce:	fd cf       	rjmp	.-6      	; 0x1f1ca <main+0x42a>
+							boot_spm_busy_wait();
+   1f1d0:	81 e1       	ldi	r24, 0x11	; 17
+   1f1d2:	80 93 57 00 	sts	0x0057, r24
+							boot_rww_enable();				// Re-enable the RWW section
+   1f1d6:	e8 95       	spm
+   1f1d8:	31 c0       	rjmp	.+98     	; 0x1f23c <main+0x49c>
+   1f1da:	d7 01       	movw	r26, r14
+   1f1dc:	c6 01       	movw	r24, r12
+   1f1de:	b6 95       	lsr	r27
+						}
+						else
+						{
+							//*	issue 543, this should work, It has not been tested.
+							uint16_t ii = address >> 1;
+   1f1e0:	a7 95       	ror	r26
+   1f1e2:	97 95       	ror	r25
+   1f1e4:	87 95       	ror	r24
+   1f1e6:	c1 5e       	subi	r28, 0xE1	; 225
+   1f1e8:	de 4f       	sbci	r29, 0xFE	; 254
+   1f1ea:	88 83       	st	Y, r24
+   1f1ec:	99 83       	std	Y+1, r25	; 0x01
+   1f1ee:	aa 83       	std	Y+2, r26	; 0x02
+   1f1f0:	bb 83       	std	Y+3, r27	; 0x03
+   1f1f2:	cf 51       	subi	r28, 0x1F	; 31
+   1f1f4:	d1 40       	sbci	r29, 0x01	; 1
+   1f1f6:	de 01       	movw	r26, r28
+   1f1f8:	1b 96       	adiw	r26, 0x0b	; 11
+   1f1fa:	4d 01       	movw	r8, r26
+   1f1fc:	a1 2c       	mov	r10, r1
+   1f1fe:	b1 2c       	mov	r11, r1
+   1f200:	a0 16       	cp	r10, r16
+							/* write EEPROM */
+							while (size) {
+   1f202:	b1 06       	cpc	r11, r17
+   1f204:	81 f0       	breq	.+32     	; 0x1f226 <main+0x486>
+   1f206:	f4 01       	movw	r30, r8
+   1f208:	61 91       	ld	r22, Z+
+   1f20a:	4f 01       	movw	r8, r30
+								eeprom_write_byte((uint8_t*)ii, *p++);
+   1f20c:	c1 5e       	subi	r28, 0xE1	; 225
+   1f20e:	de 4f       	sbci	r29, 0xFE	; 254
+   1f210:	88 81       	ld	r24, Y
+   1f212:	99 81       	ldd	r25, Y+1	; 0x01
+   1f214:	cf 51       	subi	r28, 0x1F	; 31
+   1f216:	d1 40       	sbci	r29, 0x01	; 1
+   1f218:	8a 0d       	add	r24, r10
+   1f21a:	9b 1d       	adc	r25, r11
+   1f21c:	53 d1       	rcall	.+678    	; 0x1f4c4 <__eewr_byte_m1280>
+   1f21e:	ff ef       	ldi	r31, 0xFF	; 255
+   1f220:	af 1a       	sub	r10, r31
+   1f222:	bf 0a       	sbc	r11, r31
+   1f224:	ed cf       	rjmp	.-38     	; 0x1f200 <main+0x460>
+   1f226:	a5 01       	movw	r20, r10
+   1f228:	60 e0       	ldi	r22, 0x00	; 0
+   1f22a:	70 e0       	ldi	r23, 0x00	; 0
+   1f22c:	44 0f       	add	r20, r20
+   1f22e:	55 1f       	adc	r21, r21
+   1f230:	66 1f       	adc	r22, r22
+   1f232:	77 1f       	adc	r23, r23
+   1f234:	4c 0d       	add	r20, r12
+   1f236:	5d 1d       	adc	r21, r13
+   1f238:	6e 1d       	adc	r22, r14
+   1f23a:	7f 1d       	adc	r23, r15
+   1f23c:	1a 82       	std	Y+2, r1	; 0x02
+   1f23e:	6a 01       	movw	r12, r20
+   1f240:	7b 01       	movw	r14, r22
+   1f242:	52 c0       	rjmp	.+164    	; 0x1f2e8 <main+0x548>
+								ii++;
+								size--;
+							}
+						}
+						msgLength		=	2;
+						msgBuffer[1]	=	STATUS_CMD_OK;
+   1f244:	2a 81       	ldd	r18, Y+2	; 0x02
+					}
+					break;
+   1f246:	30 e0       	ldi	r19, 0x00	; 0
+   1f248:	32 2f       	mov	r19, r18
+   1f24a:	22 27       	eor	r18, r18
+
+				case CMD_READ_FLASH_ISP:
+				case CMD_READ_EEPROM_ISP:
+					{
+						unsigned int	size	=	((msgBuffer[1])<<8) | msgBuffer[2];
+   1f24c:	9b 81       	ldd	r25, Y+3	; 0x03
+   1f24e:	29 2b       	or	r18, r25
+   1f250:	89 01       	movw	r16, r18
+   1f252:	0d 5f       	subi	r16, 0xFD	; 253
+   1f254:	1f 4f       	sbci	r17, 0xFF	; 255
+   1f256:	1a 82       	std	Y+2, r1	; 0x02
+						unsigned char	*p		=	msgBuffer+1;
+						msgLength				=	size+3;
+   1f258:	84 31       	cpi	r24, 0x14	; 20
+   1f25a:	b1 f4       	brne	.+44     	; 0x1f288 <main+0x4e8>
+   1f25c:	de 01       	movw	r26, r28
+
+						*p++	=	STATUS_CMD_OK;
+   1f25e:	13 96       	adiw	r26, 0x03	; 3
+						if (msgBuffer[0] == CMD_READ_FLASH_ISP )
+   1f260:	eb be       	out	0x3b, r14	; 59
+   1f262:	f6 01       	movw	r30, r12
+   1f264:	87 91       	elpm	r24, Z+
+   1f266:	96 91       	elpm	r25, Z
+
+							// Read FLASH
+							do {
+						//#if defined(RAMPZ)
+						#if (FLASHEND > 0x10000)
+								data	=	pgm_read_word_far(address);
+   1f268:	8c 93       	st	X, r24
+   1f26a:	12 96       	adiw	r26, 0x02	; 2
+   1f26c:	fd 01       	movw	r30, r26
+   1f26e:	31 97       	sbiw	r30, 0x01	; 1
+						#else
+								data	=	pgm_read_word_near(address);
+						#endif
+								*p++	=	(unsigned char)data;		//LSB
+   1f270:	90 83       	st	Z, r25
+   1f272:	42 e0       	ldi	r20, 0x02	; 2
+   1f274:	c4 0e       	add	r12, r20
+   1f276:	d1 1c       	adc	r13, r1
+								*p++	=	(unsigned char)(data >> 8);	//MSB
+   1f278:	e1 1c       	adc	r14, r1
+								address	+=	2;							// Select next word in memory
+   1f27a:	f1 1c       	adc	r15, r1
+   1f27c:	22 50       	subi	r18, 0x02	; 2
+   1f27e:	31 09       	sbc	r19, r1
+   1f280:	21 15       	cp	r18, r1
+   1f282:	31 05       	cpc	r19, r1
+								size	-=	2;
+   1f284:	69 f7       	brne	.-38     	; 0x1f260 <main+0x4c0>
+   1f286:	2b c0       	rjmp	.+86     	; 0x1f2de <main+0x53e>
+							}while (size);
+   1f288:	ce 01       	movw	r24, r28
+   1f28a:	03 96       	adiw	r24, 0x03	; 3
+   1f28c:	5c 01       	movw	r10, r24
+   1f28e:	49 01       	movw	r8, r18
+   1f290:	d7 01       	movw	r26, r14
+   1f292:	c6 01       	movw	r24, r12
+   1f294:	81 bd       	out	0x21, r24	; 33
+						unsigned int	size	=	((msgBuffer[1])<<8) | msgBuffer[2];
+						unsigned char	*p		=	msgBuffer+1;
+						msgLength				=	size+3;
+
+						*p++	=	STATUS_CMD_OK;
+						if (msgBuffer[0] == CMD_READ_FLASH_ISP )
+   1f296:	49 2f       	mov	r20, r25
+   1f298:	5a 2f       	mov	r21, r26
+   1f29a:	6b 2f       	mov	r22, r27
+						}
+						else
+						{
+							/* Read EEPROM */
+							do {
+								EEARL	=	address;			// Setup EEPROM address
+   1f29c:	77 27       	eor	r23, r23
+								EEARH	=	((address >> 8));
+   1f29e:	42 bd       	out	0x22, r20	; 34
+   1f2a0:	01 96       	adiw	r24, 0x01	; 1
+   1f2a2:	a1 1d       	adc	r26, r1
+   1f2a4:	b1 1d       	adc	r27, r1
+   1f2a6:	f8 9a       	sbi	0x1f, 0	; 31
+								address++;					// Select next EEPROM byte
+   1f2a8:	40 b5       	in	r20, 0x20	; 32
+   1f2aa:	f5 01       	movw	r30, r10
+   1f2ac:	41 93       	st	Z+, r20
+								EECR	|=	(1<<EERE);			// Read EEPROM
+   1f2ae:	5f 01       	movw	r10, r30
+								*p++	=	EEDR;				// Send EEPROM data
+   1f2b0:	f1 e0       	ldi	r31, 0x01	; 1
+   1f2b2:	8f 1a       	sub	r8, r31
+   1f2b4:	91 08       	sbc	r9, r1
+   1f2b6:	81 14       	cp	r8, r1
+								size--;
+   1f2b8:	91 04       	cpc	r9, r1
+   1f2ba:	61 f7       	brne	.-40     	; 0x1f294 <main+0x4f4>
+   1f2bc:	c9 01       	movw	r24, r18
+							} while (size);
+   1f2be:	01 97       	sbiw	r24, 0x01	; 1
+   1f2c0:	a0 e0       	ldi	r26, 0x00	; 0
+   1f2c2:	b0 e0       	ldi	r27, 0x00	; 0
+   1f2c4:	01 96       	adiw	r24, 0x01	; 1
+   1f2c6:	a1 1d       	adc	r26, r1
+   1f2c8:	b1 1d       	adc	r27, r1
+   1f2ca:	c8 0e       	add	r12, r24
+   1f2cc:	d9 1e       	adc	r13, r25
+   1f2ce:	ea 1e       	adc	r14, r26
+   1f2d0:	fb 1e       	adc	r15, r27
+   1f2d2:	a3 e0       	ldi	r26, 0x03	; 3
+   1f2d4:	b0 e0       	ldi	r27, 0x00	; 0
+   1f2d6:	ac 0f       	add	r26, r28
+   1f2d8:	bd 1f       	adc	r27, r29
+   1f2da:	a2 0f       	add	r26, r18
+   1f2dc:	b3 1f       	adc	r27, r19
+   1f2de:	1c 92       	st	X, r1
+   1f2e0:	81 2c       	mov	r8, r1
+   1f2e2:	05 c0       	rjmp	.+10     	; 0x1f2ee <main+0x54e>
+   1f2e4:	80 ec       	ldi	r24, 0xC0	; 192
+						}
+						*p++	=	STATUS_CMD_OK;
+   1f2e6:	8a 83       	std	Y+2, r24	; 0x02
+					}
+					break;
+   1f2e8:	81 2c       	mov	r8, r1
+   1f2ea:	02 e0       	ldi	r16, 0x02	; 2
+
+				default:
+					msgLength		=	2;
+					msgBuffer[1]	=	STATUS_CMD_FAILED;
+   1f2ec:	10 e0       	ldi	r17, 0x00	; 0
+   1f2ee:	8b e1       	ldi	r24, 0x1B	; 27
+					break;
+   1f2f0:	0e 94 98 f0 	call	0x1e130	; 0x1e130 <sendchar>
+						*p++	=	STATUS_CMD_OK;
+					}
+					break;
+
+				default:
+					msgLength		=	2;
+   1f2f4:	c2 5e       	subi	r28, 0xE2	; 226
+			}
+
+			/*
+			 * Now send answer message back
+			 */
+			sendchar(MESSAGE_START);
+   1f2f6:	de 4f       	sbci	r29, 0xFE	; 254
+   1f2f8:	88 81       	ld	r24, Y
+   1f2fa:	ce 51       	subi	r28, 0x1E	; 30
+			checksum	=	MESSAGE_START^0;
+
+			sendchar(seqNum);
+   1f2fc:	d1 40       	sbci	r29, 0x01	; 1
+   1f2fe:	0e 94 98 f0 	call	0x1e130	; 0x1e130 <sendchar>
+   1f302:	81 2f       	mov	r24, r17
+   1f304:	0e 94 98 f0 	call	0x1e130	; 0x1e130 <sendchar>
+   1f308:	80 2f       	mov	r24, r16
+			checksum	^=	seqNum;
+
+			c			=	((msgLength>>8)&0xFF);
+			sendchar(c);
+   1f30a:	0e 94 98 f0 	call	0x1e130	; 0x1e130 <sendchar>
+   1f30e:	8e e0       	ldi	r24, 0x0E	; 14
+			checksum	^=	c;
+
+			c			=	msgLength&0x00FF;
+			sendchar(c);
+   1f310:	0e 94 98 f0 	call	0x1e130	; 0x1e130 <sendchar>
+   1f314:	95 e1       	ldi	r25, 0x15	; 21
+			checksum ^= c;
+
+			sendchar(TOKEN);
+   1f316:	99 2e       	mov	r9, r25
+   1f318:	c2 5e       	subi	r28, 0xE2	; 226
+   1f31a:	de 4f       	sbci	r29, 0xFE	; 254
+			sendchar(seqNum);
+			checksum	^=	seqNum;
+
+			c			=	((msgLength>>8)&0xFF);
+			sendchar(c);
+			checksum	^=	c;
+   1f31c:	28 81       	ld	r18, Y
+   1f31e:	ce 51       	subi	r28, 0x1E	; 30
+   1f320:	d1 40       	sbci	r29, 0x01	; 1
+   1f322:	92 26       	eor	r9, r18
+   1f324:	90 26       	eor	r9, r16
+   1f326:	91 26       	eor	r9, r17
+   1f328:	ce 01       	movw	r24, r28
+   1f32a:	01 96       	adiw	r24, 0x01	; 1
+
+			c			=	msgLength&0x00FF;
+			sendchar(c);
+			checksum ^= c;
+   1f32c:	5c 01       	movw	r10, r24
+
+			sendchar(TOKEN);
+			checksum ^= TOKEN;
+   1f32e:	08 0f       	add	r16, r24
+   1f330:	19 1f       	adc	r17, r25
+   1f332:	a0 16       	cp	r10, r16
+   1f334:	b1 06       	cpc	r11, r17
+   1f336:	91 f0       	breq	.+36     	; 0x1f35c <main+0x5bc>
+   1f338:	f5 01       	movw	r30, r10
+
+			p	=	msgBuffer;
+			while ( msgLength )
+   1f33a:	91 91       	ld	r25, Z+
+   1f33c:	5f 01       	movw	r10, r30
+   1f33e:	89 2f       	mov	r24, r25
+			{
+				c	=	*p++;
+   1f340:	cb 5d       	subi	r28, 0xDB	; 219
+   1f342:	de 4f       	sbci	r29, 0xFE	; 254
+   1f344:	98 83       	st	Y, r25
+				sendchar(c);
+   1f346:	c5 52       	subi	r28, 0x25	; 37
+   1f348:	d1 40       	sbci	r29, 0x01	; 1
+   1f34a:	0e 94 98 f0 	call	0x1e130	; 0x1e130 <sendchar>
+   1f34e:	cb 5d       	subi	r28, 0xDB	; 219
+   1f350:	de 4f       	sbci	r29, 0xFE	; 254
+   1f352:	98 81       	ld	r25, Y
+   1f354:	c5 52       	subi	r28, 0x25	; 37
+				checksum ^=c;
+   1f356:	d1 40       	sbci	r29, 0x01	; 1
+   1f358:	99 26       	eor	r9, r25
+   1f35a:	eb cf       	rjmp	.-42     	; 0x1f332 <main+0x592>
+   1f35c:	89 2d       	mov	r24, r9
+   1f35e:	0e 94 98 f0 	call	0x1e130	; 0x1e130 <sendchar>
+   1f362:	c2 5e       	subi	r28, 0xE2	; 226
+				msgLength--;
+			}
+			sendchar(checksum);
+   1f364:	de 4f       	sbci	r29, 0xFE	; 254
+   1f366:	28 81       	ld	r18, Y
+   1f368:	ce 51       	subi	r28, 0x1E	; 30
+			seqNum++;
+   1f36a:	d1 40       	sbci	r29, 0x01	; 1
+   1f36c:	2f 5f       	subi	r18, 0xFF	; 255
+   1f36e:	c2 5e       	subi	r28, 0xE2	; 226
+   1f370:	de 4f       	sbci	r29, 0xFE	; 254
+   1f372:	28 83       	st	Y, r18
+   1f374:	ce 51       	subi	r28, 0x1E	; 30
+   1f376:	d1 40       	sbci	r29, 0x01	; 1
+   1f378:	85 b1       	in	r24, 0x05	; 5
+   1f37a:	80 58       	subi	r24, 0x80	; 128
+   1f37c:	85 b9       	out	0x05, r24	; 5
+   1f37e:	81 10       	cpse	r8, r1
+	
+		#ifndef REMOVE_BOOTLOADER_LED
+			//*	<MLS>	toggle the LED
+			PROGLED_PORT	^=	(1<<PROGLED_PIN);	// active high LED ON
+   1f380:	03 c0       	rjmp	.+6      	; 0x1f388 <main+0x5e8>
+   1f382:	40 e0       	ldi	r20, 0x00	; 0
+   1f384:	50 e0       	ldi	r21, 0x00	; 0
+
+
+	if (boot_state==1)
+	{
+		//*	main loop
+		while (!isLeave)
+   1f386:	8e cd       	rjmp	.-1252   	; 0x1eea4 <main+0x104>
+   1f388:	27 98       	cbi	0x04, 7	; 4
+   1f38a:	2f 98       	cbi	0x05, 7	; 5
+   1f38c:	84 e6       	ldi	r24, 0x64	; 100
+   1f38e:	90 e0       	ldi	r25, 0x00	; 0
+	delay_ms(100);
+#endif
+
+
+#ifndef REMOVE_BOOTLOADER_LED
+	PROGLED_DDR		&=	~(1<<PROGLED_PIN);	// set to default
+   1f390:	0e 94 a4 f0 	call	0x1e148	; 0x1e148 <delay_ms>
+	PROGLED_PORT	&=	~(1<<PROGLED_PIN);	// active low LED OFF
+//	PROGLED_PORT	|=	(1<<PROGLED_PIN);	// active high LED OFf
+	delay_ms(100);							// delay after exit
+   1f394:	00 00       	nop
+   1f396:	80 91 c0 00 	lds	r24, 0x00C0
+   1f39a:	8d 7f       	andi	r24, 0xFD	; 253
+#endif
+
+
+	asm volatile ("nop");			// wait until port has changed
+   1f39c:	80 93 c0 00 	sts	0x00C0, r24
+
+	/*
+	 * Now leave bootloader
+	 */
+
+	UART_STATUS_REG	&=	0xfd;
+   1f3a0:	81 e1       	ldi	r24, 0x11	; 17
+   1f3a2:	80 93 57 00 	sts	0x0057, r24
+   1f3a6:	e8 95       	spm
+	boot_rww_enable();				// enable application section
+   1f3a8:	ee 27       	eor	r30, r30
+   1f3aa:	ff 27       	eor	r31, r31
+   1f3ac:	09 94       	ijmp
+   1f3ae:	ff cf       	rjmp	.-2      	; 0x1f3ae <main+0x60e>
+
+
+	asm volatile(
+   1f3b0:	8b e1       	ldi	r24, 0x1B	; 27
+   1f3b2:	98 2e       	mov	r9, r24
+   1f3b4:	61 e0       	ldi	r22, 0x01	; 1
+   1f3b6:	ab cd       	rjmp	.-1194   	; 0x1ef0e <main+0x16e>
+				{
+					case ST_START:
+						if ( c == MESSAGE_START )
+						{
+							msgParseState	=	ST_GET_SEQ_NUM;
+							checksum		=	MESSAGE_START^0;
+   1f3b8:	19 01       	movw	r2, r18
+   1f3ba:	66 e0       	ldi	r22, 0x06	; 6
+				switch (msgParseState)
+				{
+					case ST_START:
+						if ( c == MESSAGE_START )
+						{
+							msgParseState	=	ST_GET_SEQ_NUM;
+   1f3bc:	a8 cd       	rjmp	.-1200   	; 0x1ef0e <main+0x16e>
+   1f3be:	60 e0       	ldi	r22, 0x00	; 0
+   1f3c0:	a6 cd       	rjmp	.-1204   	; 0x1ef0e <main+0x16e>
+
+0001f3c2 <__muluhisi3>:
+					case ST_GET_DATA:
+						msgBuffer[ii++]	=	c;
+						checksum		^=	c;
+						if (ii == msgLength )
+						{
+							msgParseState	=	ST_GET_CHECK;
+   1f3c2:	62 d0       	rcall	.+196    	; 0x1f488 <__umulhisi3>
+   1f3c4:	a5 9f       	mul	r26, r21
+						{
+							msgParseState	=	ST_PROCESS;
+						}
+						else
+						{
+							msgParseState	=	ST_START;
+   1f3c6:	90 0d       	add	r25, r0
+   1f3c8:	b4 9f       	mul	r27, r20
+   1f3ca:	90 0d       	add	r25, r0
+   1f3cc:	a4 9f       	mul	r26, r20
+   1f3ce:	80 0d       	add	r24, r0
+   1f3d0:	91 1d       	adc	r25, r1
+   1f3d2:	11 24       	eor	r1, r1
+   1f3d4:	08 95       	ret
+
+0001f3d6 <__udivmodsi4>:
+   1f3d6:	a1 e2       	ldi	r26, 0x21	; 33
+   1f3d8:	1a 2e       	mov	r1, r26
+   1f3da:	aa 1b       	sub	r26, r26
+   1f3dc:	bb 1b       	sub	r27, r27
+   1f3de:	fd 01       	movw	r30, r26
+   1f3e0:	0d c0       	rjmp	.+26     	; 0x1f3fc <__udivmodsi4_ep>
+
+0001f3e2 <__udivmodsi4_loop>:
+   1f3e2:	aa 1f       	adc	r26, r26
+   1f3e4:	bb 1f       	adc	r27, r27
+   1f3e6:	ee 1f       	adc	r30, r30
+   1f3e8:	ff 1f       	adc	r31, r31
+   1f3ea:	a2 17       	cp	r26, r18
+   1f3ec:	b3 07       	cpc	r27, r19
+   1f3ee:	e4 07       	cpc	r30, r20
+   1f3f0:	f5 07       	cpc	r31, r21
+   1f3f2:	20 f0       	brcs	.+8      	; 0x1f3fc <__udivmodsi4_ep>
+   1f3f4:	a2 1b       	sub	r26, r18
+   1f3f6:	b3 0b       	sbc	r27, r19
+   1f3f8:	e4 0b       	sbc	r30, r20
+   1f3fa:	f5 0b       	sbc	r31, r21
+
+0001f3fc <__udivmodsi4_ep>:
+   1f3fc:	66 1f       	adc	r22, r22
+   1f3fe:	77 1f       	adc	r23, r23
+   1f400:	88 1f       	adc	r24, r24
+   1f402:	99 1f       	adc	r25, r25
+   1f404:	1a 94       	dec	r1
+   1f406:	69 f7       	brne	.-38     	; 0x1f3e2 <__udivmodsi4_loop>
+   1f408:	60 95       	com	r22
+   1f40a:	70 95       	com	r23
+   1f40c:	80 95       	com	r24
+   1f40e:	90 95       	com	r25
+   1f410:	9b 01       	movw	r18, r22
+   1f412:	ac 01       	movw	r20, r24
+   1f414:	bd 01       	movw	r22, r26
+   1f416:	cf 01       	movw	r24, r30
+   1f418:	08 95       	ret
+
+0001f41a <__prologue_saves__>:
+   1f41a:	2f 92       	push	r2
+   1f41c:	3f 92       	push	r3
+   1f41e:	4f 92       	push	r4
+   1f420:	5f 92       	push	r5
+   1f422:	6f 92       	push	r6
+   1f424:	7f 92       	push	r7
+   1f426:	8f 92       	push	r8
+   1f428:	9f 92       	push	r9
+   1f42a:	af 92       	push	r10
+   1f42c:	bf 92       	push	r11
+   1f42e:	cf 92       	push	r12
+   1f430:	df 92       	push	r13
+   1f432:	ef 92       	push	r14
+   1f434:	ff 92       	push	r15
+   1f436:	0f 93       	push	r16
+   1f438:	1f 93       	push	r17
+   1f43a:	cf 93       	push	r28
+   1f43c:	df 93       	push	r29
+   1f43e:	cd b7       	in	r28, 0x3d	; 61
+   1f440:	de b7       	in	r29, 0x3e	; 62
+   1f442:	ca 1b       	sub	r28, r26
+   1f444:	db 0b       	sbc	r29, r27
+   1f446:	0f b6       	in	r0, 0x3f	; 63
+   1f448:	f8 94       	cli
+   1f44a:	de bf       	out	0x3e, r29	; 62
+   1f44c:	0f be       	out	0x3f, r0	; 63
+   1f44e:	cd bf       	out	0x3d, r28	; 61
+   1f450:	09 94       	ijmp
+
+0001f452 <__epilogue_restores__>:
+   1f452:	2a 88       	ldd	r2, Y+18	; 0x12
+   1f454:	39 88       	ldd	r3, Y+17	; 0x11
+   1f456:	48 88       	ldd	r4, Y+16	; 0x10
+   1f458:	5f 84       	ldd	r5, Y+15	; 0x0f
+   1f45a:	6e 84       	ldd	r6, Y+14	; 0x0e
+   1f45c:	7d 84       	ldd	r7, Y+13	; 0x0d
+   1f45e:	8c 84       	ldd	r8, Y+12	; 0x0c
+   1f460:	9b 84       	ldd	r9, Y+11	; 0x0b
+   1f462:	aa 84       	ldd	r10, Y+10	; 0x0a
+   1f464:	b9 84       	ldd	r11, Y+9	; 0x09
+   1f466:	c8 84       	ldd	r12, Y+8	; 0x08
+   1f468:	df 80       	ldd	r13, Y+7	; 0x07
+   1f46a:	ee 80       	ldd	r14, Y+6	; 0x06
+   1f46c:	fd 80       	ldd	r15, Y+5	; 0x05
+   1f46e:	0c 81       	ldd	r16, Y+4	; 0x04
+   1f470:	1b 81       	ldd	r17, Y+3	; 0x03
+   1f472:	aa 81       	ldd	r26, Y+2	; 0x02
+   1f474:	b9 81       	ldd	r27, Y+1	; 0x01
+   1f476:	ce 0f       	add	r28, r30
+   1f478:	d1 1d       	adc	r29, r1
+   1f47a:	0f b6       	in	r0, 0x3f	; 63
+   1f47c:	f8 94       	cli
+   1f47e:	de bf       	out	0x3e, r29	; 62
+   1f480:	0f be       	out	0x3f, r0	; 63
+   1f482:	cd bf       	out	0x3d, r28	; 61
+   1f484:	ed 01       	movw	r28, r26
+   1f486:	08 95       	ret
+
+0001f488 <__umulhisi3>:
+   1f488:	a2 9f       	mul	r26, r18
+   1f48a:	b0 01       	movw	r22, r0
+   1f48c:	b3 9f       	mul	r27, r19
+   1f48e:	c0 01       	movw	r24, r0
+   1f490:	a3 9f       	mul	r26, r19
+   1f492:	70 0d       	add	r23, r0
+   1f494:	81 1d       	adc	r24, r1
+   1f496:	11 24       	eor	r1, r1
+   1f498:	91 1d       	adc	r25, r1
+   1f49a:	b2 9f       	mul	r27, r18
+   1f49c:	70 0d       	add	r23, r0
+   1f49e:	81 1d       	adc	r24, r1
+   1f4a0:	11 24       	eor	r1, r1
+   1f4a2:	91 1d       	adc	r25, r1
+   1f4a4:	08 95       	ret
+
+0001f4a6 <memset>:
+   1f4a6:	dc 01       	movw	r26, r24
+   1f4a8:	01 c0       	rjmp	.+2      	; 0x1f4ac <memset+0x6>
+   1f4aa:	6d 93       	st	X+, r22
+   1f4ac:	41 50       	subi	r20, 0x01	; 1
+   1f4ae:	50 40       	sbci	r21, 0x00	; 0
+   1f4b0:	e0 f7       	brcc	.-8      	; 0x1f4aa <memset+0x4>
+   1f4b2:	08 95       	ret
+
+0001f4b4 <__eerd_byte_m1280>:
+   1f4b4:	f9 99       	sbic	0x1f, 1	; 31
+   1f4b6:	fe cf       	rjmp	.-4      	; 0x1f4b4 <__eerd_byte_m1280>
+   1f4b8:	92 bd       	out	0x22, r25	; 34
+   1f4ba:	81 bd       	out	0x21, r24	; 33
+   1f4bc:	f8 9a       	sbi	0x1f, 0	; 31
+   1f4be:	99 27       	eor	r25, r25
+   1f4c0:	80 b5       	in	r24, 0x20	; 32
+   1f4c2:	08 95       	ret
+
+0001f4c4 <__eewr_byte_m1280>:
+   1f4c4:	26 2f       	mov	r18, r22
+
+0001f4c6 <__eewr_r18_m1280>:
+   1f4c6:	f9 99       	sbic	0x1f, 1	; 31
+   1f4c8:	fe cf       	rjmp	.-4      	; 0x1f4c6 <__eewr_r18_m1280>
+   1f4ca:	1f ba       	out	0x1f, r1	; 31
+   1f4cc:	92 bd       	out	0x22, r25	; 34
+   1f4ce:	81 bd       	out	0x21, r24	; 33
+   1f4d0:	20 bd       	out	0x20, r18	; 32
+   1f4d2:	0f b6       	in	r0, 0x3f	; 63
+   1f4d4:	f8 94       	cli
+   1f4d6:	fa 9a       	sbi	0x1f, 2	; 31
+   1f4d8:	f9 9a       	sbi	0x1f, 1	; 31
+   1f4da:	0f be       	out	0x3f, r0	; 63
+   1f4dc:	01 96       	adiw	r24, 0x01	; 1
+   1f4de:	08 95       	ret
+
+0001f4e0 <_exit>:
+   1f4e0:	f8 94       	cli
+
+0001f4e2 <__stop_program>:
+   1f4e2:	ff cf       	rjmp	.-2      	; 0x1f4e2 <__stop_program>

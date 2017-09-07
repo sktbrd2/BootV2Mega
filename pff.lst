@@ -1,0 +1,2882 @@
+   1               		.file	"pff.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__RAMPZ__ = 0x3b
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.text
+   9               	.Ltext0:
+  10               		.cfi_sections	.debug_frame
+  12               	clust2sect:
+  13               	.LFB3:
+  14               		.file 1 "pff.c"
+   1:pff.c         **** /*----------------------------------------------------------------------------/
+   2:pff.c         **** /  Petit FatFs - FAT file system module  R0.02a                (C)ChaN, 2010
+   3:pff.c         **** /-----------------------------------------------------------------------------/
+   4:pff.c         **** / Petit FatFs module is an open source software to implement FAT file system to
+   5:pff.c         **** / small embedded systems. This is a free software and is opened for education,
+   6:pff.c         **** / research and commercial developments under license policy of following trems.
+   7:pff.c         **** /
+   8:pff.c         **** /  Copyright (C) 2010, ChaN, all right reserved.
+   9:pff.c         **** /
+  10:pff.c         **** / * The Petit FatFs module is a free software and there is NO WARRANTY.
+  11:pff.c         **** / * No restriction on use. You can use, modify and redistribute it for
+  12:pff.c         **** /   personal, non-profit or commercial use UNDER YOUR RESPONSIBILITY.
+  13:pff.c         **** / * Redistributions of source code must retain the above copyright notice.
+  14:pff.c         **** /
+  15:pff.c         **** /-----------------------------------------------------------------------------/
+  16:pff.c         **** / Jun 15,'09  R0.01a  First release. (Branched from FatFs R0.07b.)
+  17:pff.c         **** /
+  18:pff.c         **** / Dec 14,'09  R0.02   Added multiple code page support.
+  19:pff.c         **** /                     Added write funciton.
+  20:pff.c         **** /                     Changed stream read mode interface.
+  21:pff.c         **** / Dec 07,'10  R0.02a  Added some configuration options.
+  22:pff.c         **** /                     Fixed fails to open objects with DBCS character.
+  23:pff.c         **** /----------------------------------------------------------------------------*/
+  24:pff.c         **** 
+  25:pff.c         **** #include "pff.h"		/* Petit FatFs configurations and declarations */
+  26:pff.c         **** #include "diskio.h"		/* Declarations of low level disk I/O functions */
+  27:pff.c         **** 
+  28:pff.c         **** 
+  29:pff.c         **** 
+  30:pff.c         **** /*--------------------------------------------------------------------------
+  31:pff.c         **** 
+  32:pff.c         ****    Module Private Definitions
+  33:pff.c         **** 
+  34:pff.c         **** ---------------------------------------------------------------------------*/
+  35:pff.c         **** 
+  36:pff.c         **** 
+  37:pff.c         **** #if _FS_FAT32
+  38:pff.c         **** #define LD_CLUST(dir)	(((DWORD)LD_WORD(dir+DIR_FstClusHI)<<16) | LD_WORD(dir+DIR_FstClusLO))
+  39:pff.c         **** #else
+  40:pff.c         **** #define LD_CLUST(dir)	LD_WORD(dir+DIR_FstClusLO)
+  41:pff.c         **** #endif
+  42:pff.c         **** 
+  43:pff.c         **** 
+  44:pff.c         **** /*--------------------------------------------------------*/
+  45:pff.c         **** /* DBCS code ranges and SBCS extend char conversion table */
+  46:pff.c         **** 
+  47:pff.c         **** #if _CODE_PAGE == 932	/* Japanese Shift-JIS */
+  48:pff.c         **** #define _DF1S	0x81	/* DBC 1st byte range 1 start */
+  49:pff.c         **** #define _DF1E	0x9F	/* DBC 1st byte range 1 end */
+  50:pff.c         **** #define _DF2S	0xE0	/* DBC 1st byte range 2 start */
+  51:pff.c         **** #define _DF2E	0xFC	/* DBC 1st byte range 2 end */
+  52:pff.c         **** #define _DS1S	0x40	/* DBC 2nd byte range 1 start */
+  53:pff.c         **** #define _DS1E	0x7E	/* DBC 2nd byte range 1 end */
+  54:pff.c         **** #define _DS2S	0x80	/* DBC 2nd byte range 2 start */
+  55:pff.c         **** #define _DS2E	0xFC	/* DBC 2nd byte range 2 end */
+  56:pff.c         **** 
+  57:pff.c         **** #elif _CODE_PAGE == 936	/* Simplified Chinese GBK */
+  58:pff.c         **** #define _DF1S	0x81
+  59:pff.c         **** #define _DF1E	0xFE
+  60:pff.c         **** #define _DS1S	0x40
+  61:pff.c         **** #define _DS1E	0x7E
+  62:pff.c         **** #define _DS2S	0x80
+  63:pff.c         **** #define _DS2E	0xFE
+  64:pff.c         **** 
+  65:pff.c         **** #elif _CODE_PAGE == 949	/* Korean */
+  66:pff.c         **** #define _DF1S	0x81
+  67:pff.c         **** #define _DF1E	0xFE
+  68:pff.c         **** #define _DS1S	0x41
+  69:pff.c         **** #define _DS1E	0x5A
+  70:pff.c         **** #define _DS2S	0x61
+  71:pff.c         **** #define _DS2E	0x7A
+  72:pff.c         **** #define _DS3S	0x81
+  73:pff.c         **** #define _DS3E	0xFE
+  74:pff.c         **** 
+  75:pff.c         **** #elif _CODE_PAGE == 950	/* Traditional Chinese Big5 */
+  76:pff.c         **** #define _DF1S	0x81
+  77:pff.c         **** #define _DF1E	0xFE
+  78:pff.c         **** #define _DS1S	0x40
+  79:pff.c         **** #define _DS1E	0x7E
+  80:pff.c         **** #define _DS2S	0xA1
+  81:pff.c         **** #define _DS2E	0xFE
+  82:pff.c         **** 
+  83:pff.c         **** #elif _CODE_PAGE == 437	/* U.S. (OEM) */
+  84:pff.c         **** #define _DF1S	0
+  85:pff.c         **** #define _EXCVT {0x80,0x9A,0x90,0x41,0x8E,0x41,0x8F,0x80,0x45,0x45,0x45,0x49,0x49,0x49,0x8E,0x8F,0x9
+  86:pff.c         **** 				0x41,0x49,0x4F,0x55,0xA5,0xA5,0xA6,0xA7,0xA8,0xA9,0xAA,0xAB,0xAC,0x21,0xAE,0xAF,0xB0,0xB1,0xB2,
+  87:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC6,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD0,0xD1,0xD2,
+  88:pff.c         **** 				0xE0,0xE1,0xE2,0xE3,0xE4,0xE5,0xE6,0xE7,0xE8,0xE9,0xEA,0xEB,0xEC,0xED,0xEE,0xEF,0xF0,0xF1,0xF2,
+  89:pff.c         **** 
+  90:pff.c         **** #elif _CODE_PAGE == 720	/* Arabic (OEM) */
+  91:pff.c         **** #define _DF1S	0
+  92:pff.c         **** #define _EXCVT {0x80,0x81,0x45,0x41,0x84,0x41,0x86,0x43,0x45,0x45,0x45,0x49,0x49,0x8D,0x8E,0x8F,0x9
+  93:pff.c         **** 				0xA0,0xA1,0xA2,0xA3,0xA4,0xA5,0xA6,0xA7,0xA8,0xA9,0xAA,0xAB,0xAC,0xAD,0xAE,0xAF,0xB0,0xB1,0xB2,
+  94:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC6,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD0,0xD1,0xD2,
+  95:pff.c         **** 				0xE0,0xE1,0xE2,0xE3,0xE4,0xE5,0xE6,0xE7,0xE8,0xE9,0xEA,0xEB,0xEC,0xED,0xEE,0xEF,0xF0,0xF1,0xF2,
+  96:pff.c         **** 
+  97:pff.c         **** #elif _CODE_PAGE == 737	/* Greek (OEM) */
+  98:pff.c         **** #define _DF1S	0
+  99:pff.c         **** #define _EXCVT {0x80,0x81,0x82,0x83,0x84,0x85,0x86,0x87,0x88,0x89,0x8A,0x8B,0x8C,0x8D,0x8E,0x8F,0x9
+ 100:pff.c         **** 				0x88,0x89,0x8A,0x8B,0x8C,0x8D,0x8E,0x8F,0x90,0x91,0xAA,0x92,0x93,0x94,0x95,0x96,0xB0,0xB1,0xB2,
+ 101:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC6,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD0,0xD1,0xD2,
+ 102:pff.c         **** 				0x97,0xEA,0xEB,0xEC,0xE4,0xED,0xEE,0xE7,0xE8,0xF1,0xEA,0xEB,0xEC,0xED,0xEE,0xEF,0xF0,0xF1,0xF2,
+ 103:pff.c         **** 
+ 104:pff.c         **** #elif _CODE_PAGE == 775	/* Baltic (OEM) */
+ 105:pff.c         **** #define _DF1S	0
+ 106:pff.c         **** #define _EXCVT {0x80,0x9A,0x91,0xA0,0x8E,0x95,0x8F,0x80,0xAD,0xED,0x8A,0x8A,0xA1,0x8D,0x8E,0x8F,0x9
+ 107:pff.c         **** 				0xA0,0xA1,0xE0,0xA3,0xA3,0xA5,0xA6,0xA7,0xA8,0xA9,0xAA,0xAB,0xAC,0xAD,0xAE,0xAF,0xB0,0xB1,0xB2,
+ 108:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC6,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xB5,0xB6,0xB7,
+ 109:pff.c         **** 				0xE0,0xE1,0xE2,0xE3,0xE5,0xE5,0xE6,0xE3,0xE8,0xE8,0xEA,0xEA,0xEE,0xED,0xEE,0xEF,0xF0,0xF1,0xF2,
+ 110:pff.c         **** 
+ 111:pff.c         **** #elif _CODE_PAGE == 850	/* Multilingual Latin 1 (OEM) */
+ 112:pff.c         **** #define _DF1S	0
+ 113:pff.c         **** #define _EXCVT {0x80,0x9A,0x90,0xB6,0x8E,0xB7,0x8F,0x80,0xD2,0xD3,0xD4,0xD8,0xD7,0xDE,0x8E,0x8F,0x9
+ 114:pff.c         **** 				0xB5,0xD6,0xE0,0xE9,0xA5,0xA5,0xA6,0xA7,0xA8,0xA9,0xAA,0xAB,0xAC,0x21,0xAE,0xAF,0xB0,0xB1,0xB2,
+ 115:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC7,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD0,0xD1,0xD2,
+ 116:pff.c         **** 				0xE0,0xE1,0xE2,0xE3,0xE5,0xE5,0xE6,0xE7,0xE7,0xE9,0xEA,0xEB,0xED,0xED,0xEE,0xEF,0xF0,0xF1,0xF2,
+ 117:pff.c         **** 
+ 118:pff.c         **** #elif _CODE_PAGE == 852	/* Latin 2 (OEM) */
+ 119:pff.c         **** #define _DF1S	0
+ 120:pff.c         **** #define _EXCVT {0x80,0x9A,0x90,0xB6,0x8E,0xDE,0x8F,0x80,0x9D,0xD3,0x8A,0x8A,0xD7,0x8D,0x8E,0x8F,0x9
+ 121:pff.c         **** 				0xB5,0xD6,0xE0,0xE9,0xA4,0xA4,0xA6,0xA6,0xA8,0xA8,0xAA,0x8D,0xAC,0xB8,0xAE,0xAF,0xB0,0xB1,0xB2,
+ 122:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC6,0xC6,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD1,0xD1,0xD2,
+ 123:pff.c         **** 				0xE0,0xE1,0xE2,0xE3,0xE3,0xD5,0xE6,0xE6,0xE8,0xE9,0xE8,0xEB,0xED,0xED,0xDD,0xEF,0xF0,0xF1,0xF2,
+ 124:pff.c         **** 
+ 125:pff.c         **** #elif _CODE_PAGE == 855	/* Cyrillic (OEM) */
+ 126:pff.c         **** #define _DF1S	0
+ 127:pff.c         **** #define _EXCVT {0x81,0x81,0x83,0x83,0x85,0x85,0x87,0x87,0x89,0x89,0x8B,0x8B,0x8D,0x8D,0x8F,0x8F,0x9
+ 128:pff.c         **** 				0xA1,0xA1,0xA3,0xA3,0xA5,0xA5,0xA7,0xA7,0xA9,0xA9,0xAB,0xAB,0xAD,0xAD,0xAE,0xAF,0xB0,0xB1,0xB2,
+ 129:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC7,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD1,0xD1,0xD3,
+ 130:pff.c         **** 				0xE0,0xE2,0xE2,0xE4,0xE4,0xE6,0xE6,0xE8,0xE8,0xEA,0xEA,0xEC,0xEC,0xEE,0xEE,0xEF,0xF0,0xF2,0xF2,
+ 131:pff.c         **** 
+ 132:pff.c         **** #elif _CODE_PAGE == 857	/* Turkish (OEM) */
+ 133:pff.c         **** #define _DF1S	0
+ 134:pff.c         **** #define _EXCVT {0x80,0x9A,0x90,0xB6,0x8E,0xB7,0x8F,0x80,0xD2,0xD3,0xD4,0xD8,0xD7,0x98,0x8E,0x8F,0x9
+ 135:pff.c         **** 				0xB5,0xD6,0xE0,0xE9,0xA5,0xA5,0xA6,0xA6,0xA8,0xA9,0xAA,0xAB,0xAC,0x21,0xAE,0xAF,0xB0,0xB1,0xB2,
+ 136:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC7,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD0,0xD1,0xD2,
+ 137:pff.c         **** 				0xE0,0xE1,0xE2,0xE3,0xE5,0xE5,0xE6,0xE7,0xE8,0xE9,0xEA,0xEB,0xDE,0x59,0xEE,0xEF,0xF0,0xF1,0xF2,
+ 138:pff.c         **** 
+ 139:pff.c         **** #elif _CODE_PAGE == 858	/* Multilingual Latin 1 + Euro (OEM) */
+ 140:pff.c         **** #define _DF1S	0
+ 141:pff.c         **** #define _EXCVT {0x80,0x9A,0x90,0xB6,0x8E,0xB7,0x8F,0x80,0xD2,0xD3,0xD4,0xD8,0xD7,0xDE,0x8E,0x8F,0x9
+ 142:pff.c         **** 				0xB5,0xD6,0xE0,0xE9,0xA5,0xA5,0xA6,0xA7,0xA8,0xA9,0xAA,0xAB,0xAC,0x21,0xAE,0xAF,0xB0,0xB1,0xB2,
+ 143:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC7,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD1,0xD1,0xD2,
+ 144:pff.c         **** 				0xE0,0xE1,0xE2,0xE3,0xE5,0xE5,0xE6,0xE7,0xE7,0xE9,0xEA,0xEB,0xED,0xED,0xEE,0xEF,0xF0,0xF1,0xF2,
+ 145:pff.c         **** 
+ 146:pff.c         **** #elif _CODE_PAGE == 862	/* Hebrew (OEM) */
+ 147:pff.c         **** #define _DF1S	0
+ 148:pff.c         **** #define _EXCVT {0x80,0x81,0x82,0x83,0x84,0x85,0x86,0x87,0x88,0x89,0x8A,0x8B,0x8C,0x8D,0x8E,0x8F,0x9
+ 149:pff.c         **** 				0x41,0x49,0x4F,0x55,0xA5,0xA5,0xA6,0xA7,0xA8,0xA9,0xAA,0xAB,0xAC,0x21,0xAE,0xAF,0xB0,0xB1,0xB2,
+ 150:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC6,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD0,0xD1,0xD2,
+ 151:pff.c         **** 				0xE0,0xE1,0xE2,0xE3,0xE4,0xE5,0xE6,0xE7,0xE8,0xE9,0xEA,0xEB,0xEC,0xED,0xEE,0xEF,0xF0,0xF1,0xF2,
+ 152:pff.c         **** 
+ 153:pff.c         **** #elif _CODE_PAGE == 866	/* Russian (OEM) */
+ 154:pff.c         **** #define _DF1S	0
+ 155:pff.c         **** #define _EXCVT {0x80,0x81,0x82,0x83,0x84,0x85,0x86,0x87,0x88,0x89,0x8A,0x8B,0x8C,0x8D,0x8E,0x8F,0x9
+ 156:pff.c         **** 				0x80,0x81,0x82,0x83,0x84,0x85,0x86,0x87,0x88,0x89,0x8A,0x8B,0x8C,0x8D,0x8E,0x8F,0xB0,0xB1,0xB2,
+ 157:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC6,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD0,0xD1,0xD2,
+ 158:pff.c         **** 				0x90,0x91,0x92,0x93,0x9d,0x95,0x96,0x97,0x98,0x99,0x9A,0x9B,0x9C,0x9D,0x9E,0x9F,0xF0,0xF0,0xF2,
+ 159:pff.c         **** 
+ 160:pff.c         **** #elif _CODE_PAGE == 874	/* Thai (OEM, Windows) */
+ 161:pff.c         **** #define _DF1S	0
+ 162:pff.c         **** #define _EXCVT {0x80,0x81,0x82,0x83,0x84,0x85,0x86,0x87,0x88,0x89,0x8A,0x8B,0x8C,0x8D,0x8E,0x8F,0x9
+ 163:pff.c         **** 				0xA0,0xA1,0xA2,0xA3,0xA4,0xA5,0xA6,0xA7,0xA8,0xA9,0xAA,0xAB,0xAC,0xAD,0xAE,0xAF,0xB0,0xB1,0xB2,
+ 164:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC6,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD0,0xD1,0xD2,
+ 165:pff.c         **** 				0xE0,0xE1,0xE2,0xE3,0xE4,0xE5,0xE6,0xE7,0xE8,0xE9,0xEA,0xEB,0xEC,0xED,0xEE,0xEF,0xF0,0xF1,0xF2,
+ 166:pff.c         **** 
+ 167:pff.c         **** #elif _CODE_PAGE == 1250 /* Central Europe (Windows) */
+ 168:pff.c         **** #define _DF1S	0
+ 169:pff.c         **** #define _EXCVT {0x80,0x81,0x82,0x83,0x84,0x85,0x86,0x87,0x88,0x89,0x8A,0x8B,0x8C,0x8D,0x8E,0x8F,0x9
+ 170:pff.c         **** 				0xA0,0xA1,0xA2,0xA3,0xA4,0xA5,0xA6,0xA7,0xA8,0xA9,0xAA,0xAB,0xAC,0xAD,0xAE,0xAF,0xB0,0xB1,0xB2,
+ 171:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC6,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD0,0xD1,0xD2,
+ 172:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC6,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD0,0xD1,0xD2,
+ 173:pff.c         **** 
+ 174:pff.c         **** #elif _CODE_PAGE == 1251 /* Cyrillic (Windows) */
+ 175:pff.c         **** #define _DF1S	0
+ 176:pff.c         **** #define _EXCVT {0x80,0x81,0x82,0x82,0x84,0x85,0x86,0x87,0x88,0x89,0x8A,0x8B,0x8C,0x8D,0x8E,0x8F,0x8
+ 177:pff.c         **** 				0xA0,0xA2,0xA2,0xA3,0xA4,0xA5,0xA6,0xA7,0xA8,0xA9,0xAA,0xAB,0xAC,0xAD,0xAE,0xAF,0xB0,0xB1,0xB2,
+ 178:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC6,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD0,0xD1,0xD2,
+ 179:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC6,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD0,0xD1,0xD2,
+ 180:pff.c         **** 
+ 181:pff.c         **** #elif _CODE_PAGE == 1252 /* Latin 1 (Windows) */
+ 182:pff.c         **** #define _DF1S	0
+ 183:pff.c         **** #define _EXCVT {0x80,0x81,0x82,0x83,0x84,0x85,0x86,0x87,0x88,0x89,0x8A,0x8B,0x8C,0x8D,0x8E,0x8F,0x9
+ 184:pff.c         **** 				0xA0,0x21,0xA2,0xA3,0xA4,0xA5,0xA6,0xA7,0xA8,0xA9,0xAA,0xAB,0xAC,0xAD,0xAE,0xAF,0xB0,0xB1,0xB2,
+ 185:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC6,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD0,0xD1,0xD2,
+ 186:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC6,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD0,0xD1,0xD2,
+ 187:pff.c         **** 
+ 188:pff.c         **** #elif _CODE_PAGE == 1253 /* Greek (Windows) */
+ 189:pff.c         **** #define _DF1S	0
+ 190:pff.c         **** #define _EXCVT {0x80,0x81,0x82,0x83,0x84,0x85,0x86,0x87,0x88,0x89,0x8A,0x8B,0x8C,0x8D,0x8E,0x8F,0x9
+ 191:pff.c         **** 				0xA0,0xA1,0xA2,0xA3,0xA4,0xA5,0xA6,0xA7,0xA8,0xA9,0xAA,0xAB,0xAC,0xAD,0xAE,0xAF,0xB0,0xB1,0xB2,
+ 192:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC6,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD0,0xD1,0xD2,
+ 193:pff.c         **** 				0xE0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC6,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD0,0xD1,0xF2,
+ 194:pff.c         **** 
+ 195:pff.c         **** #elif _CODE_PAGE == 1254 /* Turkish (Windows) */
+ 196:pff.c         **** #define _DF1S	0
+ 197:pff.c         **** #define _EXCVT {0x80,0x81,0x82,0x83,0x84,0x85,0x86,0x87,0x88,0x89,0x8A,0x8B,0x8C,0x8D,0x8E,0x8F,0x9
+ 198:pff.c         **** 				0xA0,0x21,0xA2,0xA3,0xA4,0xA5,0xA6,0xA7,0xA8,0xA9,0xAA,0xAB,0xAC,0xAD,0xAE,0xAF,0xB0,0xB1,0xB2,
+ 199:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC6,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD0,0xD1,0xD2,
+ 200:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC6,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD0,0xD1,0xD2,
+ 201:pff.c         **** 
+ 202:pff.c         **** #elif _CODE_PAGE == 1255 /* Hebrew (Windows) */
+ 203:pff.c         **** #define _DF1S	0
+ 204:pff.c         **** #define _EXCVT {0x80,0x81,0x82,0x83,0x84,0x85,0x86,0x87,0x88,0x89,0x8A,0x8B,0x8C,0x8D,0x8E,0x8F,0x9
+ 205:pff.c         **** 				0xA0,0x21,0xA2,0xA3,0xA4,0xA5,0xA6,0xA7,0xA8,0xA9,0xAA,0xAB,0xAC,0xAD,0xAE,0xAF,0xB0,0xB1,0xB2,
+ 206:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC6,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD0,0xD1,0xD2,
+ 207:pff.c         **** 				0xE0,0xE1,0xE2,0xE3,0xE4,0xE5,0xE6,0xE7,0xE8,0xE9,0xEA,0xEB,0xEC,0xED,0xEE,0xEF,0xF0,0xF1,0xF2,
+ 208:pff.c         **** 
+ 209:pff.c         **** #elif _CODE_PAGE == 1256 /* Arabic (Windows) */
+ 210:pff.c         **** #define _DF1S	0
+ 211:pff.c         **** #define _EXCVT {0x80,0x81,0x82,0x83,0x84,0x85,0x86,0x87,0x88,0x89,0x8A,0x8B,0x8C,0x8D,0x8E,0x8F,0x9
+ 212:pff.c         **** 				0xA0,0xA1,0xA2,0xA3,0xA4,0xA5,0xA6,0xA7,0xA8,0xA9,0xAA,0xAB,0xAC,0xAD,0xAE,0xAF,0xB0,0xB1,0xB2,
+ 213:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC6,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD0,0xD1,0xD2,
+ 214:pff.c         **** 				0x41,0xE1,0x41,0xE3,0xE4,0xE5,0xE6,0x43,0x45,0x45,0x45,0x45,0xEC,0xED,0x49,0x49,0xF0,0xF1,0xF2,
+ 215:pff.c         **** 
+ 216:pff.c         **** #elif _CODE_PAGE == 1257 /* Baltic (Windows) */
+ 217:pff.c         **** #define _DF1S	0
+ 218:pff.c         **** #define _EXCVT {0x80,0x81,0x82,0x83,0x84,0x85,0x86,0x87,0x88,0x89,0x8A,0x8B,0x8C,0x8D,0x8E,0x8F,0x9
+ 219:pff.c         **** 				0xA0,0xA1,0xA2,0xA3,0xA4,0xA5,0xA6,0xA7,0xA8,0xA9,0xAA,0xAB,0xAC,0xAD,0xAE,0xAF,0xB0,0xB1,0xB2,
+ 220:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC6,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD0,0xD1,0xD2,
+ 221:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC6,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD0,0xD1,0xD2,
+ 222:pff.c         **** 
+ 223:pff.c         **** #elif _CODE_PAGE == 1258 /* Vietnam (OEM, Windows) */
+ 224:pff.c         **** #define _DF1S	0
+ 225:pff.c         **** #define _EXCVT {0x80,0x81,0x82,0x83,0x84,0x85,0x86,0x87,0x88,0x89,0x8A,0x8B,0x8C,0x8D,0x8E,0x8F,0x9
+ 226:pff.c         **** 				0xA0,0x21,0xA2,0xA3,0xA4,0xA5,0xA6,0xA7,0xA8,0xA9,0xAA,0xAB,0xAC,0xAD,0xAE,0xAF,0xB0,0xB1,0xB2,
+ 227:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC6,0xC7,0xC8,0xC9,0xCA,0xCB,0xCC,0xCD,0xCE,0xCF,0xD0,0xD1,0xD2,
+ 228:pff.c         **** 				0xC0,0xC1,0xC2,0xC3,0xC4,0xC5,0xC6,0xC7,0xC8,0xC9,0xCA,0xCB,0xEC,0xCD,0xCE,0xCF,0xD0,0xD1,0xF2,
+ 229:pff.c         **** 
+ 230:pff.c         **** #elif _CODE_PAGE == 1	/* ASCII (for only non-LFN cfg) */
+ 231:pff.c         **** #define _DF1S	0
+ 232:pff.c         **** 
+ 233:pff.c         **** #else
+ 234:pff.c         **** #error Unknown code page
+ 235:pff.c         **** 
+ 236:pff.c         **** #endif
+ 237:pff.c         **** 
+ 238:pff.c         **** 
+ 239:pff.c         **** 
+ 240:pff.c         **** /* Character code support macros */
+ 241:pff.c         **** 
+ 242:pff.c         **** #define IsUpper(c)	(((c)>='A')&&((c)<='Z'))
+ 243:pff.c         **** #define IsLower(c)	(((c)>='a')&&((c)<='z'))
+ 244:pff.c         **** 
+ 245:pff.c         **** #if _DF1S		/* DBCS configuration */
+ 246:pff.c         **** 
+ 247:pff.c         **** #ifdef _DF2S	/* Two 1st byte areas */
+ 248:pff.c         **** #define IsDBCS1(c)	(((BYTE)(c) >= _DF1S && (BYTE)(c) <= _DF1E) || ((BYTE)(c) >= _DF2S && (BYTE)(c) 
+ 249:pff.c         **** #else			/* One 1st byte area */
+ 250:pff.c         **** #define IsDBCS1(c)	((BYTE)(c) >= _DF1S && (BYTE)(c) <= _DF1E)
+ 251:pff.c         **** #endif
+ 252:pff.c         **** 
+ 253:pff.c         **** #ifdef _DS3S	/* Three 2nd byte areas */
+ 254:pff.c         **** #define IsDBCS2(c)	(((BYTE)(c) >= _DS1S && (BYTE)(c) <= _DS1E) || ((BYTE)(c) >= _DS2S && (BYTE)(c) 
+ 255:pff.c         **** #else			/* Two 2nd byte areas */
+ 256:pff.c         **** #define IsDBCS2(c)	(((BYTE)(c) >= _DS1S && (BYTE)(c) <= _DS1E) || ((BYTE)(c) >= _DS2S && (BYTE)(c) 
+ 257:pff.c         **** #endif
+ 258:pff.c         **** 
+ 259:pff.c         **** #else			/* SBCS configuration */
+ 260:pff.c         **** 
+ 261:pff.c         **** #define IsDBCS1(c)	0
+ 262:pff.c         **** #define IsDBCS2(c)	0
+ 263:pff.c         **** 
+ 264:pff.c         **** #endif /* _DF1S */
+ 265:pff.c         **** 
+ 266:pff.c         **** 
+ 267:pff.c         **** /* FatFs refers the members in the FAT structures with byte offset instead
+ 268:pff.c         **** / of structure member because there are incompatibility of the packing option
+ 269:pff.c         **** / between various compilers. */
+ 270:pff.c         **** 
+ 271:pff.c         **** #define BS_jmpBoot			0
+ 272:pff.c         **** #define BS_OEMName			3
+ 273:pff.c         **** #define BPB_BytsPerSec		11
+ 274:pff.c         **** #define BPB_SecPerClus		13
+ 275:pff.c         **** #define BPB_RsvdSecCnt		14
+ 276:pff.c         **** #define BPB_NumFATs			16
+ 277:pff.c         **** #define BPB_RootEntCnt		17
+ 278:pff.c         **** #define BPB_TotSec16		19
+ 279:pff.c         **** #define BPB_Media			21
+ 280:pff.c         **** #define BPB_FATSz16			22
+ 281:pff.c         **** #define BPB_SecPerTrk		24
+ 282:pff.c         **** #define BPB_NumHeads		26
+ 283:pff.c         **** #define BPB_HiddSec			28
+ 284:pff.c         **** #define BPB_TotSec32		32
+ 285:pff.c         **** #define BS_55AA				510
+ 286:pff.c         **** 
+ 287:pff.c         **** #define BS_DrvNum			36
+ 288:pff.c         **** #define BS_BootSig			38
+ 289:pff.c         **** #define BS_VolID			39
+ 290:pff.c         **** #define BS_VolLab			43
+ 291:pff.c         **** #define BS_FilSysType		54
+ 292:pff.c         **** 
+ 293:pff.c         **** #define BPB_FATSz32			36
+ 294:pff.c         **** #define BPB_ExtFlags		40
+ 295:pff.c         **** #define BPB_FSVer			42
+ 296:pff.c         **** #define BPB_RootClus		44
+ 297:pff.c         **** #define BPB_FSInfo			48
+ 298:pff.c         **** #define BPB_BkBootSec		50
+ 299:pff.c         **** #define BS_DrvNum32			64
+ 300:pff.c         **** #define BS_BootSig32		66
+ 301:pff.c         **** #define BS_VolID32			67
+ 302:pff.c         **** #define BS_VolLab32			71
+ 303:pff.c         **** #define BS_FilSysType32		82
+ 304:pff.c         **** 
+ 305:pff.c         **** #define MBR_Table			446
+ 306:pff.c         **** 
+ 307:pff.c         **** #define	DIR_Name			0
+ 308:pff.c         **** #define	DIR_Attr			11
+ 309:pff.c         **** #define	DIR_NTres			12
+ 310:pff.c         **** #define	DIR_CrtTime			14
+ 311:pff.c         **** #define	DIR_CrtDate			16
+ 312:pff.c         **** #define	DIR_FstClusHI		20
+ 313:pff.c         **** #define	DIR_WrtTime			22
+ 314:pff.c         **** #define	DIR_WrtDate			24
+ 315:pff.c         **** #define	DIR_FstClusLO		26
+ 316:pff.c         **** #define	DIR_FileSize		28
+ 317:pff.c         **** 
+ 318:pff.c         **** 
+ 319:pff.c         **** 
+ 320:pff.c         **** /*--------------------------------------------------------------------------
+ 321:pff.c         **** 
+ 322:pff.c         ****    Private Functions
+ 323:pff.c         **** 
+ 324:pff.c         **** ---------------------------------------------------------------------------*/
+ 325:pff.c         **** 
+ 326:pff.c         **** 
+ 327:pff.c         **** static
+ 328:pff.c         **** FATFS *FatFs;	/* Pointer to the file system object (logical drive) */
+ 329:pff.c         **** 
+ 330:pff.c         **** 
+ 331:pff.c         **** /* Fill memory */
+ 332:pff.c         **** static
+ 333:pff.c         **** void mem_set (void* dst, int val, int cnt) {
+ 334:pff.c         **** 	char *d = (char*)dst;
+ 335:pff.c         **** 	while (cnt--) *d++ = (char)val;
+ 336:pff.c         **** }
+ 337:pff.c         **** 
+ 338:pff.c         **** /* Compare memory to memory */
+ 339:pff.c         **** static
+ 340:pff.c         **** int mem_cmp (const void* dst, const void* src, int cnt) {
+ 341:pff.c         **** 	const char *d = (const char *)dst, *s = (const char *)src;
+ 342:pff.c         **** 	int r = 0;
+ 343:pff.c         **** 	while (cnt-- && (r = *d++ - *s++) == 0) ;
+ 344:pff.c         **** 	return r;
+ 345:pff.c         **** }
+ 346:pff.c         **** 
+ 347:pff.c         **** 
+ 348:pff.c         **** 
+ 349:pff.c         **** /*-----------------------------------------------------------------------*/
+ 350:pff.c         **** /* FAT access - Read value of a FAT entry                                */
+ 351:pff.c         **** /*-----------------------------------------------------------------------*/
+ 352:pff.c         **** 
+ 353:pff.c         **** static
+ 354:pff.c         **** CLUST get_fat (	/* 1:IO error, Else:Cluster status */
+ 355:pff.c         **** 	CLUST clst	/* Cluster# to get the link information */
+ 356:pff.c         **** )
+ 357:pff.c         **** {
+ 358:pff.c         **** 	WORD wc, bc, ofs;
+ 359:pff.c         **** 	BYTE buf[4];
+ 360:pff.c         **** 	FATFS *fs = FatFs;
+ 361:pff.c         **** 
+ 362:pff.c         **** 
+ 363:pff.c         **** 	if (clst < 2 || clst >= fs->n_fatent)	/* Range check */
+ 364:pff.c         **** 		return 1;
+ 365:pff.c         **** 
+ 366:pff.c         **** 	switch (fs->fs_type) {
+ 367:pff.c         **** #if _FS_FAT12
+ 368:pff.c         **** 	case FS_FAT12 :
+ 369:pff.c         **** 		bc = (WORD)clst; bc += bc / 2;
+ 370:pff.c         **** 		ofs = bc % 512; bc /= 512;
+ 371:pff.c         **** 		if (ofs != 511) {
+ 372:pff.c         **** 			if (disk_readp(buf, fs->fatbase + bc, ofs, 2)) break;
+ 373:pff.c         **** 		} else {
+ 374:pff.c         **** 			if (disk_readp(buf, fs->fatbase + bc, 511, 1)) break;
+ 375:pff.c         **** 			if (disk_readp(buf+1, fs->fatbase + bc + 1, 0, 1)) break;
+ 376:pff.c         **** 		}
+ 377:pff.c         **** 		wc = LD_WORD(buf);
+ 378:pff.c         **** 		return (clst & 1) ? (wc >> 4) : (wc & 0xFFF);
+ 379:pff.c         **** #endif
+ 380:pff.c         **** 	case FS_FAT16 :
+ 381:pff.c         **** 		if (disk_readp(buf, fs->fatbase + clst / 256, (WORD)(((WORD)clst % 256) * 2), 2)) break;
+ 382:pff.c         **** 		return LD_WORD(buf);
+ 383:pff.c         **** #if _FS_FAT32
+ 384:pff.c         **** 	case FS_FAT32 :
+ 385:pff.c         **** 		if (disk_readp(buf, fs->fatbase + clst / 128, (WORD)(((WORD)clst % 128) * 4), 4)) break;
+ 386:pff.c         **** 		return LD_DWORD(buf) & 0x0FFFFFFF;
+ 387:pff.c         **** #endif
+ 388:pff.c         **** 	}
+ 389:pff.c         **** 
+ 390:pff.c         **** 	return 1;	/* An error occured at the disk I/O layer */
+ 391:pff.c         **** }
+ 392:pff.c         **** 
+ 393:pff.c         **** 
+ 394:pff.c         **** 
+ 395:pff.c         **** 
+ 396:pff.c         **** /*-----------------------------------------------------------------------*/
+ 397:pff.c         **** /* Get sector# from cluster#                                             */
+ 398:pff.c         **** /*-----------------------------------------------------------------------*/
+ 399:pff.c         **** 
+ 400:pff.c         **** static
+ 401:pff.c         **** DWORD clust2sect (	/* !=0: Sector number, 0: Failed - invalid cluster# */
+ 402:pff.c         **** 	CLUST clst		/* Cluster# to be converted */
+ 403:pff.c         **** )
+ 404:pff.c         **** {
+  15               		.loc 1 404 0
+  16               		.cfi_startproc
+  17               	.LVL0:
+  18 0000 0F93      		push r16
+  19               	.LCFI0:
+  20               		.cfi_def_cfa_offset 3
+  21               		.cfi_offset 16, -2
+  22 0002 1F93      		push r17
+  23               	.LCFI1:
+  24               		.cfi_def_cfa_offset 4
+  25               		.cfi_offset 17, -3
+  26               	/* prologue: function */
+  27               	/* frame size = 0 */
+  28               	/* stack size = 2 */
+  29               	.L__stack_usage = 2
+  30 0004 9B01      		movw r18,r22
+  31 0006 AC01      		movw r20,r24
+ 405:pff.c         **** 	FATFS *fs = FatFs;
+  32               		.loc 1 405 0
+  33 0008 E091 0000 		lds r30,FatFs
+  34 000c F091 0000 		lds r31,FatFs+1
+  35               	.LVL1:
+ 406:pff.c         **** 
+ 407:pff.c         **** 
+ 408:pff.c         **** 	clst -= 2;
+  36               		.loc 1 408 0
+  37 0010 2250      		subi r18,2
+  38 0012 3109      		sbc r19,__zero_reg__
+  39 0014 4109      		sbc r20,__zero_reg__
+  40 0016 5109      		sbc r21,__zero_reg__
+  41               	.LVL2:
+ 409:pff.c         **** 	if (clst >= (fs->n_fatent - 2)) return 0;		/* Invalid cluster# */
+  42               		.loc 1 409 0
+  43 0018 8681      		ldd r24,Z+6
+  44 001a 9781      		ldd r25,Z+7
+  45 001c A085      		ldd r26,Z+8
+  46 001e B185      		ldd r27,Z+9
+  47 0020 0297      		sbiw r24,2
+  48 0022 A109      		sbc r26,__zero_reg__
+  49 0024 B109      		sbc r27,__zero_reg__
+  50 0026 2817      		cp r18,r24
+  51 0028 3907      		cpc r19,r25
+  52 002a 4A07      		cpc r20,r26
+  53 002c 5B07      		cpc r21,r27
+  54 002e 00F4      		brsh .L3
+ 410:pff.c         **** 	return (DWORD)clst * fs->csize + fs->database;
+  55               		.loc 1 410 0
+  56 0030 A281      		ldd r26,Z+2
+  57 0032 B0E0      		ldi r27,0
+  58 0034 0E94 0000 		call __muluhisi3
+  59 0038 0289      		ldd r16,Z+18
+  60 003a 1389      		ldd r17,Z+19
+  61 003c 2489      		ldd r18,Z+20
+  62 003e 3589      		ldd r19,Z+21
+  63 0040 600F      		add r22,r16
+  64 0042 711F      		adc r23,r17
+  65 0044 821F      		adc r24,r18
+  66 0046 931F      		adc r25,r19
+  67 0048 00C0      		rjmp .L2
+  68               	.L3:
+ 409:pff.c         **** 	if (clst >= (fs->n_fatent - 2)) return 0;		/* Invalid cluster# */
+  69               		.loc 1 409 0
+  70 004a 60E0      		ldi r22,0
+  71 004c 70E0      		ldi r23,0
+  72 004e CB01      		movw r24,r22
+  73               	.L2:
+  74               	/* epilogue start */
+ 411:pff.c         **** }
+  75               		.loc 1 411 0
+  76 0050 1F91      		pop r17
+  77 0052 0F91      		pop r16
+  78 0054 0895      		ret
+  79               		.cfi_endproc
+  80               	.LFE3:
+  83               	dir_rewind:
+  84               	.LFB4:
+ 412:pff.c         **** 
+ 413:pff.c         **** 
+ 414:pff.c         **** 
+ 415:pff.c         **** 
+ 416:pff.c         **** /*-----------------------------------------------------------------------*/
+ 417:pff.c         **** /* Directory handling - Rewind directory index                           */
+ 418:pff.c         **** /*-----------------------------------------------------------------------*/
+ 419:pff.c         **** 
+ 420:pff.c         **** static
+ 421:pff.c         **** FRESULT dir_rewind (
+ 422:pff.c         **** 	DIR *dj			/* Pointer to directory object */
+ 423:pff.c         **** )
+ 424:pff.c         **** {
+  85               		.loc 1 424 0
+  86               		.cfi_startproc
+  87               	.LVL3:
+  88 0056 0F93      		push r16
+  89               	.LCFI2:
+  90               		.cfi_def_cfa_offset 3
+  91               		.cfi_offset 16, -2
+  92 0058 1F93      		push r17
+  93               	.LCFI3:
+  94               		.cfi_def_cfa_offset 4
+  95               		.cfi_offset 17, -3
+  96 005a CF93      		push r28
+  97               	.LCFI4:
+  98               		.cfi_def_cfa_offset 5
+  99               		.cfi_offset 28, -4
+ 100 005c DF93      		push r29
+ 101               	.LCFI5:
+ 102               		.cfi_def_cfa_offset 6
+ 103               		.cfi_offset 29, -5
+ 104               	/* prologue: function */
+ 105               	/* frame size = 0 */
+ 106               	/* stack size = 4 */
+ 107               	.L__stack_usage = 4
+ 108 005e EC01      		movw r28,r24
+ 425:pff.c         **** 	CLUST clst;
+ 426:pff.c         **** 	FATFS *fs = FatFs;
+ 109               		.loc 1 426 0
+ 110 0060 E091 0000 		lds r30,FatFs
+ 111 0064 F091 0000 		lds r31,FatFs+1
+ 112               	.LVL4:
+ 427:pff.c         **** 
+ 428:pff.c         **** 
+ 429:pff.c         **** 	dj->index = 0;
+ 113               		.loc 1 429 0
+ 114 0068 1982      		std Y+1,__zero_reg__
+ 115 006a 1882      		st Y,__zero_reg__
+ 430:pff.c         **** 	clst = dj->sclust;
+ 116               		.loc 1 430 0
+ 117 006c 6C81      		ldd r22,Y+4
+ 118 006e 7D81      		ldd r23,Y+5
+ 119 0070 8E81      		ldd r24,Y+6
+ 120 0072 9F81      		ldd r25,Y+7
+ 121               	.LVL5:
+ 431:pff.c         **** 	if (clst == 1 || clst >= fs->n_fatent)	/* Check start cluster range */
+ 122               		.loc 1 431 0
+ 123 0074 6130      		cpi r22,1
+ 124 0076 7105      		cpc r23,__zero_reg__
+ 125 0078 8105      		cpc r24,__zero_reg__
+ 126 007a 9105      		cpc r25,__zero_reg__
+ 127 007c 01F0      		breq .L11
+ 128               		.loc 1 431 0 is_stmt 0 discriminator 1
+ 129 007e 0681      		ldd r16,Z+6
+ 130 0080 1781      		ldd r17,Z+7
+ 131 0082 2085      		ldd r18,Z+8
+ 132 0084 3185      		ldd r19,Z+9
+ 133 0086 6017      		cp r22,r16
+ 134 0088 7107      		cpc r23,r17
+ 135 008a 8207      		cpc r24,r18
+ 136 008c 9307      		cpc r25,r19
+ 137 008e 00F4      		brsh .L11
+ 432:pff.c         **** 		return FR_DISK_ERR;
+ 433:pff.c         **** 	if (_FS_FAT32 && !clst && fs->fs_type == FS_FAT32)	/* Replace cluster# 0 with root cluster# if in 
+ 138               		.loc 1 433 0 is_stmt 1
+ 139 0090 6115      		cp r22,__zero_reg__
+ 140 0092 7105      		cpc r23,__zero_reg__
+ 141 0094 8105      		cpc r24,__zero_reg__
+ 142 0096 9105      		cpc r25,__zero_reg__
+ 143 0098 01F4      		brne .L7
+ 144               		.loc 1 433 0 is_stmt 0 discriminator 1
+ 145 009a 2081      		ld r18,Z
+ 146 009c 2330      		cpi r18,lo8(3)
+ 147 009e 01F4      		brne .L7
+ 434:pff.c         **** 		clst = (CLUST)fs->dirbase;
+ 148               		.loc 1 434 0 is_stmt 1
+ 149 00a0 6685      		ldd r22,Z+14
+ 150 00a2 7785      		ldd r23,Z+15
+ 151 00a4 8089      		ldd r24,Z+16
+ 152 00a6 9189      		ldd r25,Z+17
+ 153               	.LVL6:
+ 154               	.L7:
+ 435:pff.c         **** 	dj->clust = clst;						/* Current cluster */
+ 155               		.loc 1 435 0
+ 156 00a8 6887      		std Y+8,r22
+ 157 00aa 7987      		std Y+9,r23
+ 158 00ac 8A87      		std Y+10,r24
+ 159 00ae 9B87      		std Y+11,r25
+ 436:pff.c         **** 	dj->sect = clst ? clust2sect(clst) : fs->dirbase;	/* Current sector */
+ 160               		.loc 1 436 0
+ 161 00b0 6115      		cp r22,__zero_reg__
+ 162 00b2 7105      		cpc r23,__zero_reg__
+ 163 00b4 8105      		cpc r24,__zero_reg__
+ 164 00b6 9105      		cpc r25,__zero_reg__
+ 165 00b8 01F0      		breq .L8
+ 166               		.loc 1 436 0 is_stmt 0 discriminator 1
+ 167 00ba 0E94 0000 		call clust2sect
+ 168               	.LVL7:
+ 169 00be 00C0      		rjmp .L9
+ 170               	.LVL8:
+ 171               	.L8:
+ 172               		.loc 1 436 0 discriminator 2
+ 173 00c0 6685      		ldd r22,Z+14
+ 174 00c2 7785      		ldd r23,Z+15
+ 175 00c4 8089      		ldd r24,Z+16
+ 176 00c6 9189      		ldd r25,Z+17
+ 177               	.LVL9:
+ 178               	.L9:
+ 179               		.loc 1 436 0 discriminator 3
+ 180 00c8 6C87      		std Y+12,r22
+ 181 00ca 7D87      		std Y+13,r23
+ 182 00cc 8E87      		std Y+14,r24
+ 183 00ce 9F87      		std Y+15,r25
+ 437:pff.c         **** 
+ 438:pff.c         **** 	return FR_OK;	/* Seek succeeded */
+ 184               		.loc 1 438 0 is_stmt 1 discriminator 3
+ 185 00d0 80E0      		ldi r24,0
+ 186 00d2 00C0      		rjmp .L6
+ 187               	.LVL10:
+ 188               	.L11:
+ 432:pff.c         **** 		return FR_DISK_ERR;
+ 189               		.loc 1 432 0
+ 190 00d4 81E0      		ldi r24,lo8(1)
+ 191               	.LVL11:
+ 192               	.L6:
+ 193               	/* epilogue start */
+ 439:pff.c         **** }
+ 194               		.loc 1 439 0
+ 195 00d6 DF91      		pop r29
+ 196 00d8 CF91      		pop r28
+ 197               	.LVL12:
+ 198 00da 1F91      		pop r17
+ 199 00dc 0F91      		pop r16
+ 200 00de 0895      		ret
+ 201               		.cfi_endproc
+ 202               	.LFE4:
+ 205               	get_fat:
+ 206               	.LFB2:
+ 357:pff.c         **** {
+ 207               		.loc 1 357 0
+ 208               		.cfi_startproc
+ 209               	.LVL13:
+ 210 00e0 4F92      		push r4
+ 211               	.LCFI6:
+ 212               		.cfi_def_cfa_offset 3
+ 213               		.cfi_offset 4, -2
+ 214 00e2 5F92      		push r5
+ 215               	.LCFI7:
+ 216               		.cfi_def_cfa_offset 4
+ 217               		.cfi_offset 5, -3
+ 218 00e4 6F92      		push r6
+ 219               	.LCFI8:
+ 220               		.cfi_def_cfa_offset 5
+ 221               		.cfi_offset 6, -4
+ 222 00e6 7F92      		push r7
+ 223               	.LCFI9:
+ 224               		.cfi_def_cfa_offset 6
+ 225               		.cfi_offset 7, -5
+ 226 00e8 AF92      		push r10
+ 227               	.LCFI10:
+ 228               		.cfi_def_cfa_offset 7
+ 229               		.cfi_offset 10, -6
+ 230 00ea BF92      		push r11
+ 231               	.LCFI11:
+ 232               		.cfi_def_cfa_offset 8
+ 233               		.cfi_offset 11, -7
+ 234 00ec CF92      		push r12
+ 235               	.LCFI12:
+ 236               		.cfi_def_cfa_offset 9
+ 237               		.cfi_offset 12, -8
+ 238 00ee DF92      		push r13
+ 239               	.LCFI13:
+ 240               		.cfi_def_cfa_offset 10
+ 241               		.cfi_offset 13, -9
+ 242 00f0 EF92      		push r14
+ 243               	.LCFI14:
+ 244               		.cfi_def_cfa_offset 11
+ 245               		.cfi_offset 14, -10
+ 246 00f2 FF92      		push r15
+ 247               	.LCFI15:
+ 248               		.cfi_def_cfa_offset 12
+ 249               		.cfi_offset 15, -11
+ 250 00f4 0F93      		push r16
+ 251               	.LCFI16:
+ 252               		.cfi_def_cfa_offset 13
+ 253               		.cfi_offset 16, -12
+ 254 00f6 1F93      		push r17
+ 255               	.LCFI17:
+ 256               		.cfi_def_cfa_offset 14
+ 257               		.cfi_offset 17, -13
+ 258 00f8 CF93      		push r28
+ 259               	.LCFI18:
+ 260               		.cfi_def_cfa_offset 15
+ 261               		.cfi_offset 28, -14
+ 262 00fa DF93      		push r29
+ 263               	.LCFI19:
+ 264               		.cfi_def_cfa_offset 16
+ 265               		.cfi_offset 29, -15
+ 266 00fc 00D0      		rcall .
+ 267 00fe 00D0      		rcall .
+ 268               	.LCFI20:
+ 269               		.cfi_def_cfa_offset 20
+ 270 0100 CDB7      		in r28,__SP_L__
+ 271 0102 DEB7      		in r29,__SP_H__
+ 272               	.LCFI21:
+ 273               		.cfi_def_cfa_register 28
+ 274               	/* prologue: function */
+ 275               	/* frame size = 4 */
+ 276               	/* stack size = 18 */
+ 277               	.L__stack_usage = 18
+ 278 0104 6B01      		movw r12,r22
+ 279 0106 7C01      		movw r14,r24
+ 360:pff.c         **** 	FATFS *fs = FatFs;
+ 280               		.loc 1 360 0
+ 281 0108 A090 0000 		lds r10,FatFs
+ 282 010c B090 0000 		lds r11,FatFs+1
+ 283               	.LVL14:
+ 363:pff.c         **** 	if (clst < 2 || clst >= fs->n_fatent)	/* Range check */
+ 284               		.loc 1 363 0
+ 285 0110 6230      		cpi r22,2
+ 286 0112 7105      		cpc r23,__zero_reg__
+ 287 0114 8105      		cpc r24,__zero_reg__
+ 288 0116 9105      		cpc r25,__zero_reg__
+ 289 0118 00F4      		brsh .+2
+ 290 011a 00C0      		rjmp .L24
+ 363:pff.c         **** 	if (clst < 2 || clst >= fs->n_fatent)	/* Range check */
+ 291               		.loc 1 363 0 is_stmt 0 discriminator 1
+ 292 011c F501      		movw r30,r10
+ 293 011e 8681      		ldd r24,Z+6
+ 294 0120 9781      		ldd r25,Z+7
+ 295 0122 A085      		ldd r26,Z+8
+ 296 0124 B185      		ldd r27,Z+9
+ 297 0126 C816      		cp r12,r24
+ 298 0128 D906      		cpc r13,r25
+ 299 012a EA06      		cpc r14,r26
+ 300 012c FB06      		cpc r15,r27
+ 301 012e 00F0      		brlo .+2
+ 302 0130 00C0      		rjmp .L24
+ 366:pff.c         **** 	switch (fs->fs_type) {
+ 303               		.loc 1 366 0 is_stmt 1
+ 304 0132 8081      		ld r24,Z
+ 305 0134 8230      		cpi r24,lo8(2)
+ 306 0136 01F4      		brne .+2
+ 307 0138 00C0      		rjmp .L16
+ 308 013a 8330      		cpi r24,lo8(3)
+ 309 013c 01F4      		brne .+2
+ 310 013e 00C0      		rjmp .L17
+ 311 0140 8130      		cpi r24,lo8(1)
+ 312 0142 01F0      		breq .+2
+ 313 0144 00C0      		rjmp .L24
+ 314               	.LVL15:
+ 369:pff.c         **** 		bc = (WORD)clst; bc += bc / 2;
+ 315               		.loc 1 369 0
+ 316 0146 2601      		movw r4,r12
+ 317 0148 5694      		lsr r5
+ 318 014a 4794      		ror r4
+ 319 014c 4C0C      		add r4,r12
+ 320 014e 5D1C      		adc r5,r13
+ 321               	.LVL16:
+ 370:pff.c         **** 		ofs = bc % 512; bc /= 512;
+ 322               		.loc 1 370 0
+ 323 0150 9201      		movw r18,r4
+ 324 0152 3170      		andi r19,1
+ 325               	.LVL17:
+ 326 0154 452C      		mov r4,r5
+ 327 0156 5524      		clr r5
+ 328 0158 4694      		lsr r4
+ 329               	.LVL18:
+ 330 015a 612C      		mov r6,__zero_reg__
+ 331 015c 712C      		mov r7,__zero_reg__
+ 332 015e 8285      		ldd r24,Z+10
+ 333 0160 9385      		ldd r25,Z+11
+ 334 0162 A485      		ldd r26,Z+12
+ 335 0164 B585      		ldd r27,Z+13
+ 372:pff.c         **** 			if (disk_readp(buf, fs->fatbase + bc, ofs, 2)) break;
+ 336               		.loc 1 372 0
+ 337 0166 B301      		movw r22,r6
+ 338 0168 A201      		movw r20,r4
+ 339 016a 480F      		add r20,r24
+ 340 016c 591F      		adc r21,r25
+ 341 016e 6A1F      		adc r22,r26
+ 342 0170 7B1F      		adc r23,r27
+ 371:pff.c         **** 		if (ofs != 511) {
+ 343               		.loc 1 371 0
+ 344 0172 2F3F      		cpi r18,-1
+ 345 0174 F1E0      		ldi r31,1
+ 346 0176 3F07      		cpc r19,r31
+ 347 0178 01F0      		breq .L19
+ 372:pff.c         **** 			if (disk_readp(buf, fs->fatbase + bc, ofs, 2)) break;
+ 348               		.loc 1 372 0
+ 349 017a 02E0      		ldi r16,lo8(2)
+ 350 017c 10E0      		ldi r17,0
+ 351 017e CE01      		movw r24,r28
+ 352 0180 0196      		adiw r24,1
+ 353 0182 00C0      		rjmp .L26
+ 354               	.L19:
+ 374:pff.c         **** 			if (disk_readp(buf, fs->fatbase + bc, 511, 1)) break;
+ 355               		.loc 1 374 0
+ 356 0184 01E0      		ldi r16,lo8(1)
+ 357 0186 10E0      		ldi r17,0
+ 358 0188 2FEF      		ldi r18,lo8(-1)
+ 359 018a 31E0      		ldi r19,lo8(1)
+ 360               	.LVL19:
+ 361 018c CE01      		movw r24,r28
+ 362 018e 0196      		adiw r24,1
+ 363 0190 0E94 0000 		call disk_readp
+ 364               	.LVL20:
+ 365 0194 8111      		cpse r24,__zero_reg__
+ 366 0196 00C0      		rjmp .L24
+ 375:pff.c         **** 			if (disk_readp(buf+1, fs->fatbase + bc + 1, 0, 1)) break;
+ 367               		.loc 1 375 0
+ 368 0198 F501      		movw r30,r10
+ 369 019a 4285      		ldd r20,Z+10
+ 370 019c 5385      		ldd r21,Z+11
+ 371 019e 6485      		ldd r22,Z+12
+ 372 01a0 7585      		ldd r23,Z+13
+ 373 01a2 4F5F      		subi r20,-1
+ 374 01a4 5F4F      		sbci r21,-1
+ 375 01a6 6F4F      		sbci r22,-1
+ 376 01a8 7F4F      		sbci r23,-1
+ 377 01aa 440D      		add r20,r4
+ 378 01ac 551D      		adc r21,r5
+ 379 01ae 661D      		adc r22,r6
+ 380 01b0 771D      		adc r23,r7
+ 381 01b2 20E0      		ldi r18,0
+ 382 01b4 30E0      		ldi r19,0
+ 383 01b6 CE01      		movw r24,r28
+ 384 01b8 0296      		adiw r24,2
+ 385               	.L26:
+ 386 01ba 0E94 0000 		call disk_readp
+ 387               	.LVL21:
+ 388 01be 8111      		cpse r24,__zero_reg__
+ 389 01c0 00C0      		rjmp .L24
+ 377:pff.c         **** 		wc = LD_WORD(buf);
+ 390               		.loc 1 377 0
+ 391 01c2 6981      		ldd r22,Y+1
+ 392 01c4 7A81      		ldd r23,Y+2
+ 393               	.LVL22:
+ 378:pff.c         **** 		return (clst & 1) ? (wc >> 4) : (wc & 0xFFF);
+ 394               		.loc 1 378 0
+ 395 01c6 C0FE      		sbrs r12,0
+ 396 01c8 00C0      		rjmp .L28
+ 378:pff.c         **** 		return (clst & 1) ? (wc >> 4) : (wc & 0xFFF);
+ 397               		.loc 1 378 0 is_stmt 0 discriminator 1
+ 398 01ca E4E0      		ldi r30,4
+ 399               		1:
+ 400 01cc 7695      		lsr r23
+ 401 01ce 6795      		ror r22
+ 402 01d0 EA95      		dec r30
+ 403 01d2 01F4      		brne 1b
+ 404               	.LVL23:
+ 405 01d4 00C0      		rjmp .L27
+ 406               	.LVL24:
+ 407               	.L28:
+ 378:pff.c         **** 		return (clst & 1) ? (wc >> 4) : (wc & 0xFFF);
+ 408               		.loc 1 378 0 discriminator 2
+ 409 01d6 7F70      		andi r23,15
+ 410               	.LVL25:
+ 411               	.L27:
+ 412 01d8 80E0      		ldi r24,0
+ 413 01da 90E0      		ldi r25,0
+ 414 01dc 00C0      		rjmp .L14
+ 415               	.L16:
+ 381:pff.c         **** 		if (disk_readp(buf, fs->fatbase + clst / 256, (WORD)(((WORD)clst % 256) * 2), 2)) break;
+ 416               		.loc 1 381 0 is_stmt 1
+ 417 01de 9601      		movw r18,r12
+ 418 01e0 3327      		clr r19
+ 419 01e2 220F      		lsl r18
+ 420 01e4 331F      		rol r19
+ 421 01e6 7727      		clr r23
+ 422 01e8 6F2D      		mov r22,r15
+ 423 01ea 5E2D      		mov r21,r14
+ 424 01ec 4D2D      		mov r20,r13
+ 425 01ee F501      		movw r30,r10
+ 426 01f0 8285      		ldd r24,Z+10
+ 427 01f2 9385      		ldd r25,Z+11
+ 428 01f4 A485      		ldd r26,Z+12
+ 429 01f6 B585      		ldd r27,Z+13
+ 430 01f8 480F      		add r20,r24
+ 431 01fa 591F      		adc r21,r25
+ 432 01fc 6A1F      		adc r22,r26
+ 433 01fe 7B1F      		adc r23,r27
+ 434 0200 02E0      		ldi r16,lo8(2)
+ 435 0202 10E0      		ldi r17,0
+ 436 0204 CE01      		movw r24,r28
+ 437 0206 0196      		adiw r24,1
+ 438 0208 0E94 0000 		call disk_readp
+ 439               	.LVL26:
+ 440 020c 8111      		cpse r24,__zero_reg__
+ 441 020e 00C0      		rjmp .L24
+ 382:pff.c         **** 		return LD_WORD(buf);
+ 442               		.loc 1 382 0
+ 443 0210 6981      		ldd r22,Y+1
+ 444 0212 7A81      		ldd r23,Y+2
+ 445 0214 00C0      		rjmp .L27
+ 446               	.L17:
+ 385:pff.c         **** 		if (disk_readp(buf, fs->fatbase + clst / 128, (WORD)(((WORD)clst % 128) * 4), 4)) break;
+ 447               		.loc 1 385 0
+ 448 0216 9601      		movw r18,r12
+ 449 0218 2F77      		andi r18,127
+ 450 021a 3327      		clr r19
+ 451 021c 220F      		lsl r18
+ 452 021e 331F      		rol r19
+ 453 0220 220F      		lsl r18
+ 454 0222 331F      		rol r19
+ 455 0224 B701      		movw r22,r14
+ 456 0226 A601      		movw r20,r12
+ 457 0228 97E0      		ldi r25,7
+ 458               		1:
+ 459 022a 7695      		lsr r23
+ 460 022c 6795      		ror r22
+ 461 022e 5795      		ror r21
+ 462 0230 4795      		ror r20
+ 463 0232 9A95      		dec r25
+ 464 0234 01F4      		brne 1b
+ 465 0236 F501      		movw r30,r10
+ 466 0238 8285      		ldd r24,Z+10
+ 467 023a 9385      		ldd r25,Z+11
+ 468 023c A485      		ldd r26,Z+12
+ 469 023e B585      		ldd r27,Z+13
+ 470 0240 480F      		add r20,r24
+ 471 0242 591F      		adc r21,r25
+ 472 0244 6A1F      		adc r22,r26
+ 473 0246 7B1F      		adc r23,r27
+ 474 0248 04E0      		ldi r16,lo8(4)
+ 475 024a 10E0      		ldi r17,0
+ 476 024c CE01      		movw r24,r28
+ 477 024e 0196      		adiw r24,1
+ 478 0250 0E94 0000 		call disk_readp
+ 479               	.LVL27:
+ 480 0254 8111      		cpse r24,__zero_reg__
+ 481 0256 00C0      		rjmp .L24
+ 386:pff.c         **** 		return LD_DWORD(buf) & 0x0FFFFFFF;
+ 482               		.loc 1 386 0
+ 483 0258 6981      		ldd r22,Y+1
+ 484 025a 7A81      		ldd r23,Y+2
+ 485 025c 8B81      		ldd r24,Y+3
+ 486 025e 9C81      		ldd r25,Y+4
+ 487 0260 9F70      		andi r25,15
+ 488 0262 00C0      		rjmp .L14
+ 489               	.L24:
+ 390:pff.c         **** 	return 1;	/* An error occured at the disk I/O layer */
+ 490               		.loc 1 390 0
+ 491 0264 61E0      		ldi r22,lo8(1)
+ 492 0266 70E0      		ldi r23,0
+ 493 0268 80E0      		ldi r24,0
+ 494 026a 90E0      		ldi r25,0
+ 495               	.L14:
+ 496               	/* epilogue start */
+ 391:pff.c         **** }
+ 497               		.loc 1 391 0
+ 498 026c 0F90      		pop __tmp_reg__
+ 499 026e 0F90      		pop __tmp_reg__
+ 500 0270 0F90      		pop __tmp_reg__
+ 501 0272 0F90      		pop __tmp_reg__
+ 502 0274 DF91      		pop r29
+ 503 0276 CF91      		pop r28
+ 504 0278 1F91      		pop r17
+ 505 027a 0F91      		pop r16
+ 506 027c FF90      		pop r15
+ 507 027e EF90      		pop r14
+ 508 0280 DF90      		pop r13
+ 509 0282 CF90      		pop r12
+ 510               	.LVL28:
+ 511 0284 BF90      		pop r11
+ 512 0286 AF90      		pop r10
+ 513               	.LVL29:
+ 514 0288 7F90      		pop r7
+ 515 028a 6F90      		pop r6
+ 516 028c 5F90      		pop r5
+ 517 028e 4F90      		pop r4
+ 518 0290 0895      		ret
+ 519               		.cfi_endproc
+ 520               	.LFE2:
+ 523               	check_fs:
+ 524               	.LFB9:
+ 440:pff.c         **** 
+ 441:pff.c         **** 
+ 442:pff.c         **** 
+ 443:pff.c         **** 
+ 444:pff.c         **** /*-----------------------------------------------------------------------*/
+ 445:pff.c         **** /* Directory handling - Move directory index next                        */
+ 446:pff.c         **** /*-----------------------------------------------------------------------*/
+ 447:pff.c         **** 
+ 448:pff.c         **** static
+ 449:pff.c         **** FRESULT dir_next (	/* FR_OK:Succeeded, FR_NO_FILE:End of table */
+ 450:pff.c         **** 	DIR *dj			/* Pointer to directory object */
+ 451:pff.c         **** )
+ 452:pff.c         **** {
+ 453:pff.c         **** 	CLUST clst;
+ 454:pff.c         **** 	WORD i;
+ 455:pff.c         **** 	FATFS *fs = FatFs;
+ 456:pff.c         **** 
+ 457:pff.c         **** 
+ 458:pff.c         **** 	i = dj->index + 1;
+ 459:pff.c         **** 	if (!i || !dj->sect)	/* Report EOT when index has reached 65535 */
+ 460:pff.c         **** 		return FR_NO_FILE;
+ 461:pff.c         **** 
+ 462:pff.c         **** 	if (!(i % 16)) {		/* Sector changed? */
+ 463:pff.c         **** 		dj->sect++;			/* Next sector */
+ 464:pff.c         **** 
+ 465:pff.c         **** 		if (dj->clust == 0) {	/* Static table */
+ 466:pff.c         **** 			if (i >= fs->n_rootdir)	/* Report EOT when end of table */
+ 467:pff.c         **** 				return FR_NO_FILE;
+ 468:pff.c         **** 		}
+ 469:pff.c         **** 		else {					/* Dynamic table */
+ 470:pff.c         **** 			if (((i / 16) & (fs->csize-1)) == 0) {	/* Cluster changed? */
+ 471:pff.c         **** 				clst = get_fat(dj->clust);		/* Get next cluster */
+ 472:pff.c         **** 				if (clst <= 1) return FR_DISK_ERR;
+ 473:pff.c         **** 				if (clst >= fs->n_fatent)		/* When it reached end of dynamic table */
+ 474:pff.c         **** 					return FR_NO_FILE;			/* Report EOT */
+ 475:pff.c         **** 				dj->clust = clst;				/* Initialize data for new cluster */
+ 476:pff.c         **** 				dj->sect = clust2sect(clst);
+ 477:pff.c         **** 			}
+ 478:pff.c         **** 		}
+ 479:pff.c         **** 	}
+ 480:pff.c         **** 
+ 481:pff.c         **** 	dj->index = i;
+ 482:pff.c         **** 
+ 483:pff.c         **** 	return FR_OK;
+ 484:pff.c         **** }
+ 485:pff.c         **** 
+ 486:pff.c         **** 
+ 487:pff.c         **** 
+ 488:pff.c         **** 
+ 489:pff.c         **** /*-----------------------------------------------------------------------*/
+ 490:pff.c         **** /* Directory handling - Find an object in the directory                  */
+ 491:pff.c         **** /*-----------------------------------------------------------------------*/
+ 492:pff.c         **** 
+ 493:pff.c         **** static
+ 494:pff.c         **** FRESULT dir_find (
+ 495:pff.c         **** 	DIR *dj,		/* Pointer to the directory object linked to the file name */
+ 496:pff.c         **** 	BYTE *dir		/* 32-byte working buffer */
+ 497:pff.c         **** )
+ 498:pff.c         **** {
+ 499:pff.c         **** 	FRESULT res;
+ 500:pff.c         **** 	BYTE c;
+ 501:pff.c         **** 
+ 502:pff.c         **** 
+ 503:pff.c         **** 	res = dir_rewind(dj);			/* Rewind directory object */
+ 504:pff.c         **** 	if (res != FR_OK) return res;
+ 505:pff.c         **** 
+ 506:pff.c         **** 	do {
+ 507:pff.c         **** 		res = disk_readp(dir, dj->sect, (WORD)((dj->index % 16) * 32), 32)	/* Read an entry */
+ 508:pff.c         **** 			? FR_DISK_ERR : FR_OK;
+ 509:pff.c         **** 		if (res != FR_OK) break;
+ 510:pff.c         **** 		c = dir[DIR_Name];	/* First character */
+ 511:pff.c         **** 		if (c == 0) { res = FR_NO_FILE; break; }	/* Reached to end of table */
+ 512:pff.c         **** 		if (!(dir[DIR_Attr] & AM_VOL) && !mem_cmp(dir, dj->fn, 11)) /* Is it a valid entry? */
+ 513:pff.c         **** 			break;
+ 514:pff.c         **** 		res = dir_next(dj);					/* Next entry */
+ 515:pff.c         **** 	} while (res == FR_OK);
+ 516:pff.c         **** 
+ 517:pff.c         **** 	return res;
+ 518:pff.c         **** }
+ 519:pff.c         **** 
+ 520:pff.c         **** 
+ 521:pff.c         **** 
+ 522:pff.c         **** 
+ 523:pff.c         **** /*-----------------------------------------------------------------------*/
+ 524:pff.c         **** /* Read an object from the directory                                     */
+ 525:pff.c         **** /*-----------------------------------------------------------------------*/
+ 526:pff.c         **** #if _USE_DIR
+ 527:pff.c         **** static
+ 528:pff.c         **** FRESULT dir_read (
+ 529:pff.c         **** 	DIR *dj,		/* Pointer to the directory object to store read object name */
+ 530:pff.c         **** 	BYTE *dir		/* 32-byte working buffer */
+ 531:pff.c         **** )
+ 532:pff.c         **** {
+ 533:pff.c         **** 	FRESULT res;
+ 534:pff.c         **** 	BYTE a, c;
+ 535:pff.c         **** 
+ 536:pff.c         **** 
+ 537:pff.c         **** 	res = FR_NO_FILE;
+ 538:pff.c         **** 	while (dj->sect) {
+ 539:pff.c         **** 		res = disk_readp(dir, dj->sect, (WORD)((dj->index % 16) * 32), 32)	/* Read an entry */
+ 540:pff.c         **** 			? FR_DISK_ERR : FR_OK;
+ 541:pff.c         **** 		if (res != FR_OK) break;
+ 542:pff.c         **** 		c = dir[DIR_Name];
+ 543:pff.c         **** 		if (c == 0) { res = FR_NO_FILE; break; }	/* Reached to end of table */
+ 544:pff.c         **** 		a = dir[DIR_Attr] & AM_MASK;
+ 545:pff.c         **** 		if (c != 0xE5 && c != '.' && !(a & AM_VOL))	/* Is it a valid entry? */
+ 546:pff.c         **** 			break;
+ 547:pff.c         **** 		res = dir_next(dj);			/* Next entry */
+ 548:pff.c         **** 		if (res != FR_OK) break;
+ 549:pff.c         **** 	}
+ 550:pff.c         **** 
+ 551:pff.c         **** 	if (res != FR_OK) dj->sect = 0;
+ 552:pff.c         **** 
+ 553:pff.c         **** 	return res;
+ 554:pff.c         **** }
+ 555:pff.c         **** #endif
+ 556:pff.c         **** 
+ 557:pff.c         **** 
+ 558:pff.c         **** 
+ 559:pff.c         **** /*-----------------------------------------------------------------------*/
+ 560:pff.c         **** /* Pick a segment and create the object name in directory form           */
+ 561:pff.c         **** /*-----------------------------------------------------------------------*/
+ 562:pff.c         **** 
+ 563:pff.c         **** #ifdef _EXCVT
+ 564:pff.c         **** 	static const BYTE cvt[] = _EXCVT;
+ 565:pff.c         **** #endif
+ 566:pff.c         **** 
+ 567:pff.c         **** static
+ 568:pff.c         **** FRESULT create_name (
+ 569:pff.c         **** 	DIR *dj,			/* Pointer to the directory object */
+ 570:pff.c         **** 	const char **path	/* Pointer to pointer to the segment in the path string */
+ 571:pff.c         **** )
+ 572:pff.c         **** {
+ 573:pff.c         **** 	BYTE c, d, ni, si, i, *sfn;
+ 574:pff.c         **** 	const char *p;
+ 575:pff.c         **** 
+ 576:pff.c         **** 	/* Create file name in directory form */
+ 577:pff.c         **** 	sfn = dj->fn;
+ 578:pff.c         **** 	mem_set(sfn, ' ', 11);
+ 579:pff.c         **** 	si = i = 0; ni = 8;
+ 580:pff.c         **** 	p = *path;
+ 581:pff.c         **** 	for (;;) {
+ 582:pff.c         **** 		c = p[si++];
+ 583:pff.c         **** 		if (c <= ' ' || c == '/') break;	/* Break on end of segment */
+ 584:pff.c         **** 		if (c == '.' || i >= ni) {
+ 585:pff.c         **** 			if (ni != 8 || c != '.') break;
+ 586:pff.c         **** 			i = 8; ni = 11;
+ 587:pff.c         **** 			continue;
+ 588:pff.c         **** 		}
+ 589:pff.c         **** #ifdef _EXCVT
+ 590:pff.c         **** 		if (c >= 0x80)					/* To upper extended char (SBCS) */
+ 591:pff.c         **** 			c = cvt[c - 0x80];
+ 592:pff.c         **** #endif
+ 593:pff.c         **** 		if (IsDBCS1(c) && i < ni - 1) {	/* DBC 1st byte? */
+ 594:pff.c         **** 			d = p[si++];				/* Get 2nd byte */
+ 595:pff.c         **** 			sfn[i++] = c;
+ 596:pff.c         **** 			sfn[i++] = d;
+ 597:pff.c         **** 		} else {						/* Single byte code */
+ 598:pff.c         **** 			if (IsLower(c)) c -= 0x20;	/* toupper */
+ 599:pff.c         **** 			sfn[i++] = c;
+ 600:pff.c         **** 		}
+ 601:pff.c         **** 	}
+ 602:pff.c         **** 	*path = &p[si];						/* Rerurn pointer to the next segment */
+ 603:pff.c         **** 
+ 604:pff.c         **** 	sfn[11] = (c <= ' ') ? 1 : 0;		/* Set last segment flag if end of path */
+ 605:pff.c         **** 
+ 606:pff.c         **** 	return FR_OK;
+ 607:pff.c         **** }
+ 608:pff.c         **** 
+ 609:pff.c         **** 
+ 610:pff.c         **** 
+ 611:pff.c         **** 
+ 612:pff.c         **** /*-----------------------------------------------------------------------*/
+ 613:pff.c         **** /* Get file information from directory entry                             */
+ 614:pff.c         **** /*-----------------------------------------------------------------------*/
+ 615:pff.c         **** #if _USE_DIR
+ 616:pff.c         **** static
+ 617:pff.c         **** void get_fileinfo (		/* No return code */
+ 618:pff.c         **** 	DIR *dj,			/* Pointer to the directory object */
+ 619:pff.c         **** 	BYTE *dir,			/* 32-byte working buffer */
+ 620:pff.c         **** 	FILINFO *fno	 	/* Pointer to store the file information */
+ 621:pff.c         **** )
+ 622:pff.c         **** {
+ 623:pff.c         **** 	BYTE i, c;
+ 624:pff.c         **** 	char *p;
+ 625:pff.c         **** 
+ 626:pff.c         **** 
+ 627:pff.c         **** 	p = fno->fname;
+ 628:pff.c         **** 	if (dj->sect) {
+ 629:pff.c         **** 		for (i = 0; i < 8; i++) {	/* Copy file name body */
+ 630:pff.c         **** 			c = dir[i];
+ 631:pff.c         **** 			if (c == ' ') break;
+ 632:pff.c         **** 			if (c == 0x05) c = 0xE5;
+ 633:pff.c         **** 			*p++ = c;
+ 634:pff.c         **** 		}
+ 635:pff.c         **** 		if (dir[8] != ' ') {		/* Copy file name extension */
+ 636:pff.c         **** 			*p++ = '.';
+ 637:pff.c         **** 			for (i = 8; i < 11; i++) {
+ 638:pff.c         **** 				c = dir[i];
+ 639:pff.c         **** 				if (c == ' ') break;
+ 640:pff.c         **** 				*p++ = c;
+ 641:pff.c         **** 			}
+ 642:pff.c         **** 		}
+ 643:pff.c         **** 		fno->fattrib = dir[DIR_Attr];				/* Attribute */
+ 644:pff.c         **** 		fno->fsize = LD_DWORD(dir+DIR_FileSize);	/* Size */
+ 645:pff.c         **** 		fno->fdate = LD_WORD(dir+DIR_WrtDate);		/* Date */
+ 646:pff.c         **** 		fno->ftime = LD_WORD(dir+DIR_WrtTime);		/* Time */
+ 647:pff.c         **** 	}
+ 648:pff.c         **** 	*p = 0;
+ 649:pff.c         **** }
+ 650:pff.c         **** #endif /* _USE_DIR */
+ 651:pff.c         **** 
+ 652:pff.c         **** 
+ 653:pff.c         **** 
+ 654:pff.c         **** /*-----------------------------------------------------------------------*/
+ 655:pff.c         **** /* Follow a file path                                                    */
+ 656:pff.c         **** /*-----------------------------------------------------------------------*/
+ 657:pff.c         **** 
+ 658:pff.c         **** static
+ 659:pff.c         **** FRESULT follow_path (	/* FR_OK(0): successful, !=0: error code */
+ 660:pff.c         **** 	DIR *dj,			/* Directory object to return last directory and found object */
+ 661:pff.c         **** 	BYTE *dir,			/* 32-byte working buffer */
+ 662:pff.c         **** 	const char *path	/* Full-path string to find a file or directory */
+ 663:pff.c         **** )
+ 664:pff.c         **** {
+ 665:pff.c         **** 	FRESULT res;
+ 666:pff.c         **** 
+ 667:pff.c         **** 
+ 668:pff.c         **** 	while (*path == ' ') path++;		/* Skip leading spaces */
+ 669:pff.c         **** 	if (*path == '/') path++;			/* Strip heading separator */
+ 670:pff.c         **** 	dj->sclust = 0;						/* Set start directory (always root dir) */
+ 671:pff.c         **** 
+ 672:pff.c         **** 	if ((BYTE)*path <= ' ') {			/* Null path means the root directory */
+ 673:pff.c         **** 		res = dir_rewind(dj);
+ 674:pff.c         **** 		dir[0] = 0;
+ 675:pff.c         **** 
+ 676:pff.c         **** 	} else {							/* Follow path */
+ 677:pff.c         **** 		for (;;) {
+ 678:pff.c         **** 			res = create_name(dj, &path);	/* Get a segment */
+ 679:pff.c         **** 			if (res != FR_OK) break;
+ 680:pff.c         **** 			res = dir_find(dj, dir);		/* Find it */
+ 681:pff.c         **** 			if (res != FR_OK) {				/* Could not find the object */
+ 682:pff.c         **** 				if (res == FR_NO_FILE && !*(dj->fn+11))
+ 683:pff.c         **** 					res = FR_NO_PATH;
+ 684:pff.c         **** 				break;
+ 685:pff.c         **** 			}
+ 686:pff.c         **** 			if (*(dj->fn+11)) break;		/* Last segment match. Function completed. */
+ 687:pff.c         **** 			if (!(dir[DIR_Attr] & AM_DIR)) { /* Cannot follow because it is a file */
+ 688:pff.c         **** 				res = FR_NO_PATH; break;
+ 689:pff.c         **** 			}
+ 690:pff.c         **** 			dj->sclust = LD_CLUST(dir);
+ 691:pff.c         **** 		}
+ 692:pff.c         **** 	}
+ 693:pff.c         **** 
+ 694:pff.c         **** 	return res;
+ 695:pff.c         **** }
+ 696:pff.c         **** 
+ 697:pff.c         **** 
+ 698:pff.c         **** 
+ 699:pff.c         **** 
+ 700:pff.c         **** /*-----------------------------------------------------------------------*/
+ 701:pff.c         **** /* Check a sector if it is an FAT boot record                            */
+ 702:pff.c         **** /*-----------------------------------------------------------------------*/
+ 703:pff.c         **** 
+ 704:pff.c         **** static
+ 705:pff.c         **** BYTE check_fs (	/* 0:The FAT boot record, 1:Valid boot record but not an FAT, 2:Not a boot record, 
+ 706:pff.c         **** 	BYTE *buf,	/* Working buffer */
+ 707:pff.c         **** 	DWORD sect	/* Sector# (lba) to check if it is an FAT boot record or not */
+ 708:pff.c         **** )
+ 709:pff.c         **** {
+ 525               		.loc 1 709 0
+ 526               		.cfi_startproc
+ 527               	.LVL30:
+ 528 0292 A0E0      		ldi r26,0
+ 529 0294 B0E0      		ldi r27,0
+ 530 0296 E0E0      		ldi r30,lo8(gs(1f))
+ 531 0298 F0E0      		ldi r31,hi8(gs(1f))
+ 532 029a 0C94 0000 		jmp __prologue_saves__+((18 - 8) * 2)
+ 533               	1:
+ 534               	.LCFI22:
+ 535               		.cfi_offset 12, -2
+ 536               		.cfi_offset 13, -3
+ 537               		.cfi_offset 14, -4
+ 538               		.cfi_offset 15, -5
+ 539               		.cfi_offset 16, -6
+ 540               		.cfi_offset 17, -7
+ 541               		.cfi_offset 28, -8
+ 542               		.cfi_offset 29, -9
+ 543               		.cfi_def_cfa_offset 10
+ 544               	/* prologue: function */
+ 545               	/* frame size = 0 */
+ 546               	/* stack size = 8 */
+ 547               	.L__stack_usage = 8
+ 548 029e EC01      		movw r28,r24
+ 549 02a0 6A01      		movw r12,r20
+ 550 02a2 7B01      		movw r14,r22
+ 710:pff.c         **** 	if (disk_readp(buf, sect, 510, 2))		/* Read the boot sector */
+ 551               		.loc 1 710 0
+ 552 02a4 02E0      		ldi r16,lo8(2)
+ 553 02a6 10E0      		ldi r17,0
+ 554 02a8 2EEF      		ldi r18,lo8(-2)
+ 555 02aa 31E0      		ldi r19,lo8(1)
+ 556 02ac 0E94 0000 		call disk_readp
+ 557               	.LVL31:
+ 558 02b0 8111      		cpse r24,__zero_reg__
+ 559 02b2 00C0      		rjmp .L34
+ 711:pff.c         **** 		return 3;
+ 712:pff.c         **** 	if (LD_WORD(buf) != 0xAA55)				/* Check record signature */
+ 560               		.loc 1 712 0
+ 561 02b4 8881      		ld r24,Y
+ 562 02b6 9981      		ldd r25,Y+1
+ 563 02b8 8535      		cpi r24,85
+ 564 02ba 9A4A      		sbci r25,-86
+ 565 02bc 01F4      		brne .L35
+ 713:pff.c         **** 		return 2;
+ 714:pff.c         **** 
+ 715:pff.c         **** 	if (!disk_readp(buf, sect, BS_FilSysType, 2) && LD_WORD(buf) == 0x4146)	/* Check FAT12/16 */
+ 566               		.loc 1 715 0
+ 567 02be 26E3      		ldi r18,lo8(54)
+ 568 02c0 30E0      		ldi r19,0
+ 569 02c2 B701      		movw r22,r14
+ 570 02c4 A601      		movw r20,r12
+ 571 02c6 CE01      		movw r24,r28
+ 572 02c8 0E94 0000 		call disk_readp
+ 573               	.LVL32:
+ 574 02cc 8111      		cpse r24,__zero_reg__
+ 575 02ce 00C0      		rjmp .L31
+ 576               		.loc 1 715 0 is_stmt 0 discriminator 1
+ 577 02d0 8881      		ld r24,Y
+ 578 02d2 9981      		ldd r25,Y+1
+ 579 02d4 8634      		cpi r24,70
+ 580 02d6 9144      		sbci r25,65
+ 581 02d8 01F0      		breq .L36
+ 582               	.L31:
+ 583               	.LVL33:
+ 584               	.LBB4:
+ 585               	.LBB5:
+ 716:pff.c         **** 		return 0;
+ 717:pff.c         **** 	if (_FS_FAT32 && !disk_readp(buf, sect, BS_FilSysType32, 2) && LD_WORD(buf) == 0x4146)	/* Check FA
+ 586               		.loc 1 717 0 is_stmt 1
+ 587 02da 02E0      		ldi r16,lo8(2)
+ 588 02dc 10E0      		ldi r17,0
+ 589 02de 22E5      		ldi r18,lo8(82)
+ 590 02e0 30E0      		ldi r19,0
+ 591 02e2 B701      		movw r22,r14
+ 592 02e4 A601      		movw r20,r12
+ 593 02e6 CE01      		movw r24,r28
+ 594 02e8 0E94 0000 		call disk_readp
+ 595               	.LVL34:
+ 596 02ec 8111      		cpse r24,__zero_reg__
+ 597 02ee 00C0      		rjmp .L37
+ 598 02f0 81E0      		ldi r24,lo8(1)
+ 599 02f2 2881      		ld r18,Y
+ 600 02f4 3981      		ldd r19,Y+1
+ 601 02f6 2634      		cpi r18,70
+ 602 02f8 3144      		sbci r19,65
+ 603 02fa 01F4      		brne .L30
+ 604 02fc 00C0      		rjmp .L36
+ 605               	.L37:
+ 718:pff.c         **** 		return 0;
+ 719:pff.c         **** 	return 1;
+ 606               		.loc 1 719 0
+ 607 02fe 81E0      		ldi r24,lo8(1)
+ 608 0300 00C0      		rjmp .L30
+ 609               	.LVL35:
+ 610               	.L34:
+ 611               	.LBE5:
+ 612               	.LBE4:
+ 711:pff.c         **** 		return 3;
+ 613               		.loc 1 711 0
+ 614 0302 83E0      		ldi r24,lo8(3)
+ 615 0304 00C0      		rjmp .L30
+ 616               	.L35:
+ 713:pff.c         **** 		return 2;
+ 617               		.loc 1 713 0
+ 618 0306 82E0      		ldi r24,lo8(2)
+ 619 0308 00C0      		rjmp .L30
+ 620               	.L36:
+ 716:pff.c         **** 		return 0;
+ 621               		.loc 1 716 0
+ 622 030a 80E0      		ldi r24,0
+ 623               	.L30:
+ 624               	/* epilogue start */
+ 720:pff.c         **** }
+ 625               		.loc 1 720 0
+ 626 030c CDB7      		in r28,__SP_L__
+ 627 030e DEB7      		in r29,__SP_H__
+ 628               	.LVL36:
+ 629 0310 E8E0      		ldi r30, lo8(8)
+ 630 0312 0C94 0000 		jmp __epilogue_restores__ + ((18 - 8) * 2)
+ 631               		.cfi_endproc
+ 632               	.LFE9:
+ 634               	.global	pf_mount
+ 636               	pf_mount:
+ 637               	.LFB10:
+ 721:pff.c         **** 
+ 722:pff.c         **** 
+ 723:pff.c         **** 
+ 724:pff.c         **** 
+ 725:pff.c         **** /*--------------------------------------------------------------------------
+ 726:pff.c         **** 
+ 727:pff.c         ****    Public Functions
+ 728:pff.c         **** 
+ 729:pff.c         **** --------------------------------------------------------------------------*/
+ 730:pff.c         **** 
+ 731:pff.c         **** 
+ 732:pff.c         **** 
+ 733:pff.c         **** /*-----------------------------------------------------------------------*/
+ 734:pff.c         **** /* Mount/Unmount a Locical Drive                                         */
+ 735:pff.c         **** /*-----------------------------------------------------------------------*/
+ 736:pff.c         **** 
+ 737:pff.c         **** FRESULT pf_mount (
+ 738:pff.c         **** 	FATFS *fs		/* Pointer to new file system object (NULL: Unmount) */
+ 739:pff.c         **** )
+ 740:pff.c         **** {
+ 638               		.loc 1 740 0
+ 639               		.cfi_startproc
+ 640               	.LVL37:
+ 641 0316 A8E2      		ldi r26,lo8(40)
+ 642 0318 B0E0      		ldi r27,0
+ 643 031a E0E0      		ldi r30,lo8(gs(1f))
+ 644 031c F0E0      		ldi r31,hi8(gs(1f))
+ 645 031e 0C94 0000 		jmp __prologue_saves__+((18 - 16) * 2)
+ 646               	1:
+ 647               	.LCFI23:
+ 648               		.cfi_offset 4, -2
+ 649               		.cfi_offset 5, -3
+ 650               		.cfi_offset 6, -4
+ 651               		.cfi_offset 7, -5
+ 652               		.cfi_offset 8, -6
+ 653               		.cfi_offset 9, -7
+ 654               		.cfi_offset 10, -8
+ 655               		.cfi_offset 11, -9
+ 656               		.cfi_offset 12, -10
+ 657               		.cfi_offset 13, -11
+ 658               		.cfi_offset 14, -12
+ 659               		.cfi_offset 15, -13
+ 660               		.cfi_offset 16, -14
+ 661               		.cfi_offset 17, -15
+ 662               		.cfi_offset 28, -16
+ 663               		.cfi_offset 29, -17
+ 664               		.cfi_def_cfa 28, 58
+ 665               	/* prologue: function */
+ 666               	/* frame size = 40 */
+ 667               	/* stack size = 56 */
+ 668               	.L__stack_usage = 56
+ 669 0322 5C01      		movw r10,r24
+ 741:pff.c         **** 	BYTE fmt, buf[36];
+ 742:pff.c         **** 	DWORD bsect, fsize, tsect, mclst;
+ 743:pff.c         **** 
+ 744:pff.c         **** 
+ 745:pff.c         **** 	FatFs = 0;
+ 670               		.loc 1 745 0
+ 671 0324 1092 0000 		sts FatFs+1,__zero_reg__
+ 672 0328 1092 0000 		sts FatFs,__zero_reg__
+ 746:pff.c         **** 	if (!fs) return FR_OK;				/* Unregister fs object */
+ 673               		.loc 1 746 0
+ 674 032c 0097      		sbiw r24,0
+ 675 032e 01F4      		brne .+2
+ 676 0330 00C0      		rjmp .L50
+ 747:pff.c         **** 
+ 748:pff.c         **** 	if (disk_initialize() & STA_NOINIT)	/* Check if the drive is ready or not */
+ 677               		.loc 1 748 0
+ 678 0332 0E94 0000 		call disk_initialize
+ 679               	.LVL38:
+ 680 0336 80FD      		sbrc r24,0
+ 681 0338 00C0      		rjmp .L51
+ 682               	.LVL39:
+ 749:pff.c         **** 		return FR_NOT_READY;
+ 750:pff.c         **** 
+ 751:pff.c         **** 	/* Search FAT partition on the drive */
+ 752:pff.c         **** 	bsect = 0;
+ 753:pff.c         **** 	fmt = check_fs(buf, bsect);			/* Check sector 0 as an SFD format */
+ 683               		.loc 1 753 0
+ 684 033a 40E0      		ldi r20,0
+ 685 033c 50E0      		ldi r21,0
+ 686 033e BA01      		movw r22,r20
+ 687 0340 CE01      		movw r24,r28
+ 688 0342 0196      		adiw r24,1
+ 689 0344 0E94 0000 		call check_fs
+ 690               	.LVL40:
+ 754:pff.c         **** 	if (fmt == 1) {						/* Not an FAT boot record, it may be FDISK format */
+ 691               		.loc 1 754 0
+ 692 0348 8130      		cpi r24,lo8(1)
+ 693 034a 01F4      		brne .L52
+ 755:pff.c         **** 		/* Check a partition listed in top of the partition table */
+ 756:pff.c         **** 		if (disk_readp(buf, bsect, MBR_Table, 16)) {	/* 1st partition entry */
+ 694               		.loc 1 756 0
+ 695 034c 00E1      		ldi r16,lo8(16)
+ 696 034e 10E0      		ldi r17,0
+ 697 0350 2EEB      		ldi r18,lo8(-66)
+ 698 0352 31E0      		ldi r19,lo8(1)
+ 699 0354 40E0      		ldi r20,0
+ 700 0356 50E0      		ldi r21,0
+ 701 0358 BA01      		movw r22,r20
+ 702 035a CE01      		movw r24,r28
+ 703               	.LVL41:
+ 704 035c 0196      		adiw r24,1
+ 705 035e 0E94 0000 		call disk_readp
+ 706               	.LVL42:
+ 707 0362 8823      		tst r24
+ 708 0364 01F0      		breq .L41
+ 709               	.LVL43:
+ 710               	.L43:
+ 757:pff.c         **** 			fmt = 3;
+ 758:pff.c         **** 		} else {
+ 759:pff.c         **** 			if (buf[4]) {					/* Is the partition existing? */
+ 760:pff.c         **** 				bsect = LD_DWORD(&buf[8]);	/* Partition offset in LBA */
+ 761:pff.c         **** 				fmt = check_fs(buf, bsect);	/* Check the partition */
+ 762:pff.c         **** 			}
+ 763:pff.c         **** 		}
+ 764:pff.c         **** 	}
+ 765:pff.c         **** 	if (fmt == 3) return FR_DISK_ERR;
+ 711               		.loc 1 765 0
+ 712 0366 81E0      		ldi r24,lo8(1)
+ 713 0368 00C0      		rjmp .L39
+ 714               	.LVL44:
+ 715               	.L41:
+ 759:pff.c         **** 			if (buf[4]) {					/* Is the partition existing? */
+ 716               		.loc 1 759 0
+ 717 036a 8D81      		ldd r24,Y+5
+ 718 036c 8111      		cpse r24,__zero_reg__
+ 719 036e 00C0      		rjmp .L42
+ 720               	.LVL45:
+ 721               	.L44:
+ 766:pff.c         **** 	if (fmt) return FR_NO_FILESYSTEM;	/* No valid FAT patition is found */
+ 722               		.loc 1 766 0
+ 723 0370 87E0      		ldi r24,lo8(7)
+ 724 0372 00C0      		rjmp .L39
+ 725               	.LVL46:
+ 726               	.L42:
+ 760:pff.c         **** 				bsect = LD_DWORD(&buf[8]);	/* Partition offset in LBA */
+ 727               		.loc 1 760 0
+ 728 0374 4984      		ldd r4,Y+9
+ 729 0376 5A84      		ldd r5,Y+10
+ 730 0378 6B84      		ldd r6,Y+11
+ 731 037a 7C84      		ldd r7,Y+12
+ 732               	.LVL47:
+ 761:pff.c         **** 				fmt = check_fs(buf, bsect);	/* Check the partition */
+ 733               		.loc 1 761 0
+ 734 037c B301      		movw r22,r6
+ 735 037e A201      		movw r20,r4
+ 736 0380 CE01      		movw r24,r28
+ 737 0382 0196      		adiw r24,1
+ 738 0384 0E94 0000 		call check_fs
+ 739               	.LVL48:
+ 740 0388 00C0      		rjmp .L40
+ 741               	.LVL49:
+ 742               	.L52:
+ 752:pff.c         **** 	bsect = 0;
+ 743               		.loc 1 752 0
+ 744 038a 412C      		mov r4,__zero_reg__
+ 745 038c 512C      		mov r5,__zero_reg__
+ 746 038e 3201      		movw r6,r4
+ 747               	.LVL50:
+ 748               	.L40:
+ 765:pff.c         **** 	if (fmt == 3) return FR_DISK_ERR;
+ 749               		.loc 1 765 0
+ 750 0390 8330      		cpi r24,lo8(3)
+ 751 0392 01F0      		breq .L43
+ 752               		.loc 1 766 0
+ 753 0394 8111      		cpse r24,__zero_reg__
+ 754 0396 00C0      		rjmp .L44
+ 767:pff.c         **** 
+ 768:pff.c         **** 	/* Initialize the file system object */
+ 769:pff.c         **** 	if (disk_readp(buf, bsect, 13, sizeof(buf))) return FR_DISK_ERR;
+ 755               		.loc 1 769 0
+ 756 0398 04E2      		ldi r16,lo8(36)
+ 757 039a 10E0      		ldi r17,0
+ 758 039c 2DE0      		ldi r18,lo8(13)
+ 759 039e 30E0      		ldi r19,0
+ 760 03a0 B301      		movw r22,r6
+ 761 03a2 A201      		movw r20,r4
+ 762 03a4 CE01      		movw r24,r28
+ 763               	.LVL51:
+ 764 03a6 0196      		adiw r24,1
+ 765 03a8 0E94 0000 		call disk_readp
+ 766               	.LVL52:
+ 767 03ac 8111      		cpse r24,__zero_reg__
+ 768 03ae 00C0      		rjmp .L43
+ 770:pff.c         **** 
+ 771:pff.c         **** 	fsize = LD_WORD(buf+BPB_FATSz16-13);				/* Number of sectors per FAT */
+ 769               		.loc 1 771 0
+ 770 03b0 2A85      		ldd r18,Y+10
+ 771 03b2 3B85      		ldd r19,Y+11
+ 772 03b4 40E0      		ldi r20,0
+ 773 03b6 50E0      		ldi r21,0
+ 774               	.LVL53:
+ 772:pff.c         **** 	if (!fsize) fsize = LD_DWORD(buf+BPB_FATSz32-13);
+ 775               		.loc 1 772 0
+ 776 03b8 2115      		cp r18,__zero_reg__
+ 777 03ba 3105      		cpc r19,__zero_reg__
+ 778 03bc 4105      		cpc r20,__zero_reg__
+ 779 03be 5105      		cpc r21,__zero_reg__
+ 780 03c0 01F4      		brne .L45
+ 781               		.loc 1 772 0 is_stmt 0 discriminator 1
+ 782 03c2 288D      		ldd r18,Y+24
+ 783 03c4 398D      		ldd r19,Y+25
+ 784 03c6 4A8D      		ldd r20,Y+26
+ 785 03c8 5B8D      		ldd r21,Y+27
+ 786               	.LVL54:
+ 787               	.L45:
+ 773:pff.c         **** 
+ 774:pff.c         **** 	fsize *= buf[BPB_NumFATs-13];						/* Number of sectors in FAT area */
+ 788               		.loc 1 774 0 is_stmt 1
+ 789 03ca AC81      		ldd r26,Y+4
+ 790 03cc B0E0      		ldi r27,0
+ 791 03ce 0E94 0000 		call __muluhisi3
+ 792 03d2 6B01      		movw r12,r22
+ 793 03d4 7C01      		movw r14,r24
+ 794               	.LVL55:
+ 775:pff.c         **** 	fs->fatbase = bsect + LD_WORD(buf+BPB_RsvdSecCnt-13); /* FAT start sector (lba) */
+ 795               		.loc 1 775 0
+ 796 03d6 8A81      		ldd r24,Y+2
+ 797 03d8 9B81      		ldd r25,Y+3
+ 798 03da AC01      		movw r20,r24
+ 799 03dc 60E0      		ldi r22,0
+ 800 03de 70E0      		ldi r23,0
+ 801 03e0 440E      		add r4,r20
+ 802 03e2 551E      		adc r5,r21
+ 803 03e4 661E      		adc r6,r22
+ 804 03e6 771E      		adc r7,r23
+ 805               	.LVL56:
+ 806 03e8 D501      		movw r26,r10
+ 807 03ea 1A96      		adiw r26,10
+ 808 03ec 4D92      		st X+,r4
+ 809 03ee 5D92      		st X+,r5
+ 810 03f0 6D92      		st X+,r6
+ 811 03f2 7C92      		st X,r7
+ 812 03f4 1D97      		sbiw r26,10+3
+ 776:pff.c         **** 	fs->csize = buf[BPB_SecPerClus-13];					/* Number of sectors per cluster */
+ 813               		.loc 1 776 0
+ 814 03f6 E981      		ldd r30,Y+1
+ 815 03f8 1296      		adiw r26,2
+ 816 03fa EC93      		st X,r30
+ 817 03fc 1297      		sbiw r26,2
+ 777:pff.c         **** 	fs->n_rootdir = LD_WORD(buf+BPB_RootEntCnt-13);		/* Nmuber of root directory entries */
+ 818               		.loc 1 777 0
+ 819 03fe 2D81      		ldd r18,Y+5
+ 820 0400 3E81      		ldd r19,Y+6
+ 821 0402 1596      		adiw r26,4+1
+ 822 0404 3C93      		st X,r19
+ 823 0406 2E93      		st -X,r18
+ 824 0408 1497      		sbiw r26,4
+ 778:pff.c         **** 	tsect = LD_WORD(buf+BPB_TotSec16-13);				/* Number of sectors on the file system */
+ 825               		.loc 1 778 0
+ 826 040a 8F81      		ldd r24,Y+7
+ 827 040c 9885      		ldd r25,Y+8
+ 828 040e A0E0      		ldi r26,0
+ 829 0410 B0E0      		ldi r27,0
+ 830               	.LVL57:
+ 779:pff.c         **** 	if (!tsect) tsect = LD_DWORD(buf+BPB_TotSec32-13);
+ 831               		.loc 1 779 0
+ 832 0412 0097      		sbiw r24,0
+ 833 0414 A105      		cpc r26,__zero_reg__
+ 834 0416 B105      		cpc r27,__zero_reg__
+ 835 0418 01F4      		brne .L46
+ 836               		.loc 1 779 0 is_stmt 0 discriminator 1
+ 837 041a 8C89      		ldd r24,Y+20
+ 838 041c 9D89      		ldd r25,Y+21
+ 839 041e AE89      		ldd r26,Y+22
+ 840 0420 BF89      		ldd r27,Y+23
+ 841               	.LVL58:
+ 842               	.L46:
+ 780:pff.c         **** 	mclst = (tsect						/* Last cluster# + 1 */
+ 781:pff.c         **** 		- LD_WORD(buf+BPB_RsvdSecCnt-13) - fsize - fs->n_rootdir / 16
+ 843               		.loc 1 781 0 is_stmt 1
+ 844 0422 4901      		movw r8,r18
+ 845 0424 14E0      		ldi r17,4
+ 846               		1:
+ 847 0426 9694      		lsr r9
+ 848 0428 8794      		ror r8
+ 849 042a 1A95      		dec r17
+ 850 042c 01F4      		brne 1b
+ 851 042e 8401      		movw r16,r8
+ 852 0430 20E0      		ldi r18,0
+ 853 0432 30E0      		ldi r19,0
+ 854 0434 0DA3      		std Y+37,r16
+ 855 0436 1EA3      		std Y+38,r17
+ 856 0438 2FA3      		std Y+39,r18
+ 857 043a 38A7      		std Y+40,r19
+ 858 043c 8C01      		movw r16,r24
+ 859 043e 9D01      		movw r18,r26
+ 860 0440 041B      		sub r16,r20
+ 861 0442 150B      		sbc r17,r21
+ 862 0444 260B      		sbc r18,r22
+ 863 0446 370B      		sbc r19,r23
+ 864 0448 C901      		movw r24,r18
+ 865 044a B801      		movw r22,r16
+ 866 044c 6C19      		sub r22,r12
+ 867 044e 7D09      		sbc r23,r13
+ 868 0450 8E09      		sbc r24,r14
+ 869 0452 9F09      		sbc r25,r15
+ 870 0454 0DA1      		ldd r16,Y+37
+ 871 0456 1EA1      		ldd r17,Y+38
+ 872 0458 2FA1      		ldd r18,Y+39
+ 873 045a 38A5      		ldd r19,Y+40
+ 874 045c 601B      		sub r22,r16
+ 875 045e 710B      		sbc r23,r17
+ 876 0460 820B      		sbc r24,r18
+ 877 0462 930B      		sbc r25,r19
+ 782:pff.c         **** 		) / fs->csize + 2;
+ 878               		.loc 1 782 0
+ 879 0464 2E2F      		mov r18,r30
+ 880 0466 30E0      		ldi r19,0
+ 881 0468 40E0      		ldi r20,0
+ 882 046a 50E0      		ldi r21,0
+ 883 046c 0E94 0000 		call __udivmodsi4
+ 780:pff.c         **** 	mclst = (tsect						/* Last cluster# + 1 */
+ 884               		.loc 1 780 0
+ 885 0470 2E5F      		subi r18,-2
+ 886 0472 3F4F      		sbci r19,-1
+ 887 0474 4F4F      		sbci r20,-1
+ 888 0476 5F4F      		sbci r21,-1
+ 889               	.LVL59:
+ 783:pff.c         **** 	fs->n_fatent = (CLUST)mclst;
+ 890               		.loc 1 783 0
+ 891 0478 D501      		movw r26,r10
+ 892 047a 1696      		adiw r26,6
+ 893 047c 2D93      		st X+,r18
+ 894 047e 3D93      		st X+,r19
+ 895 0480 4D93      		st X+,r20
+ 896 0482 5C93      		st X,r21
+ 897 0484 1997      		sbiw r26,6+3
+ 898               	.LVL60:
+ 784:pff.c         **** 
+ 785:pff.c         **** 	fmt = FS_FAT16;							/* Determine the FAT sub type */
+ 786:pff.c         **** 	if (mclst < 0xFF7) 						/* Number of clusters < 0xFF5 */
+ 899               		.loc 1 786 0
+ 900 0486 273F      		cpi r18,-9
+ 901 0488 BFE0      		ldi r27,15
+ 902 048a 3B07      		cpc r19,r27
+ 903 048c 4105      		cpc r20,__zero_reg__
+ 904 048e 5105      		cpc r21,__zero_reg__
+ 905 0490 00F0      		brlo .L53
+ 787:pff.c         **** #if _FS_FAT12
+ 788:pff.c         **** 		fmt = FS_FAT12;
+ 789:pff.c         **** #else
+ 790:pff.c         **** 		return FR_NO_FILESYSTEM;
+ 791:pff.c         **** #endif
+ 792:pff.c         **** 	if (mclst >= 0xFFF7)					/* Number of clusters >= 0xFFF5 */
+ 906               		.loc 1 792 0
+ 907 0492 273F      		cpi r18,-9
+ 908 0494 3F4F      		sbci r19,-1
+ 909 0496 4105      		cpc r20,__zero_reg__
+ 910 0498 5105      		cpc r21,__zero_reg__
+ 911 049a 00F4      		brsh .L54
+ 785:pff.c         **** 	fmt = FS_FAT16;							/* Determine the FAT sub type */
+ 912               		.loc 1 785 0
+ 913 049c 82E0      		ldi r24,lo8(2)
+ 914               	.LVL61:
+ 915 049e 00C0      		rjmp .L47
+ 916               	.LVL62:
+ 917               	.L53:
+ 788:pff.c         **** 		fmt = FS_FAT12;
+ 918               		.loc 1 788 0
+ 919 04a0 81E0      		ldi r24,lo8(1)
+ 920               	.LVL63:
+ 921 04a2 00C0      		rjmp .L47
+ 922               	.LVL64:
+ 923               	.L54:
+ 793:pff.c         **** #if _FS_FAT32
+ 794:pff.c         **** 		fmt = FS_FAT32;
+ 924               		.loc 1 794 0
+ 925 04a4 83E0      		ldi r24,lo8(3)
+ 926               	.LVL65:
+ 927               	.L47:
+ 795:pff.c         **** #else
+ 796:pff.c         **** 		return FR_NO_FILESYSTEM;
+ 797:pff.c         **** #endif
+ 798:pff.c         **** 
+ 799:pff.c         **** 	fs->fs_type = fmt;		/* FAT sub-type */
+ 928               		.loc 1 799 0
+ 929 04a6 D501      		movw r26,r10
+ 930 04a8 8C93      		st X,r24
+ 800:pff.c         **** 	if (_FS_FAT32 && fmt == FS_FAT32)
+ 931               		.loc 1 800 0
+ 932 04aa 8330      		cpi r24,lo8(3)
+ 933 04ac 01F4      		brne .L48
+ 934               	.LVL66:
+ 801:pff.c         **** 		fs->dirbase = LD_DWORD(buf+(BPB_RootClus-13));	/* Root directory start cluster */
+ 935               		.loc 1 801 0
+ 936 04ae 88A1      		ldd r24,Y+32
+ 937 04b0 99A1      		ldd r25,Y+33
+ 938 04b2 AAA1      		ldd r26,Y+34
+ 939 04b4 BBA1      		ldd r27,Y+35
+ 940 04b6 00C0      		rjmp .L58
+ 941               	.LVL67:
+ 942               	.L48:
+ 802:pff.c         **** 	else
+ 803:pff.c         **** 		fs->dirbase = fs->fatbase + fsize;				/* Root directory start sector (lba) */
+ 943               		.loc 1 803 0
+ 944 04b8 D701      		movw r26,r14
+ 945 04ba C601      		movw r24,r12
+ 946 04bc 840D      		add r24,r4
+ 947 04be 951D      		adc r25,r5
+ 948 04c0 A61D      		adc r26,r6
+ 949 04c2 B71D      		adc r27,r7
+ 950               	.L58:
+ 951 04c4 F501      		movw r30,r10
+ 952 04c6 8687      		std Z+14,r24
+ 953 04c8 9787      		std Z+15,r25
+ 954 04ca A08B      		std Z+16,r26
+ 955 04cc B18B      		std Z+17,r27
+ 804:pff.c         **** 	fs->database = fs->fatbase + fsize + fs->n_rootdir / 16;	/* Data start sector (lba) */
+ 956               		.loc 1 804 0
+ 957 04ce 0DA1      		ldd r16,Y+37
+ 958 04d0 1EA1      		ldd r17,Y+38
+ 959 04d2 2FA1      		ldd r18,Y+39
+ 960 04d4 38A5      		ldd r19,Y+40
+ 961 04d6 400E      		add r4,r16
+ 962 04d8 511E      		adc r5,r17
+ 963 04da 621E      		adc r6,r18
+ 964 04dc 731E      		adc r7,r19
+ 965 04de 4C0C      		add r4,r12
+ 966 04e0 5D1C      		adc r5,r13
+ 967 04e2 6E1C      		adc r6,r14
+ 968 04e4 7F1C      		adc r7,r15
+ 969 04e6 428A      		std Z+18,r4
+ 970 04e8 538A      		std Z+19,r5
+ 971 04ea 648A      		std Z+20,r6
+ 972 04ec 758A      		std Z+21,r7
+ 805:pff.c         **** 
+ 806:pff.c         **** 	fs->flag = 0;
+ 973               		.loc 1 806 0
+ 974 04ee 1182      		std Z+1,__zero_reg__
+ 807:pff.c         **** 	FatFs = fs;
+ 975               		.loc 1 807 0
+ 976 04f0 B092 0000 		sts FatFs+1,r11
+ 977 04f4 A092 0000 		sts FatFs,r10
+ 978               	.LVL68:
+ 979               	.L50:
+ 746:pff.c         **** 	if (!fs) return FR_OK;				/* Unregister fs object */
+ 980               		.loc 1 746 0
+ 981 04f8 80E0      		ldi r24,0
+ 982 04fa 00C0      		rjmp .L39
+ 983               	.L51:
+ 749:pff.c         **** 		return FR_NOT_READY;
+ 984               		.loc 1 749 0
+ 985 04fc 82E0      		ldi r24,lo8(2)
+ 986               	.L39:
+ 987               	/* epilogue start */
+ 808:pff.c         **** 
+ 809:pff.c         **** 	return FR_OK;
+ 810:pff.c         **** }
+ 988               		.loc 1 810 0
+ 989 04fe A896      		adiw r28,40
+ 990 0500 E0E1      		ldi r30, lo8(16)
+ 991 0502 0C94 0000 		jmp __epilogue_restores__ + ((18 - 16) * 2)
+ 992               		.cfi_endproc
+ 993               	.LFE10:
+ 995               	.global	pf_open
+ 997               	pf_open:
+ 998               	.LFB11:
+ 811:pff.c         **** 
+ 812:pff.c         **** 
+ 813:pff.c         **** 
+ 814:pff.c         **** 
+ 815:pff.c         **** /*-----------------------------------------------------------------------*/
+ 816:pff.c         **** /* Open or Create a File                                                 */
+ 817:pff.c         **** /*-----------------------------------------------------------------------*/
+ 818:pff.c         **** 
+ 819:pff.c         **** FRESULT pf_open (
+ 820:pff.c         **** 	const char *path	/* Pointer to the file name */
+ 821:pff.c         **** )
+ 822:pff.c         **** {
+ 999               		.loc 1 822 0
+ 1000               		.cfi_startproc
+ 1001               	.LVL69:
+ 1002 0506 ACE3      		ldi r26,lo8(60)
+ 1003 0508 B0E0      		ldi r27,0
+ 1004 050a E0E0      		ldi r30,lo8(gs(1f))
+ 1005 050c F0E0      		ldi r31,hi8(gs(1f))
+ 1006 050e 0C94 0000 		jmp __prologue_saves__+((18 - 13) * 2)
+ 1007               	1:
+ 1008               	.LCFI24:
+ 1009               		.cfi_offset 7, -2
+ 1010               		.cfi_offset 8, -3
+ 1011               		.cfi_offset 9, -4
+ 1012               		.cfi_offset 10, -5
+ 1013               		.cfi_offset 11, -6
+ 1014               		.cfi_offset 12, -7
+ 1015               		.cfi_offset 13, -8
+ 1016               		.cfi_offset 14, -9
+ 1017               		.cfi_offset 15, -10
+ 1018               		.cfi_offset 16, -11
+ 1019               		.cfi_offset 17, -12
+ 1020               		.cfi_offset 28, -13
+ 1021               		.cfi_offset 29, -14
+ 1022               		.cfi_def_cfa 28, 75
+ 1023               	/* prologue: function */
+ 1024               	/* frame size = 60 */
+ 1025               	/* stack size = 73 */
+ 1026               	.L__stack_usage = 73
+ 823:pff.c         **** 	FRESULT res;
+ 824:pff.c         **** 	DIR dj;
+ 825:pff.c         **** 	BYTE sp[12], dir[32];
+ 826:pff.c         **** 	FATFS *fs = FatFs;
+ 1027               		.loc 1 826 0
+ 1028 0512 C090 0000 		lds r12,FatFs
+ 1029 0516 D090 0000 		lds r13,FatFs+1
+ 1030               	.LVL70:
+ 827:pff.c         **** 
+ 828:pff.c         **** 
+ 829:pff.c         **** 	if (!fs)						/* Check file system */
+ 1031               		.loc 1 829 0
+ 1032 051a C114      		cp r12,__zero_reg__
+ 1033 051c D104      		cpc r13,__zero_reg__
+ 1034 051e 01F4      		brne .+2
+ 1035 0520 00C0      		rjmp .L90
+ 830:pff.c         **** 		return FR_NOT_ENABLED;
+ 831:pff.c         **** 
+ 832:pff.c         **** 	fs->flag = 0;
+ 1036               		.loc 1 832 0
+ 1037 0522 D601      		movw r26,r12
+ 1038 0524 1196      		adiw r26,1
+ 1039 0526 1C92      		st X,__zero_reg__
+ 833:pff.c         **** 	dj.fn = sp;
+ 1040               		.loc 1 833 0
+ 1041 0528 9E01      		movw r18,r28
+ 1042 052a 2F5C      		subi r18,-49
+ 1043 052c 3F4F      		sbci r19,-1
+ 1044 052e 3CA3      		std Y+36,r19
+ 1045 0530 2BA3      		std Y+35,r18
+ 1046               	.LVL71:
+ 1047 0532 9C01      		movw r18,r24
+ 1048               	.LVL72:
+ 1049               	.L61:
+ 1050 0534 7901      		movw r14,r18
+ 1051               	.LBB18:
+ 1052               	.LBB19:
+ 668:pff.c         **** 	while (*path == ' ') path++;		/* Skip leading spaces */
+ 1053               		.loc 1 668 0
+ 1054 0536 F901      		movw r30,r18
+ 1055 0538 8081      		ld r24,Z
+ 1056               	.LVL73:
+ 1057 053a 2F5F      		subi r18,-1
+ 1058 053c 3F4F      		sbci r19,-1
+ 1059               	.LVL74:
+ 1060 053e 8032      		cpi r24,lo8(32)
+ 1061 0540 01F0      		breq .L61
+ 669:pff.c         **** 	if (*path == '/') path++;			/* Strip heading separator */
+ 1062               		.loc 1 669 0
+ 1063 0542 8F32      		cpi r24,lo8(47)
+ 1064 0544 01F4      		brne .L63
+ 1065 0546 7901      		movw r14,r18
+ 1066               	.L63:
+ 1067               	.LVL75:
+ 670:pff.c         **** 	dj->sclust = 0;						/* Set start directory (always root dir) */
+ 1068               		.loc 1 670 0
+ 1069 0548 1DA2      		std Y+37,__zero_reg__
+ 1070 054a 1EA2      		std Y+38,__zero_reg__
+ 1071 054c 1FA2      		std Y+39,__zero_reg__
+ 1072 054e 18A6      		std Y+40,__zero_reg__
+ 672:pff.c         **** 	if ((BYTE)*path <= ' ') {			/* Null path means the root directory */
+ 1073               		.loc 1 672 0
+ 1074 0550 D701      		movw r26,r14
+ 1075 0552 8C91      		ld r24,X
+ 1076 0554 8132      		cpi r24,lo8(33)
+ 1077 0556 00F4      		brsh .L88
+ 673:pff.c         **** 		res = dir_rewind(dj);
+ 1078               		.loc 1 673 0
+ 1079 0558 CE01      		movw r24,r28
+ 1080 055a 8196      		adiw r24,33
+ 1081 055c 0E94 0000 		call dir_rewind
+ 1082               	.LVL76:
+ 674:pff.c         **** 		dir[0] = 0;
+ 1083               		.loc 1 674 0
+ 1084 0560 1982      		std Y+1,__zero_reg__
+ 1085               	.LBE19:
+ 1086               	.LBE18:
+ 834:pff.c         **** 	res = follow_path(&dj, dir, path);	/* Follow the file path */
+ 835:pff.c         **** 	if (res != FR_OK) return res;		/* Follow failed */
+ 1087               		.loc 1 835 0
+ 1088 0562 8823      		tst r24
+ 1089 0564 01F4      		brne .+2
+ 1090 0566 00C0      		rjmp .L65
+ 1091 0568 00C0      		rjmp .L116
+ 1092               	.LVL77:
+ 1093               	.L88:
+ 1094               	.LBB45:
+ 1095               	.LBB42:
+ 1096               	.LBB20:
+ 1097               	.LBB21:
+ 1098               	.LBB22:
+ 1099               	.LBB23:
+ 335:pff.c         **** 	while (cnt--) *d++ = (char)val;
+ 1100               		.loc 1 335 0
+ 1101 056a A0E2      		ldi r26,lo8(32)
+ 1102 056c 7A2E      		mov r7,r26
+ 1103 056e 4E01      		movw r8,r28
+ 1104 0570 BCE0      		ldi r27,12
+ 1105 0572 8B0E      		add r8,r27
+ 1106 0574 911C      		adc r9,__zero_reg__
+ 1107               	.L115:
+ 1108               	.LBE23:
+ 1109               	.LBE22:
+ 1110               	.LBE21:
+ 1111               	.LBE20:
+ 1112               	.LBE42:
+ 1113               	.LBE45:
+ 660:pff.c         **** 	DIR *dj,			/* Directory object to return last directory and found object */
+ 1114               		.loc 1 660 0
+ 1115 0576 EBA1      		ldd r30,Y+35
+ 1116 0578 FCA1      		ldd r31,Y+36
+ 1117               	.LVL78:
+ 1118 057a DF01      		movw r26,r30
+ 1119 057c CF01      		movw r24,r30
+ 1120 057e 0B96      		adiw r24,11
+ 1121               	.LVL79:
+ 1122               	.L66:
+ 1123               	.LBB46:
+ 1124               	.LBB43:
+ 1125               	.LBB28:
+ 1126               	.LBB26:
+ 1127               	.LBB25:
+ 1128               	.LBB24:
+ 335:pff.c         **** 	while (cnt--) *d++ = (char)val;
+ 1129               		.loc 1 335 0
+ 1130 0580 A817      		cp r26,r24
+ 1131 0582 B907      		cpc r27,r25
+ 1132 0584 01F0      		breq .L118
+ 1133               	.LVL80:
+ 1134 0586 7D92      		st X+,r7
+ 1135               	.LVL81:
+ 1136 0588 00C0      		rjmp .L66
+ 1137               	.LVL82:
+ 1138               	.L118:
+ 1139 058a 90E0      		ldi r25,0
+ 1140 058c 80E0      		ldi r24,0
+ 1141 058e 28E0      		ldi r18,lo8(8)
+ 1142               	.LVL83:
+ 1143               	.L68:
+ 1144               	.LBE24:
+ 1145               	.LBE25:
+ 582:pff.c         **** 		c = p[si++];
+ 1146               		.loc 1 582 0
+ 1147 0590 31E0      		ldi r19,lo8(1)
+ 1148 0592 380F      		add r19,r24
+ 1149               	.LVL84:
+ 1150 0594 D701      		movw r26,r14
+ 1151 0596 A80F      		add r26,r24
+ 1152 0598 B11D      		adc r27,__zero_reg__
+ 1153 059a 8C91      		ld r24,X
+ 1154               	.LVL85:
+ 583:pff.c         **** 		if (c <= ' ' || c == '/') break;	/* Break on end of segment */
+ 1155               		.loc 1 583 0
+ 1156 059c 8132      		cpi r24,lo8(33)
+ 1157 059e 00F0      		brlo .L69
+ 1158 05a0 8F32      		cpi r24,lo8(47)
+ 1159 05a2 01F0      		breq .L69
+ 584:pff.c         **** 		if (c == '.' || i >= ni) {
+ 1160               		.loc 1 584 0
+ 1161 05a4 8E32      		cpi r24,lo8(46)
+ 1162 05a6 01F4      		brne .+2
+ 1163 05a8 00C0      		rjmp .L70
+ 1164 05aa 9217      		cp r25,r18
+ 1165 05ac 00F4      		brsh .L69
+ 598:pff.c         **** 			if (IsLower(c)) c -= 0x20;	/* toupper */
+ 1166               		.loc 1 598 0
+ 1167 05ae 4FE9      		ldi r20,lo8(-97)
+ 1168 05b0 480F      		add r20,r24
+ 1169 05b2 4A31      		cpi r20,lo8(26)
+ 1170 05b4 00F4      		brsh .L71
+ 1171 05b6 8052      		subi r24,lo8(-(-32))
+ 1172               	.LVL86:
+ 1173               	.L71:
+ 599:pff.c         **** 			sfn[i++] = c;
+ 1174               		.loc 1 599 0
+ 1175 05b8 DF01      		movw r26,r30
+ 1176 05ba A90F      		add r26,r25
+ 1177 05bc B11D      		adc r27,__zero_reg__
+ 1178 05be 8C93      		st X,r24
+ 1179 05c0 9F5F      		subi r25,lo8(-(1))
+ 1180               	.LVL87:
+ 1181               	.L72:
+ 582:pff.c         **** 		c = p[si++];
+ 1182               		.loc 1 582 0
+ 1183 05c2 832F      		mov r24,r19
+ 1184               	.LVL88:
+ 1185 05c4 00C0      		rjmp .L68
+ 1186               	.LVL89:
+ 1187               	.L69:
+ 602:pff.c         **** 	*path = &p[si];						/* Rerurn pointer to the next segment */
+ 1188               		.loc 1 602 0
+ 1189 05c6 E30E      		add r14,r19
+ 1190 05c8 F11C      		adc r15,__zero_reg__
+ 1191               	.LVL90:
+ 604:pff.c         **** 	sfn[11] = (c <= ' ') ? 1 : 0;		/* Set last segment flag if end of path */
+ 1192               		.loc 1 604 0
+ 1193 05ca 91E0      		ldi r25,lo8(1)
+ 1194               	.LVL91:
+ 1195 05cc 8132      		cpi r24,lo8(33)
+ 1196 05ce 00F0      		brlo .L73
+ 1197 05d0 90E0      		ldi r25,0
+ 1198               	.L73:
+ 1199 05d2 9387      		std Z+11,r25
+ 1200               	.LBE26:
+ 1201               	.LBE28:
+ 1202               	.LBB29:
+ 1203               	.LBB30:
+ 503:pff.c         **** 	res = dir_rewind(dj);			/* Rewind directory object */
+ 1204               		.loc 1 503 0
+ 1205 05d4 CE01      		movw r24,r28
+ 1206               	.LVL92:
+ 1207 05d6 8196      		adiw r24,33
+ 1208 05d8 0E94 0000 		call dir_rewind
+ 1209               	.LVL93:
+ 504:pff.c         **** 	if (res != FR_OK) return res;
+ 1210               		.loc 1 504 0
+ 1211 05dc 8111      		cpse r24,__zero_reg__
+ 1212 05de 00C0      		rjmp .L74
+ 1213               	.LVL94:
+ 1214               	.L87:
+ 507:pff.c         **** 		res = disk_readp(dir, dj->sect, (WORD)((dj->index % 16) * 32), 32)	/* Read an entry */
+ 1215               		.loc 1 507 0
+ 1216 05e0 29A1      		ldd r18,Y+33
+ 1217 05e2 3AA1      		ldd r19,Y+34
+ 1218 05e4 2F70      		andi r18,15
+ 1219 05e6 3327      		clr r19
+ 1220 05e8 F5E0      		ldi r31,5
+ 1221               		1:
+ 1222 05ea 220F      		lsl r18
+ 1223 05ec 331F      		rol r19
+ 1224 05ee FA95      		dec r31
+ 1225 05f0 01F4      		brne 1b
+ 1226 05f2 4DA5      		ldd r20,Y+45
+ 1227 05f4 5EA5      		ldd r21,Y+46
+ 1228 05f6 6FA5      		ldd r22,Y+47
+ 1229 05f8 78A9      		ldd r23,Y+48
+ 1230 05fa 00E2      		ldi r16,lo8(32)
+ 1231 05fc 10E0      		ldi r17,0
+ 1232 05fe CE01      		movw r24,r28
+ 1233 0600 0196      		adiw r24,1
+ 1234 0602 0E94 0000 		call disk_readp
+ 1235               	.LVL95:
+ 508:pff.c         **** 			? FR_DISK_ERR : FR_OK;
+ 1236               		.loc 1 508 0
+ 1237 0606 8111      		cpse r24,__zero_reg__
+ 1238 0608 00C0      		rjmp .L93
+ 1239               	.LVL96:
+ 511:pff.c         **** 		if (c == 0) { res = FR_NO_FILE; break; }	/* Reached to end of table */
+ 1240               		.loc 1 511 0
+ 1241 060a 8981      		ldd r24,Y+1
+ 1242               	.LVL97:
+ 1243 060c 8823      		tst r24
+ 1244 060e 01F4      		brne .+2
+ 1245 0610 00C0      		rjmp .L77
+ 512:pff.c         **** 		if (!(dir[DIR_Attr] & AM_VOL) && !mem_cmp(dir, dj->fn, 11)) /* Is it a valid entry? */
+ 1246               		.loc 1 512 0
+ 1247 0612 2C85      		ldd r18,Y+12
+ 1248 0614 23FD      		sbrc r18,3
+ 1249 0616 00C0      		rjmp .L78
+ 1250 0618 6BA1      		ldd r22,Y+35
+ 1251 061a 7CA1      		ldd r23,Y+36
+ 1252               	.LVL98:
+ 1253 061c FE01      		movw r30,r28
+ 1254 061e 3196      		adiw r30,1
+ 1255               	.LVL99:
+ 1256 0620 CB01      		movw r24,r22
+ 1257               	.LVL100:
+ 1258               	.L80:
+ 1259               	.LBB31:
+ 1260               	.LBB32:
+ 343:pff.c         **** 	while (cnt-- && (r = *d++ - *s++) == 0) ;
+ 1261               		.loc 1 343 0
+ 1262 0622 E815      		cp r30,r8
+ 1263 0624 F905      		cpc r31,r9
+ 1264 0626 01F4      		brne .+2
+ 1265 0628 00C0      		rjmp .L79
+ 1266               	.LVL101:
+ 1267 062a 4191      		ld r20,Z+
+ 1268               	.LVL102:
+ 1269 062c DC01      		movw r26,r24
+ 1270 062e 3D91      		ld r19,X+
+ 1271 0630 CD01      		movw r24,r26
+ 1272               	.LVL103:
+ 1273 0632 4317      		cp r20,r19
+ 1274 0634 01F0      		breq .L80
+ 1275               	.LVL104:
+ 1276               	.L78:
+ 1277               	.LBE32:
+ 1278               	.LBE31:
+ 1279               	.LBB33:
+ 1280               	.LBB34:
+ 455:pff.c         **** 	FATFS *fs = FatFs;
+ 1281               		.loc 1 455 0
+ 1282 0636 A090 0000 		lds r10,FatFs
+ 1283 063a B090 0000 		lds r11,FatFs+1
+ 1284               	.LVL105:
+ 458:pff.c         **** 	i = dj->index + 1;
+ 1285               		.loc 1 458 0
+ 1286 063e 09A1      		ldd r16,Y+33
+ 1287 0640 1AA1      		ldd r17,Y+34
+ 1288 0642 0F5F      		subi r16,-1
+ 1289 0644 1F4F      		sbci r17,-1
+ 1290               	.LVL106:
+ 459:pff.c         **** 	if (!i || !dj->sect)	/* Report EOT when index has reached 65535 */
+ 1291               		.loc 1 459 0
+ 1292 0646 0115      		cp r16,__zero_reg__
+ 1293 0648 1105      		cpc r17,__zero_reg__
+ 1294 064a 01F4      		brne .+2
+ 1295 064c 00C0      		rjmp .L81
+ 1296 064e 8DA5      		ldd r24,Y+45
+ 1297 0650 9EA5      		ldd r25,Y+46
+ 1298 0652 AFA5      		ldd r26,Y+47
+ 1299 0654 B8A9      		ldd r27,Y+48
+ 1300 0656 0097      		sbiw r24,0
+ 1301 0658 A105      		cpc r26,__zero_reg__
+ 1302 065a B105      		cpc r27,__zero_reg__
+ 1303 065c 01F4      		brne .+2
+ 1304 065e 00C0      		rjmp .L81
+ 462:pff.c         **** 	if (!(i % 16)) {		/* Sector changed? */
+ 1305               		.loc 1 462 0
+ 1306 0660 9801      		movw r18,r16
+ 1307 0662 2F70      		andi r18,15
+ 1308 0664 3327      		clr r19
+ 1309 0666 232B      		or r18,r19
+ 1310 0668 01F0      		breq .+2
+ 1311 066a 00C0      		rjmp .L83
+ 463:pff.c         **** 		dj->sect++;			/* Next sector */
+ 1312               		.loc 1 463 0
+ 1313 066c 0196      		adiw r24,1
+ 1314 066e A11D      		adc r26,__zero_reg__
+ 1315 0670 B11D      		adc r27,__zero_reg__
+ 1316 0672 8DA7      		std Y+45,r24
+ 1317 0674 9EA7      		std Y+46,r25
+ 1318 0676 AFA7      		std Y+47,r26
+ 1319 0678 B8AB      		std Y+48,r27
+ 465:pff.c         **** 		if (dj->clust == 0) {	/* Static table */
+ 1320               		.loc 1 465 0
+ 1321 067a 69A5      		ldd r22,Y+41
+ 1322 067c 7AA5      		ldd r23,Y+42
+ 1323 067e 8BA5      		ldd r24,Y+43
+ 1324 0680 9CA5      		ldd r25,Y+44
+ 1325 0682 6115      		cp r22,__zero_reg__
+ 1326 0684 7105      		cpc r23,__zero_reg__
+ 1327 0686 8105      		cpc r24,__zero_reg__
+ 1328 0688 9105      		cpc r25,__zero_reg__
+ 1329 068a 01F4      		brne .L84
+ 466:pff.c         **** 			if (i >= fs->n_rootdir)	/* Report EOT when end of table */
+ 1330               		.loc 1 466 0
+ 1331 068c F501      		movw r30,r10
+ 1332 068e 8481      		ldd r24,Z+4
+ 1333 0690 9581      		ldd r25,Z+5
+ 1334 0692 0817      		cp r16,r24
+ 1335 0694 1907      		cpc r17,r25
+ 1336 0696 00F4      		brsh .L81
+ 1337 0698 00C0      		rjmp .L83
+ 1338               	.L84:
+ 470:pff.c         **** 			if (((i / 16) & (fs->csize-1)) == 0) {	/* Cluster changed? */
+ 1339               		.loc 1 470 0
+ 1340 069a D501      		movw r26,r10
+ 1341 069c 1296      		adiw r26,2
+ 1342 069e 2C91      		ld r18,X
+ 1343 06a0 422F      		mov r20,r18
+ 1344 06a2 50E0      		ldi r21,0
+ 1345 06a4 4150      		subi r20,1
+ 1346 06a6 5109      		sbc r21,__zero_reg__
+ 1347 06a8 9801      		movw r18,r16
+ 1348 06aa E4E0      		ldi r30,4
+ 1349               		1:
+ 1350 06ac 3695      		lsr r19
+ 1351 06ae 2795      		ror r18
+ 1352 06b0 EA95      		dec r30
+ 1353 06b2 01F4      		brne 1b
+ 1354 06b4 4223      		and r20,r18
+ 1355 06b6 5323      		and r21,r19
+ 1356 06b8 452B      		or r20,r21
+ 1357 06ba 01F4      		brne .L83
+ 471:pff.c         **** 				clst = get_fat(dj->clust);		/* Get next cluster */
+ 1358               		.loc 1 471 0
+ 1359 06bc 0E94 0000 		call get_fat
+ 1360               	.LVL107:
+ 472:pff.c         **** 				if (clst <= 1) return FR_DISK_ERR;
+ 1361               		.loc 1 472 0
+ 1362 06c0 6230      		cpi r22,2
+ 1363 06c2 7105      		cpc r23,__zero_reg__
+ 1364 06c4 8105      		cpc r24,__zero_reg__
+ 1365 06c6 9105      		cpc r25,__zero_reg__
+ 1366 06c8 00F4      		brsh .+2
+ 1367 06ca 00C0      		rjmp .L94
+ 473:pff.c         **** 				if (clst >= fs->n_fatent)		/* When it reached end of dynamic table */
+ 1368               		.loc 1 473 0
+ 1369 06cc F501      		movw r30,r10
+ 1370 06ce 2681      		ldd r18,Z+6
+ 1371 06d0 3781      		ldd r19,Z+7
+ 1372 06d2 4085      		ldd r20,Z+8
+ 1373 06d4 5185      		ldd r21,Z+9
+ 1374 06d6 6217      		cp r22,r18
+ 1375 06d8 7307      		cpc r23,r19
+ 1376 06da 8407      		cpc r24,r20
+ 1377 06dc 9507      		cpc r25,r21
+ 1378 06de 00F4      		brsh .L81
+ 475:pff.c         **** 				dj->clust = clst;				/* Initialize data for new cluster */
+ 1379               		.loc 1 475 0
+ 1380 06e0 69A7      		std Y+41,r22
+ 1381 06e2 7AA7      		std Y+42,r23
+ 1382 06e4 8BA7      		std Y+43,r24
+ 1383 06e6 9CA7      		std Y+44,r25
+ 476:pff.c         **** 				dj->sect = clust2sect(clst);
+ 1384               		.loc 1 476 0
+ 1385 06e8 0E94 0000 		call clust2sect
+ 1386               	.LVL108:
+ 1387 06ec 6DA7      		std Y+45,r22
+ 1388 06ee 7EA7      		std Y+46,r23
+ 1389 06f0 8FA7      		std Y+47,r24
+ 1390 06f2 98AB      		std Y+48,r25
+ 1391               	.L83:
+ 481:pff.c         **** 	dj->index = i;
+ 1392               		.loc 1 481 0
+ 1393 06f4 1AA3      		std Y+34,r17
+ 1394 06f6 09A3      		std Y+33,r16
+ 1395 06f8 00C0      		rjmp .L87
+ 1396               	.L81:
+ 460:pff.c         **** 		return FR_NO_FILE;
+ 1397               		.loc 1 460 0
+ 1398 06fa 83E0      		ldi r24,lo8(3)
+ 1399               	.LVL109:
+ 1400               	.L74:
+ 1401               	.LBE34:
+ 1402               	.LBE33:
+ 1403               	.LBE30:
+ 1404               	.LBE29:
+ 682:pff.c         **** 				if (res == FR_NO_FILE && !*(dj->fn+11))
+ 1405               		.loc 1 682 0
+ 1406 06fc 8330      		cpi r24,lo8(3)
+ 1407 06fe 01F0      		breq .+2
+ 1408 0700 00C0      		rjmp .L116
+ 1409               	.L77:
+ 1410 0702 EBA1      		ldd r30,Y+35
+ 1411 0704 FCA1      		ldd r31,Y+36
+ 1412 0706 8385      		ldd r24,Z+11
+ 1413 0708 8823      		tst r24
+ 1414 070a 01F4      		brne .+2
+ 1415 070c 00C0      		rjmp .L96
+ 1416 070e 00C0      		rjmp .L98
+ 1417               	.LVL110:
+ 1418               	.L79:
+ 686:pff.c         **** 			if (*(dj->fn+11)) break;		/* Last segment match. Function completed. */
+ 1419               		.loc 1 686 0
+ 1420 0710 FB01      		movw r30,r22
+ 1421               	.LVL111:
+ 1422 0712 8385      		ldd r24,Z+11
+ 1423 0714 8823      		tst r24
+ 1424 0716 01F0      		breq .L117
+ 1425               	.LVL112:
+ 1426               	.L65:
+ 1427               	.LBE43:
+ 1428               	.LBE46:
+ 836:pff.c         **** 	if (!dir[0] || (dir[DIR_Attr] & AM_DIR))	/* It is a directory */
+ 1429               		.loc 1 836 0
+ 1430 0718 8981      		ldd r24,Y+1
+ 1431 071a 8823      		tst r24
+ 1432 071c 01F0      		breq .L98
+ 1433               		.loc 1 836 0 is_stmt 0 discriminator 1
+ 1434 071e 8C85      		ldd r24,Y+12
+ 1435 0720 84FD      		sbrc r24,4
+ 1436 0722 00C0      		rjmp .L98
+ 837:pff.c         **** 		return FR_NO_FILE;
+ 838:pff.c         **** 
+ 839:pff.c         **** 	fs->org_clust = LD_CLUST(dir);			/* File start cluster */
+ 1437               		.loc 1 839 0 is_stmt 1
+ 1438 0724 8D89      		ldd r24,Y+21
+ 1439 0726 9E89      		ldd r25,Y+22
+ 1440 0728 A0E0      		ldi r26,0
+ 1441 072a B0E0      		ldi r27,0
+ 1442 072c DC01      		movw r26,r24
+ 1443 072e 9927      		clr r25
+ 1444 0730 8827      		clr r24
+ 1445 0732 4B8D      		ldd r20,Y+27
+ 1446 0734 5C8D      		ldd r21,Y+28
+ 1447 0736 60E0      		ldi r22,0
+ 1448 0738 70E0      		ldi r23,0
+ 1449 073a 842B      		or r24,r20
+ 1450 073c 952B      		or r25,r21
+ 1451 073e A62B      		or r26,r22
+ 1452 0740 B72B      		or r27,r23
+ 1453 0742 F601      		movw r30,r12
+ 1454 0744 868F      		std Z+30,r24
+ 1455 0746 978F      		std Z+31,r25
+ 1456 0748 A0A3      		std Z+32,r26
+ 1457 074a B1A3      		std Z+33,r27
+ 840:pff.c         **** 	fs->fsize = LD_DWORD(dir+DIR_FileSize);	/* File size */
+ 1458               		.loc 1 840 0
+ 1459 074c 8D8D      		ldd r24,Y+29
+ 1460 074e 9E8D      		ldd r25,Y+30
+ 1461 0750 AF8D      		ldd r26,Y+31
+ 1462 0752 B8A1      		ldd r27,Y+32
+ 1463 0754 828F      		std Z+26,r24
+ 1464 0756 938F      		std Z+27,r25
+ 1465 0758 A48F      		std Z+28,r26
+ 1466 075a B58F      		std Z+29,r27
+ 841:pff.c         **** 	fs->fptr = 0;						/* File pointer */
+ 1467               		.loc 1 841 0
+ 1468 075c 168A      		std Z+22,__zero_reg__
+ 1469 075e 178A      		std Z+23,__zero_reg__
+ 1470 0760 108E      		std Z+24,__zero_reg__
+ 1471 0762 118E      		std Z+25,__zero_reg__
+ 842:pff.c         **** 	fs->flag = FA_OPENED;
+ 1472               		.loc 1 842 0
+ 1473 0764 81E0      		ldi r24,lo8(1)
+ 1474 0766 8183      		std Z+1,r24
+ 843:pff.c         **** 
+ 844:pff.c         **** 	return FR_OK;
+ 1475               		.loc 1 844 0
+ 1476 0768 80E0      		ldi r24,0
+ 1477 076a 00C0      		rjmp .L116
+ 1478               	.LVL113:
+ 1479               	.L90:
+ 830:pff.c         **** 		return FR_NOT_ENABLED;
+ 1480               		.loc 1 830 0
+ 1481 076c 86E0      		ldi r24,lo8(6)
+ 1482               	.LVL114:
+ 1483 076e 00C0      		rjmp .L116
+ 1484               	.LVL115:
+ 1485               	.L98:
+ 837:pff.c         **** 		return FR_NO_FILE;
+ 1486               		.loc 1 837 0
+ 1487 0770 83E0      		ldi r24,lo8(3)
+ 1488 0772 00C0      		rjmp .L116
+ 1489               	.LVL116:
+ 1490               	.L70:
+ 1491               	.LBB47:
+ 1492               	.LBB44:
+ 1493               	.LBB39:
+ 1494               	.LBB27:
+ 585:pff.c         **** 			if (ni != 8 || c != '.') break;
+ 1495               		.loc 1 585 0
+ 1496 0774 2830      		cpi r18,lo8(8)
+ 1497 0776 01F0      		breq .+2
+ 1498 0778 00C0      		rjmp .L69
+ 586:pff.c         **** 			i = 8; ni = 11;
+ 1499               		.loc 1 586 0
+ 1500 077a 98E0      		ldi r25,lo8(8)
+ 1501               	.LVL117:
+ 1502 077c 2BE0      		ldi r18,lo8(11)
+ 1503               	.LVL118:
+ 1504 077e 00C0      		rjmp .L72
+ 1505               	.LVL119:
+ 1506               	.L94:
+ 1507               	.LBE27:
+ 1508               	.LBE39:
+ 1509               	.LBB40:
+ 1510               	.LBB37:
+ 1511               	.LBB36:
+ 1512               	.LBB35:
+ 472:pff.c         **** 				if (clst <= 1) return FR_DISK_ERR;
+ 1513               		.loc 1 472 0
+ 1514 0780 81E0      		ldi r24,lo8(1)
+ 1515 0782 00C0      		rjmp .L74
+ 1516               	.LVL120:
+ 1517               	.L117:
+ 1518               	.LBE35:
+ 1519               	.LBE36:
+ 1520               	.LBE37:
+ 1521               	.LBE40:
+ 687:pff.c         **** 			if (!(dir[DIR_Attr] & AM_DIR)) { /* Cannot follow because it is a file */
+ 1522               		.loc 1 687 0
+ 1523 0784 24FF      		sbrs r18,4
+ 1524 0786 00C0      		rjmp .L96
+ 690:pff.c         **** 			dj->sclust = LD_CLUST(dir);
+ 1525               		.loc 1 690 0
+ 1526 0788 8D89      		ldd r24,Y+21
+ 1527 078a 9E89      		ldd r25,Y+22
+ 1528 078c A0E0      		ldi r26,0
+ 1529 078e B0E0      		ldi r27,0
+ 1530 0790 DC01      		movw r26,r24
+ 1531 0792 9927      		clr r25
+ 1532 0794 8827      		clr r24
+ 1533 0796 4B8D      		ldd r20,Y+27
+ 1534 0798 5C8D      		ldd r21,Y+28
+ 1535 079a 60E0      		ldi r22,0
+ 1536 079c 70E0      		ldi r23,0
+ 1537               	.LVL121:
+ 1538 079e 842B      		or r24,r20
+ 1539 07a0 952B      		or r25,r21
+ 1540 07a2 A62B      		or r26,r22
+ 1541 07a4 B72B      		or r27,r23
+ 1542 07a6 8DA3      		std Y+37,r24
+ 1543 07a8 9EA3      		std Y+38,r25
+ 1544 07aa AFA3      		std Y+39,r26
+ 1545 07ac B8A7      		std Y+40,r27
+ 1546 07ae 00C0      		rjmp .L115
+ 1547               	.LVL122:
+ 1548               	.L93:
+ 1549               	.LBB41:
+ 1550               	.LBB38:
+ 509:pff.c         **** 		if (res != FR_OK) break;
+ 1551               		.loc 1 509 0
+ 1552 07b0 81E0      		ldi r24,lo8(1)
+ 1553               	.LVL123:
+ 1554 07b2 00C0      		rjmp .L116
+ 1555               	.L96:
+ 1556               	.LBE38:
+ 1557               	.LBE41:
+ 688:pff.c         **** 				res = FR_NO_PATH; break;
+ 1558               		.loc 1 688 0
+ 1559 07b4 84E0      		ldi r24,lo8(4)
+ 1560               	.LVL124:
+ 1561               	.L116:
+ 1562               	/* epilogue start */
+ 1563               	.LBE44:
+ 1564               	.LBE47:
+ 845:pff.c         **** }
+ 1565               		.loc 1 845 0
+ 1566 07b6 EC96      		adiw r28,60
+ 1567 07b8 EDE0      		ldi r30, lo8(13)
+ 1568 07ba 0C94 0000 		jmp __epilogue_restores__ + ((18 - 13) * 2)
+ 1569               		.cfi_endproc
+ 1570               	.LFE11:
+ 1572               	.global	pf_read
+ 1574               	pf_read:
+ 1575               	.LFB12:
+ 846:pff.c         **** 
+ 847:pff.c         **** 
+ 848:pff.c         **** 
+ 849:pff.c         **** 
+ 850:pff.c         **** /*-----------------------------------------------------------------------*/
+ 851:pff.c         **** /* Read File                                                             */
+ 852:pff.c         **** /*-----------------------------------------------------------------------*/
+ 853:pff.c         **** #if _USE_READ
+ 854:pff.c         **** 
+ 855:pff.c         **** FRESULT pf_read (
+ 856:pff.c         **** 	void* buff,		/* Pointer to the read buffer (NULL:Forward data to the stream)*/
+ 857:pff.c         **** 	WORD btr,		/* Number of bytes to read */
+ 858:pff.c         **** 	WORD* br		/* Pointer to number of bytes read */
+ 859:pff.c         **** )
+ 860:pff.c         **** {
+ 1576               		.loc 1 860 0
+ 1577               		.cfi_startproc
+ 1578               	.LVL125:
+ 1579 07be A0E0      		ldi r26,0
+ 1580 07c0 B0E0      		ldi r27,0
+ 1581 07c2 E0E0      		ldi r30,lo8(gs(1f))
+ 1582 07c4 F0E0      		ldi r31,hi8(gs(1f))
+ 1583 07c6 0C94 0000 		jmp __prologue_saves__+((18 - 16) * 2)
+ 1584               	1:
+ 1585               	.LCFI25:
+ 1586               		.cfi_offset 4, -2
+ 1587               		.cfi_offset 5, -3
+ 1588               		.cfi_offset 6, -4
+ 1589               		.cfi_offset 7, -5
+ 1590               		.cfi_offset 8, -6
+ 1591               		.cfi_offset 9, -7
+ 1592               		.cfi_offset 10, -8
+ 1593               		.cfi_offset 11, -9
+ 1594               		.cfi_offset 12, -10
+ 1595               		.cfi_offset 13, -11
+ 1596               		.cfi_offset 14, -12
+ 1597               		.cfi_offset 15, -13
+ 1598               		.cfi_offset 16, -14
+ 1599               		.cfi_offset 17, -15
+ 1600               		.cfi_offset 28, -16
+ 1601               		.cfi_offset 29, -17
+ 1602               		.cfi_def_cfa_offset 18
+ 1603               	/* prologue: function */
+ 1604               	/* frame size = 0 */
+ 1605               	/* stack size = 16 */
+ 1606               	.L__stack_usage = 16
+ 1607 07ca 4C01      		movw r8,r24
+ 1608 07cc 7B01      		movw r14,r22
+ 1609 07ce 5A01      		movw r10,r20
+ 1610               	.LVL126:
+ 861:pff.c         **** 	DRESULT dr;
+ 862:pff.c         **** 	CLUST clst;
+ 863:pff.c         **** 	DWORD sect, remain;
+ 864:pff.c         **** 	WORD rcnt;
+ 865:pff.c         **** 	BYTE cs, *rbuff = buff;
+ 866:pff.c         **** 	FATFS *fs = FatFs;
+ 1611               		.loc 1 866 0
+ 1612 07d0 C091 0000 		lds r28,FatFs
+ 1613 07d4 D091 0000 		lds r29,FatFs+1
+ 1614               	.LVL127:
+ 867:pff.c         **** 
+ 868:pff.c         **** 
+ 869:pff.c         **** 	*br = 0;
+ 1615               		.loc 1 869 0
+ 1616 07d8 FA01      		movw r30,r20
+ 1617 07da 1182      		std Z+1,__zero_reg__
+ 1618 07dc 1082      		st Z,__zero_reg__
+ 870:pff.c         **** 	if (!fs) return FR_NOT_ENABLED;		/* Check file system */
+ 1619               		.loc 1 870 0
+ 1620 07de 2097      		sbiw r28,0
+ 1621 07e0 01F4      		brne .+2
+ 1622 07e2 00C0      		rjmp .L131
+ 871:pff.c         **** 	if (!(fs->flag & FA_OPENED))		/* Check if opened */
+ 1623               		.loc 1 871 0
+ 1624 07e4 8981      		ldd r24,Y+1
+ 1625               	.LVL128:
+ 1626 07e6 80FF      		sbrs r24,0
+ 1627 07e8 00C0      		rjmp .L132
+ 872:pff.c         **** 		return FR_NOT_OPENED;
+ 873:pff.c         **** 
+ 874:pff.c         **** 	remain = fs->fsize - fs->fptr;
+ 1628               		.loc 1 874 0
+ 1629 07ea 8A8D      		ldd r24,Y+26
+ 1630 07ec 9B8D      		ldd r25,Y+27
+ 1631 07ee AC8D      		ldd r26,Y+28
+ 1632 07f0 BD8D      		ldd r27,Y+29
+ 1633 07f2 4E89      		ldd r20,Y+22
+ 1634 07f4 5F89      		ldd r21,Y+23
+ 1635 07f6 688D      		ldd r22,Y+24
+ 1636 07f8 798D      		ldd r23,Y+25
+ 1637               	.LVL129:
+ 1638 07fa 841B      		sub r24,r20
+ 1639 07fc 950B      		sbc r25,r21
+ 1640 07fe A60B      		sbc r26,r22
+ 1641 0800 B70B      		sbc r27,r23
+ 1642               	.LVL130:
+ 875:pff.c         **** 	if (btr > remain) btr = (WORD)remain;			/* Truncate btr by remaining bytes */
+ 1643               		.loc 1 875 0
+ 1644 0802 A701      		movw r20,r14
+ 1645 0804 60E0      		ldi r22,0
+ 1646 0806 70E0      		ldi r23,0
+ 1647               	.LVL131:
+ 1648 0808 8417      		cp r24,r20
+ 1649 080a 9507      		cpc r25,r21
+ 1650 080c A607      		cpc r26,r22
+ 1651 080e B707      		cpc r27,r23
+ 1652 0810 00F4      		brsh .L121
+ 1653               		.loc 1 875 0 is_stmt 0 discriminator 1
+ 1654 0812 7C01      		movw r14,r24
+ 1655               	.LVL132:
+ 1656               	.L121:
+ 876:pff.c         **** 
+ 877:pff.c         **** 	while (btr)	{									/* Repeat until all data transferred */
+ 878:pff.c         **** 		if ((fs->fptr % 512) == 0) {				/* On the sector boundary? */
+ 879:pff.c         **** 			cs = (BYTE)(fs->fptr / 512 & (fs->csize - 1));	/* Sector offset in the cluster */
+ 880:pff.c         **** 			if (!cs) {								/* On the cluster boundary? */
+ 881:pff.c         **** 				clst = (fs->fptr == 0) ?			/* On the top of the file? */
+ 882:pff.c         **** 					fs->org_clust : get_fat(fs->curr_clust);
+ 883:pff.c         **** 				if (clst <= 1) goto fr_abort;
+ 884:pff.c         **** 				fs->curr_clust = clst;				/* Update current cluster */
+ 885:pff.c         **** 			}
+ 886:pff.c         **** 			sect = clust2sect(fs->curr_clust);		/* Get current sector */
+ 887:pff.c         **** 			if (!sect) goto fr_abort;
+ 888:pff.c         **** 			fs->dsect = sect + cs;
+ 889:pff.c         **** 		}
+ 890:pff.c         **** 		rcnt = (WORD)(512 - (fs->fptr % 512));		/* Get partial sector data from sector buffer */
+ 891:pff.c         **** 		if (rcnt > btr) rcnt = btr;
+ 892:pff.c         **** 		dr = disk_readp(!buff ? 0 : rbuff, fs->dsect, (WORD)(fs->fptr % 512), rcnt);
+ 1657               		.loc 1 892 0 is_stmt 1 discriminator 1
+ 1658 0814 3401      		movw r6,r8
+ 890:pff.c         **** 		rcnt = (WORD)(512 - (fs->fptr % 512));		/* Get partial sector data from sector buffer */
+ 1659               		.loc 1 890 0 discriminator 1
+ 1660 0816 412C      		mov r4,__zero_reg__
+ 1661 0818 32E0      		ldi r19,lo8(2)
+ 1662 081a 532E      		mov r5,r19
+ 1663               	.LVL133:
+ 1664               	.L122:
+ 877:pff.c         **** 	while (btr)	{									/* Repeat until all data transferred */
+ 1665               		.loc 1 877 0 discriminator 1
+ 1666 081c E114      		cp r14,__zero_reg__
+ 1667 081e F104      		cpc r15,__zero_reg__
+ 1668 0820 01F4      		brne .+2
+ 1669 0822 00C0      		rjmp .L137
+ 878:pff.c         **** 		if ((fs->fptr % 512) == 0) {				/* On the sector boundary? */
+ 1670               		.loc 1 878 0
+ 1671 0824 8E89      		ldd r24,Y+22
+ 1672 0826 9F89      		ldd r25,Y+23
+ 1673 0828 A88D      		ldd r26,Y+24
+ 1674 082a B98D      		ldd r27,Y+25
+ 1675 082c AC01      		movw r20,r24
+ 1676 082e BD01      		movw r22,r26
+ 1677 0830 5170      		andi r21,1
+ 1678 0832 6627      		clr r22
+ 1679 0834 7727      		clr r23
+ 1680 0836 452B      		or r20,r21
+ 1681 0838 462B      		or r20,r22
+ 1682 083a 472B      		or r20,r23
+ 1683 083c 01F4      		brne .L123
+ 879:pff.c         **** 			cs = (BYTE)(fs->fptr / 512 & (fs->csize - 1));	/* Sector offset in the cluster */
+ 1684               		.loc 1 879 0
+ 1685 083e DA80      		ldd r13,Y+2
+ 1686 0840 DA94      		dec r13
+ 1687 0842 AC01      		movw r20,r24
+ 1688 0844 BD01      		movw r22,r26
+ 1689 0846 29E0      		ldi r18,9
+ 1690               		1:
+ 1691 0848 7695      		lsr r23
+ 1692 084a 6795      		ror r22
+ 1693 084c 5795      		ror r21
+ 1694 084e 4795      		ror r20
+ 1695 0850 2A95      		dec r18
+ 1696 0852 01F4      		brne 1b
+ 1697 0854 D422      		and r13,r20
+ 1698               	.LVL134:
+ 880:pff.c         **** 			if (!cs) {								/* On the cluster boundary? */
+ 1699               		.loc 1 880 0
+ 1700 0856 01F4      		brne .L124
+ 882:pff.c         **** 					fs->org_clust : get_fat(fs->curr_clust);
+ 1701               		.loc 1 882 0
+ 1702 0858 892B      		or r24,r25
+ 1703 085a 8A2B      		or r24,r26
+ 1704 085c 8B2B      		or r24,r27
+ 1705 085e 01F4      		brne .L125
+ 882:pff.c         **** 					fs->org_clust : get_fat(fs->curr_clust);
+ 1706               		.loc 1 882 0 is_stmt 0 discriminator 1
+ 1707 0860 6E8D      		ldd r22,Y+30
+ 1708 0862 7F8D      		ldd r23,Y+31
+ 1709 0864 88A1      		ldd r24,Y+32
+ 1710 0866 99A1      		ldd r25,Y+33
+ 1711 0868 00C0      		rjmp .L126
+ 1712               	.L125:
+ 882:pff.c         **** 					fs->org_clust : get_fat(fs->curr_clust);
+ 1713               		.loc 1 882 0 discriminator 2
+ 1714 086a 6AA1      		ldd r22,Y+34
+ 1715 086c 7BA1      		ldd r23,Y+35
+ 1716 086e 8CA1      		ldd r24,Y+36
+ 1717 0870 9DA1      		ldd r25,Y+37
+ 1718 0872 0E94 0000 		call get_fat
+ 1719               	.LVL135:
+ 1720               	.L126:
+ 883:pff.c         **** 				if (clst <= 1) goto fr_abort;
+ 1721               		.loc 1 883 0 is_stmt 1
+ 1722 0876 6230      		cpi r22,2
+ 1723 0878 7105      		cpc r23,__zero_reg__
+ 1724 087a 8105      		cpc r24,__zero_reg__
+ 1725 087c 9105      		cpc r25,__zero_reg__
+ 1726 087e 00F4      		brsh .+2
+ 1727 0880 00C0      		rjmp .L127
+ 884:pff.c         **** 				fs->curr_clust = clst;				/* Update current cluster */
+ 1728               		.loc 1 884 0
+ 1729 0882 6AA3      		std Y+34,r22
+ 1730 0884 7BA3      		std Y+35,r23
+ 1731 0886 8CA3      		std Y+36,r24
+ 1732 0888 9DA3      		std Y+37,r25
+ 1733               	.LVL136:
+ 1734               	.L124:
+ 886:pff.c         **** 			sect = clust2sect(fs->curr_clust);		/* Get current sector */
+ 1735               		.loc 1 886 0
+ 1736 088a 6AA1      		ldd r22,Y+34
+ 1737 088c 7BA1      		ldd r23,Y+35
+ 1738 088e 8CA1      		ldd r24,Y+36
+ 1739 0890 9DA1      		ldd r25,Y+37
+ 1740 0892 0E94 0000 		call clust2sect
+ 1741               	.LVL137:
+ 887:pff.c         **** 			if (!sect) goto fr_abort;
+ 1742               		.loc 1 887 0
+ 1743 0896 6115      		cp r22,__zero_reg__
+ 1744 0898 7105      		cpc r23,__zero_reg__
+ 1745 089a 8105      		cpc r24,__zero_reg__
+ 1746 089c 9105      		cpc r25,__zero_reg__
+ 1747 089e 01F4      		brne .+2
+ 1748 08a0 00C0      		rjmp .L127
+ 888:pff.c         **** 			fs->dsect = sect + cs;
+ 1749               		.loc 1 888 0
+ 1750 08a2 DC01      		movw r26,r24
+ 1751 08a4 CB01      		movw r24,r22
+ 1752 08a6 8D0D      		add r24,r13
+ 1753 08a8 911D      		adc r25,__zero_reg__
+ 1754 08aa A11D      		adc r26,__zero_reg__
+ 1755 08ac B11D      		adc r27,__zero_reg__
+ 1756 08ae 8EA3      		std Y+38,r24
+ 1757 08b0 9FA3      		std Y+39,r25
+ 1758 08b2 A8A7      		std Y+40,r26
+ 1759 08b4 B9A7      		std Y+41,r27
+ 1760               	.LVL138:
+ 1761               	.L123:
+ 890:pff.c         **** 		rcnt = (WORD)(512 - (fs->fptr % 512));		/* Get partial sector data from sector buffer */
+ 1762               		.loc 1 890 0
+ 1763 08b6 2E89      		ldd r18,Y+22
+ 1764 08b8 3F89      		ldd r19,Y+23
+ 1765 08ba 3170      		andi r19,1
+ 1766 08bc C201      		movw r24,r4
+ 1767 08be 821B      		sub r24,r18
+ 1768 08c0 930B      		sbc r25,r19
+ 1769               	.LVL139:
+ 1770 08c2 6701      		movw r12,r14
+ 1771 08c4 8E15      		cp r24,r14
+ 1772 08c6 9F05      		cpc r25,r15
+ 1773 08c8 00F4      		brsh .L128
+ 1774               	.LVL140:
+ 1775 08ca 6C01      		movw r12,r24
+ 1776               	.LVL141:
+ 1777               	.L128:
+ 1778               		.loc 1 892 0
+ 1779 08cc 4EA1      		ldd r20,Y+38
+ 1780 08ce 5FA1      		ldd r21,Y+39
+ 1781 08d0 68A5      		ldd r22,Y+40
+ 1782 08d2 79A5      		ldd r23,Y+41
+ 1783 08d4 8114      		cp r8,__zero_reg__
+ 1784 08d6 9104      		cpc r9,__zero_reg__
+ 1785 08d8 01F4      		brne .L133
+ 1786 08da 80E0      		ldi r24,0
+ 1787 08dc 90E0      		ldi r25,0
+ 1788 08de 00C0      		rjmp .L129
+ 1789               	.L133:
+ 1790 08e0 C301      		movw r24,r6
+ 1791               	.L129:
+ 1792               		.loc 1 892 0 is_stmt 0 discriminator 3
+ 1793 08e2 8601      		movw r16,r12
+ 1794 08e4 0E94 0000 		call disk_readp
+ 1795               	.LVL142:
+ 893:pff.c         **** 		if (dr) goto fr_abort;
+ 1796               		.loc 1 893 0 is_stmt 1 discriminator 3
+ 1797 08e8 8111      		cpse r24,__zero_reg__
+ 1798 08ea 00C0      		rjmp .L127
+ 894:pff.c         **** 		fs->fptr += rcnt; rbuff += rcnt;			/* Update pointers and counters */
+ 1799               		.loc 1 894 0
+ 1800 08ec 8E89      		ldd r24,Y+22
+ 1801 08ee 9F89      		ldd r25,Y+23
+ 1802 08f0 A88D      		ldd r26,Y+24
+ 1803 08f2 B98D      		ldd r27,Y+25
+ 1804               	.LVL143:
+ 1805 08f4 8C0D      		add r24,r12
+ 1806 08f6 9D1D      		adc r25,r13
+ 1807 08f8 A11D      		adc r26,__zero_reg__
+ 1808 08fa B11D      		adc r27,__zero_reg__
+ 1809 08fc 8E8B      		std Y+22,r24
+ 1810 08fe 9F8B      		std Y+23,r25
+ 1811 0900 A88F      		std Y+24,r26
+ 1812 0902 B98F      		std Y+25,r27
+ 1813 0904 6C0C      		add r6,r12
+ 1814 0906 7D1C      		adc r7,r13
+ 1815               	.LVL144:
+ 895:pff.c         **** 		btr -= rcnt; *br += rcnt;
+ 1816               		.loc 1 895 0
+ 1817 0908 EC18      		sub r14,r12
+ 1818 090a FD08      		sbc r15,r13
+ 1819               	.LVL145:
+ 1820 090c F501      		movw r30,r10
+ 1821 090e 8081      		ld r24,Z
+ 1822 0910 9181      		ldd r25,Z+1
+ 1823 0912 8C0D      		add r24,r12
+ 1824 0914 9D1D      		adc r25,r13
+ 1825 0916 9183      		std Z+1,r25
+ 1826 0918 8083      		st Z,r24
+ 1827 091a 00C0      		rjmp .L122
+ 1828               	.LVL146:
+ 1829               	.L137:
+ 896:pff.c         **** 	}
+ 897:pff.c         **** 
+ 898:pff.c         **** 	return FR_OK;
+ 1830               		.loc 1 898 0
+ 1831 091c 80E0      		ldi r24,0
+ 1832 091e 00C0      		rjmp .L120
+ 1833               	.L127:
+ 1834               	.LDL1:
+ 899:pff.c         **** 
+ 900:pff.c         **** fr_abort:
+ 901:pff.c         **** 	fs->flag = 0;
+ 1835               		.loc 1 901 0
+ 1836 0920 1982      		std Y+1,__zero_reg__
+ 902:pff.c         **** 	return FR_DISK_ERR;
+ 1837               		.loc 1 902 0
+ 1838 0922 81E0      		ldi r24,lo8(1)
+ 1839 0924 00C0      		rjmp .L120
+ 1840               	.LVL147:
+ 1841               	.L131:
+ 870:pff.c         **** 	if (!fs) return FR_NOT_ENABLED;		/* Check file system */
+ 1842               		.loc 1 870 0
+ 1843 0926 86E0      		ldi r24,lo8(6)
+ 1844 0928 00C0      		rjmp .L120
+ 1845               	.L132:
+ 872:pff.c         **** 		return FR_NOT_OPENED;
+ 1846               		.loc 1 872 0
+ 1847 092a 85E0      		ldi r24,lo8(5)
+ 1848               	.LVL148:
+ 1849               	.L120:
+ 1850               	/* epilogue start */
+ 903:pff.c         **** }
+ 1851               		.loc 1 903 0
+ 1852 092c CDB7      		in r28,__SP_L__
+ 1853 092e DEB7      		in r29,__SP_H__
+ 1854               	.LVL149:
+ 1855 0930 E0E1      		ldi r30, lo8(16)
+ 1856 0932 0C94 0000 		jmp __epilogue_restores__ + ((18 - 16) * 2)
+ 1857               		.cfi_endproc
+ 1858               	.LFE12:
+ 1860               		.local	FatFs
+ 1861               		.comm	FatFs,2,1
+ 1862               	.Letext0:
+ 1863               		.file 2 "integer.h"
+ 1864               		.file 3 "pff.h"
+ 1865               		.file 4 "diskio.h"
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 pff.c
+     /tmp/ccadKRiA.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccadKRiA.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccadKRiA.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccadKRiA.s:5      *ABS*:000000000000003b __RAMPZ__
+     /tmp/ccadKRiA.s:6      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccadKRiA.s:7      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccadKRiA.s:12     .text:0000000000000000 clust2sect
+                             .bss:0000000000000000 FatFs
+     /tmp/ccadKRiA.s:83     .text:0000000000000056 dir_rewind
+     /tmp/ccadKRiA.s:205    .text:00000000000000e0 get_fat
+     /tmp/ccadKRiA.s:523    .text:0000000000000292 check_fs
+     /tmp/ccadKRiA.s:636    .text:0000000000000316 pf_mount
+     /tmp/ccadKRiA.s:997    .text:0000000000000506 pf_open
+     /tmp/ccadKRiA.s:1574   .text:00000000000007be pf_read
+
+UNDEFINED SYMBOLS
+__muluhisi3
+disk_readp
+__prologue_saves__
+__epilogue_restores__
+disk_initialize
+__udivmodsi4
+__do_clear_bss
